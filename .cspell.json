@@ -19,6 +19,7 @@
 		"libauth",
 		"mkdir",
 		"prettierignore",
+		"prettierrc",
 		"romaji",
 		"sandboxed",
 		"serializers",
