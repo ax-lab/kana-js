@@ -14,9 +14,12 @@
 		"esnext",
 		"execa",
 		"exponentiate",
+		"Geta",
 		"globby",
+		"Kangxi",
 		"lcov",
 		"libauth",
+		"Masu",
 		"mkdir",
 		"prettierignore",
 		"prettierrc",
@@ -26,8 +29,18 @@
 		"transpiled",
 		"typedoc",
 		"unmocked",
-		"untracked"
+		"untracked",
+		"yori"
 	],
 	"flagWords": [],
-	"ignorePaths": ["package.json", "package-lock.json", "yarn.lock", "tsconfig.json", "node_modules/**", ".vscode/**"]
+	"ignorePaths": ["package.json", "package-lock.json", "yarn.lock", "tsconfig.json", "node_modules/**", ".vscode/**"],
+	"ignoreRegExpList": [
+		"Hangul Letter [-\\w]+",
+		"Parenthesized Hangul [-\\w]+",
+		"Parenthesized Korean Character [-\\w]+",
+		"Circled Hangul [-\\w]+",
+		"Circled Korean Character [-\\w]+",
+		"Square [-\\w]+",
+		"Square Era Name [-\\w]+"
+	]
 }
