@@ -9,6 +9,7 @@
 		"circleci",
 		"codecov",
 		"commitlint",
+		"dakuten",
 		"dependabot",
 		"editorconfig",
 		"esnext",
@@ -16,11 +17,16 @@
 		"exponentiate",
 		"Geta",
 		"globby",
+		"inanimates",
 		"Kangxi",
 		"lcov",
 		"libauth",
 		"Masu",
+		"morae",
 		"mkdir",
+		"MMSP",
+		"nbsp",
+		"NNBSP",
 		"prettierignore",
 		"prettierrc",
 		"romaji",
@@ -30,6 +36,7 @@
 		"typedoc",
 		"unmocked",
 		"untracked",
+		"yōon",
 		"yori"
 	],
 	"flagWords": [],
@@ -41,6 +48,7 @@
 		"Circled Hangul [-\\w]+",
 		"Circled Korean Character [-\\w]+",
 		"Square [-\\w]+",
-		"Square Era Name [-\\w]+"
+		"Square Era Name [-\\w]+",
+		"e\\.g\\.,? \"[^\"]{1,70}\""
 	]
 }
