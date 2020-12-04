@@ -35,6 +35,10 @@
 		"eslint-comments/disable-enable-pair": ["error", { "allowWholeFile": true }],
 		"eslint-comments/no-unused-disable": "error",
 		"import/order": ["error", { "newlines-between": "always", "alphabetize": { "order": "asc" } }],
-		"sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }]
+		"sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }],
+
+		// Custom rules:
+		"functional/no-loop-statement": "off",
+		"jest/no-disabled-tests": "off"
 	}
 }

@@ -3,6 +3,10 @@
 	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
 	"language": "en",
 	"words": [
+		"abcdefghijklmnopqrstuvwxyz",
+		"āīūēō",
+		"âîûêô",
+		"áéíóú",
 		"bitauth",
 		"bitjson",
 		"cimg",
@@ -21,6 +25,7 @@
 		"Kangxi",
 		"lcov",
 		"libauth",
+		"maru",
 		"Masu",
 		"morae",
 		"mkdir",
