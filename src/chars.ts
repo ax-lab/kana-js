@@ -5,14 +5,14 @@
  */
 
 /**
- * Returns the first character in the string.
+ * Returns the first Unicode character in the string.
  *
- * This method handles UTF-16 surrogate pairs and is also aware of combining
- * marks.
+ * This method handles UTF-16 surrogate pairs and combining marks, returning
+ * them as a single unit.
  */
 export function nextChar(input: string): string {
-	const cp = input.codePointAt(0)
-	return cp ? String.fromCodePoint(cp) : ''
+	const m = /^[\s\S][\p{M}]*/u.exec(input)
+	return m ? m[0] : ''
 }
 
 /**
