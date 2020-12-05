@@ -23,7 +23,7 @@ describe('chars', () => {
 		// Test text, courtesy of https://onlineunicodetools.com/add-combining-characters
 		//
 		// (space for rendering)
-		const WEIRD = ['c̥͛ḁ͛r̥͛p̥͛e̥͛ d̥͛i̥͛e̥͛m̥͛', 'l̡̟̖̟᷿̣̖̮͊̎᷄̈̉̍ͯ︡͜ơ͖̺͖͖̭̘̝̟̈̿ͫ͌̏͘͟͠v̧̨̡̦᷿᷂̣͕̐᷇ͣ︠᷇̏͜͝͡ȅ̫͉̺̖̙͕̯̄͒̃᷆ͨ᷅͘͢ͅ', 's̶t̶r̶o̶k̶e̶d̶ t̶e̶x̶t̶']
+		const WEIRD = ['c̥͛ḁ͛r̥͛p̥͛e̥͛ d̥͛i̥͛e̥͛m̥͛', 'l̡̟̖̟᷿̣̖̮͊̎᷄̈̉̍ͯ︡͜ơ͖̺͖͖̭̘̝̟̈̿ͫ͌̏͘͟͠v̧̨̡̦᷿᷂̣͕̐᷇ͣ︠᷇̏͜͝͡ȅ̫͉̺̖̙͕̯͒̃᷆ͨ᷅͘͢ͅ', 's̶t̶r̶o̶k̶e̶d̶ t̶e̶x̶t̶']
 
 		expect(chars.removeAccents(WEIRD[0])).toEqual('carpe diem')
 		expect(chars.removeAccents(WEIRD[1])).toEqual('love')
@@ -31,31 +31,54 @@ describe('chars', () => {
 	})
 
 	test('removeAccents should preserve romaji long vowels', () => {
-		// spellchecker: disable
-		expect(chars.removeAccents('āīūēō')).toEqual('āīūēō')
-		expect(chars.removeAccents('āīūēō', true)).toEqual('āīūēō')
-		expect(chars.removeAccents('āīūēō', false)).toEqual('āīūēō')
-		expect(chars.removeAccents('āb̄c̄d̄ēf̄ḡh̄īj̄k̄l̄m̄n̄ōp̄q̄r̄s̄t̄ūv̄w̄x̄ȳz̄')).toEqual('ābcdēfghījklmnōpqrstūvwxyz')
+		const INPUT_A = 'āīūēō'.normalize('NFD')
+		const INPUT_B = 'ĀĪŪĒŌ'.normalize('NFD')
+		const INPUT_C = 'āb̄c̄d̄ēf̄ḡh̄īj̄k̄l̄m̄n̄ōp̄q̄r̄s̄t̄ūv̄w̄x̄ȳz̄'.normalize('NFD')
+		const INPUT_D = 'ĀB̄C̄D̄ĒF̄ḠH̄ĪJ̄K̄L̄M̄N̄ŌP̄Q̄R̄S̄T̄ŪV̄W̄X̄ȲZ̄'.normalize('NFD')
 
-		expect(chars.removeAccents('âîûêô')).toEqual('âîûêô')
-		expect(chars.removeAccents('âîûêô', true)).toEqual('âîûêô')
-		expect(chars.removeAccents('âîûêô', false)).toEqual('âîûêô')
-		expect(chars.removeAccents('âb̂ĉd̂êf̂ĝĥîĵk̂l̂m̂n̂ôp̂q̂r̂ŝt̂ûv̂ŵx̂ŷẑ')).toEqual('âbcdêfghîjklmnôpqrstûvwxyz')
-		// spellchecker: enable
+		const OUTPUT_A = 'āīūēō'.normalize('NFC')
+		const OUTPUT_B = 'ĀĪŪĒŌ'.normalize('NFC')
+		const OUTPUT_C = 'ābcdēfghījklmnōpqrstūvwxyz'.normalize('NFC')
+		const OUTPUT_D = 'ĀBCDĒFGHĪJKLMNŌPQRSTŪVWXYZ'.normalize('NFC')
+
+		expect(chars.removeAccents(INPUT_A)).toEqual(OUTPUT_A)
+		expect(chars.removeAccents(INPUT_A, true)).toEqual(OUTPUT_A)
+		expect(chars.removeAccents(INPUT_A, false)).toEqual(OUTPUT_A)
+
+		expect(chars.removeAccents(INPUT_B)).toEqual(OUTPUT_B)
+		expect(chars.removeAccents(INPUT_B, true)).toEqual(OUTPUT_B)
+		expect(chars.removeAccents(INPUT_B, false)).toEqual(OUTPUT_B)
+
+		expect(chars.removeAccents(INPUT_C)).toEqual(OUTPUT_C)
+		expect(chars.removeAccents(INPUT_C, true)).toEqual(OUTPUT_C)
+		expect(chars.removeAccents(INPUT_C, false)).toEqual(OUTPUT_C)
+
+		expect(chars.removeAccents(INPUT_D)).toEqual(OUTPUT_D)
+		expect(chars.removeAccents(INPUT_D, true)).toEqual(OUTPUT_D)
+		expect(chars.removeAccents(INPUT_D, false)).toEqual(OUTPUT_D)
 	})
 
 	test('removeAccents should remove invalid voiced sound marks', () => {
-		const inputA = '\u{3099}(a\u{3099} あ\u{3099} は\u{3099} [\u{3099}])\u{3099}'.normalize('NFD')
-		const inputB = '\u{309A}(a\u{309A} あ\u{309A} は\u{309A} [\u{309A}])\u{309A}'.normalize('NFD')
-		const outputA = '(a あ ば [])'.normalize()
-		const outputB = '(a あ ぱ [])'.normalize()
+		const baseInput = '_(a_ あ_ _ は_ [_])_'
+
+		const inputA = baseInput.replace(/_/g, '\u{3099}')
+		const inputB = baseInput.replace(/_/g, '\u{309A}')
+		const inputC = baseInput.replace(/_/g, '\u{3099}\u{309A}\u{309A}')
+		const outputA = '(a あ  ば [])'.normalize('NFC')
+		const outputB = '(a あ  ぱ [])'.normalize('NFC')
+		const outputC = outputA
 
 		expect(chars.removeAccents(inputA)).toEqual(outputA)
 		expect(chars.removeAccents(inputA, true)).toEqual(outputA)
 		expect(chars.removeAccents(inputA, false)).toEqual(outputA)
+
 		expect(chars.removeAccents(inputB)).toEqual(outputB)
 		expect(chars.removeAccents(inputB, true)).toEqual(outputB)
 		expect(chars.removeAccents(inputB, false)).toEqual(outputB)
+
+		expect(chars.removeAccents(inputC)).toEqual(outputC)
+		expect(chars.removeAccents(inputC, true)).toEqual(outputC)
+		expect(chars.removeAccents(inputC, false)).toEqual(outputC)
 	})
 
 	test('removeAccents should preserve valid voiced sound marks', () => {
@@ -114,8 +137,8 @@ describe('chars', () => {
 	test('removeAccents should strip diacritics if stripAnyLanguage is true', () => {
 		const input = '𝘤̥͛𝘢̥͛𝘳̥͛𝘱̥͛𝘦̥͛ 𝘥̥͛𝘪̥͛𝘦̥͛𝘮̥͛'.normalize('NFD')
 		const output = '𝘤𝘢𝘳𝘱𝘦 𝘥𝘪𝘦𝘮'.normalize('NFC')
-		expect(chars.removeAccents(input)).toEqual(input.normalize())
-		expect(chars.removeAccents(input, false)).toEqual(input.normalize())
+		expect(chars.removeAccents(input)).toEqual(input.normalize('NFC'))
+		expect(chars.removeAccents(input, false)).toEqual(input.normalize('NFC'))
 		expect(chars.removeAccents(input, true)).toEqual(output)
 	})
 })
