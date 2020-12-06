@@ -40,6 +40,7 @@
 		// Custom rules:
 		"functional/no-loop-statement": "off",
 		"functional/no-mixed-type": "off",
+		"functional/no-return-void": "off",
 		"functional/prefer-readonly-type": "off",
 		"functional/prefer-type-literal": "off",
 		"jest/expect-expect": "off",
