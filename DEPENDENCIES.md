@@ -40,6 +40,8 @@ Additionally we include the following plugins:
 	* https://github.com/prettier/eslint-config-prettier
 * Jest plugin:
 	* https://github.com/jest-community/eslint-plugin-jest
+* Downgrade errors to warnings
+	* https://github.com/bfanger/eslint-plugin-only-warn
 
 The secondary `tsconfig.eslint.json` is required to lint additional files that 
 are not part of the compilation (e.g. test files). Files on the linter's path

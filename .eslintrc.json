@@ -11,7 +11,7 @@
 		"jest": true
 	},
 	"ignorePatterns": ["node_modules", "build", "coverage", "dist", "*.config.js"],
-	"plugins": ["@typescript-eslint", "import", "eslint-comments", "functional", "jest"],
+	"plugins": ["@typescript-eslint", "import", "eslint-comments", "functional", "jest", "only-warn"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:eslint-comments/recommended",
@@ -39,6 +39,10 @@
 
 		// Custom rules:
 		"functional/no-loop-statement": "off",
+		"functional/no-mixed-type": "off",
+		"functional/prefer-readonly-type": "off",
+		"functional/prefer-type-literal": "off",
+		"jest/expect-expect": "off",
 		"jest/no-disabled-tests": "off"
 	}
 }
