@@ -38,6 +38,7 @@
 		"sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }],
 
 		// Custom rules:
+		"@typescript-eslint/no-non-null-assertion": "off",
 		"functional/no-loop-statement": "off",
 		"functional/no-mixed-type": "off",
 		"functional/no-return-void": "off",

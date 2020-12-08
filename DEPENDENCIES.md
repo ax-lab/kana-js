@@ -120,6 +120,11 @@ result in spurious errors about unsafe calls and member access to the `Any` type
 
 _Describe any code dependencies and rationale for them. Provide links to repositories and documentation._
 
+## Code Dependencies
+
+* `Immutable.js` - provides better support for functional style programming.
+	* https://immutable-js.github.io/immutable-js/
+
 ## Dev Dependencies
 
 * `babel` - Required by Jest to use with Typescript.

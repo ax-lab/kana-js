@@ -1,3 +1,5 @@
+import { List, Map, Seq } from 'immutable'
+
 type SomeEnum = {
 	[key: string]: number | string
 	[key: number]: number | string
@@ -48,22 +50,15 @@ export function enumToString(enumType: SomeEnum, value: number | string | null |
 
 	// For bitflags we need to isolate the individual bits
 	if (isFlag) {
-		// Array that we'll build with all the flags set in the value
-		const flags: string[] = []
-
-		// Retrieve all numeric enum entries (ignore the reverse mapping)
-		const keys = Object.keys(enumType).filter((x) => typeof enumType[x] === 'number')
-
-		// Build a map of key => value
-		const values: { [key: string]: number } = {}
-		for (const key of keys) {
-			// eslint-disable-next-line functional/immutable-data
-			values[key] = +enumType[key]
-		}
+		// Filter the numeric enum keys, which correspond to the flags (enums
+		// generate a reverse mapping of value to names as well).
+		const enumValues = Seq(enumType)
+			.filter((v) => typeof v === 'number')
+			.toMap() as Map<string, number>
 
 		// Sort the keys. We want individual bit flags to be sorted by
 		// increasing value, but we want composites to come first and be
-		// sorted decreasing.
+		// sorted decreasing (from broadest to narrowest).
 		//
 		// This weird sort order makes sure that when a composite flag is used
 		// it will actually appear in the output, with more complete flags being
@@ -72,10 +67,8 @@ export function enumToString(enumType: SomeEnum, value: number | string | null |
 		// Check if `key` is a composite flag. This is true if any other
 		// flag bits are a subset of `key`.
 		const isComposite = (key: string) => {
-			const val = values[key]
-			for (const k of keys) {
-				const v = values[k]
-
+			const val = enumValues.get(key)!
+			for (const v of enumValues.values()) {
 				// `v` is a subset of `val` if:
 				// - it is not the empty flag;
 				// - any bit set in `v` is also set in `val`;
@@ -87,8 +80,7 @@ export function enumToString(enumType: SomeEnum, value: number | string | null |
 			return false
 		}
 
-		// eslint-disable-next-line functional/immutable-data
-		keys.sort((a, b) => {
+		const keys = enumValues.keySeq().sort((a, b) => {
 			const cA = isComposite(a)
 			const cB = isComposite(b)
 			if (cA !== cB) {
@@ -96,31 +88,33 @@ export function enumToString(enumType: SomeEnum, value: number | string | null |
 				return cA ? -1 : +1
 			} else if (cA) {
 				// Between composites, we sort in decreasing order
-				return values[b] - values[a]
+				return enumValues.get(b)! - enumValues.get(a)!
 			} else {
 				// Between non-composites, we sort in increasing order
-				return values[a] - values[b]
+				return enumValues.get(a)! - enumValues.get(b)!
 			}
 		})
 
-		// eslint-disable-next-line functional/no-let
-		let remaining = value
-		for (const key of keys) {
-			const val = +enumType[key]
-			if (val !== 0 && (remaining & val) === val) {
-				// eslint-disable-next-line functional/immutable-data
-				flags.push(key)
-				remaining = remaining - val
-			}
-		}
-		if (remaining !== 0) {
-			// eslint-disable-next-line functional/immutable-data
-			flags.push(remaining.toString())
-		}
-		if (!flags.length) {
-			// eslint-disable-next-line functional/immutable-data
-			flags.push('0')
-		}
+		const result = keys.reduce(
+			(res, key) => {
+				const flag = enumValues.get(key)!
+				if (flag !== 0 && (res.value & flag) === flag) {
+					return {
+						value: res.value - flag,
+						flags: res.flags.push(key),
+					}
+				}
+				return res
+			},
+			{ value: value, flags: List<string>() }
+		)
+
+		const flags =
+			result.value !== 0
+				? result.flags.push(result.value.toString())
+				: result.flags.count() === 0
+				? result.flags.push('0')
+				: result.flags
 		return flags.join('+')
 	}
 
