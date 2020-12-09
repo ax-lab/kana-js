@@ -1,8 +1,42 @@
 /**
- * Methods to test and extract characters from a string.
+ * Methods to test and extract characters from a Japanese-related text string.
  *
  * @packageDocumentation
  */
+
+import { TABLE as CHAR_TABLE } from './chars_table'
+import { CharFlags, CharKind } from './chars_types'
+
+export * from './chars_types'
+
+/**
+ * Looks up information about a single character unit. Character units are
+ * generally a single Unicode codepoint, but can also include combining marks
+ * for non-normalized or rare characters.
+ *
+ * This is designed to be used with the output of `nextChar` (possibly after
+ * being cleaned up by `removeAccents`).
+ *
+ * The main purpose of this function is to be used for segmentation of Japanese
+ * text (both native and Romaji). It also provides some general Unicode info
+ * for convenience when processing general text (e.g. in a multi-idiom
+ * context).
+ *
+ * This function uses lookup tables for the most common characters and then
+ * fallsback to regular expressions based on Unicode ranges.
+ */
+export function getCharInfo(char: string): readonly [CharKind, CharFlags] | undefined {
+	if (!char) {
+		return undefined
+	}
+
+	const res = CHAR_TABLE[char]
+	if (res) {
+		return res
+	}
+
+	return [CharKind.NONE, 0]
+}
 
 /**
  * Returns the first Unicode character in the string.
