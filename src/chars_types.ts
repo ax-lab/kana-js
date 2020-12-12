@@ -30,9 +30,10 @@ export enum CharKind {
 	KATAKANA,
 
 	/**
-	 * Long sound mark (i.e. `ー` and the halfwidth `ｰ`).
+	 * A symbol used with kana text, such as the long sound mark (`ー` and `ｰ`)
+	 * or the masu symbol (`〼`).
 	 */
-	LONG_SOUNDMARK,
+	KANA,
 
 	/**
 	 * Any kanji character. This includes non-japanese Kanji and is based
@@ -136,61 +137,66 @@ export enum CharFlags {
 	IS_SMALL = 1 << 0,
 
 	/**
+	 * Flag for the kana long sound mark (i.e. `ー` and the halfwidth `ｰ`).
+	 */
+	IS_LONG_MARK = 1 << 1,
+
+	/**
 	 * Flag for the iteration marks of kana characters.
 	 *
 	 * Relevant for: HIRAGANA | KATAKANA
 	 */
-	IS_MARK = 1 << 1,
+	IS_MARK = 1 << 2,
 
 	/**
 	 * Flags rare or archaic kana characters.
 	 *
 	 * Relevant for: HIRAGANA | KATAKANA
 	 */
-	IS_RARE = 1 << 2,
+	IS_RARE = 1 << 3,
 
 	/**
 	 * Flags the halfwidth versions of katakana characters.
 	 *
 	 * Relevant for: KATAKANA
 	 */
-	IS_HALFWIDTH = 1 << 3,
+	IS_HALFWIDTH = 1 << 4,
 
 	/**
 	 * Flags lowercase characters.
 	 *
 	 * Relevant for: ROMAJI | ROMAN_LETTER | OTHER_WORD
 	 */
-	IS_LOWER = 1 << 4,
+	IS_LOWER = 1 << 5,
 
 	/**
 	 * Flags uppercase characters.
 	 *
 	 * Relevant for: ROMAJI | ROMAN_LETTER | OTHER_WORD
 	 */
-	IS_UPPER = 1 << 5,
+	IS_UPPER = 1 << 6,
 
 	/**
 	 * Charset agnostic flag for letters, including kana, kanji, ASCII and other
 	 * languages.
 	 *
-	 * Relevant for: HIRAGANA | KATAKANA | KANJI | ROMAJI | ROMAN_LETTER | OTHER_WORD
+	 * Relevant for: HIRAGANA | KATAKANA | KANA | KANJI | ROMAJI | ROMAN_LETTER | OTHER_WORD
 	 */
-	IS_LETTER = 1 << 6,
+	IS_LETTER = 1 << 7,
 
 	/**
 	 * Charset agnostic flag for digits.
 	 *
 	 * Relevant for: ROMAJI | ROMAN_DIGIT | OTHER_WORD
 	 */
-	IS_NUMBER = 1 << 7,
+	IS_NUMBER = 1 << 8,
 
 	/**
 	 * Flags the fullwidth version of ASCII characters used in Japanese text.
 	 *
 	 * Relevant for: ROMAN_DIGIT | ROMAN_LETTER | JAPANESE_PUNCTUATION | JAPANESE_SYMBOL
 	 */
-	IS_ASCII_FULLWIDTH = 1 << 8,
+	IS_ASCII_FULLWIDTH = 1 << 9,
 
 	/**
 	 * Flags a kanji radical (`U+2E80 - U+2EF3 / U+2F00 - U+2FD5`). Those are
@@ -198,7 +204,7 @@ export enum CharFlags {
 	 *
 	 * Relevant for: JAPANESE_SYMBOL
 	 */
-	IS_KANJI_RADICAL = 1 << 9,
+	IS_KANJI_RADICAL = 1 << 10,
 
 	//=================//
 	// Charset         //
@@ -215,11 +221,11 @@ export enum CharFlags {
 	 * as such includes non-japanese kanji.
 	 *
 	 */
-	CHAR_JAPANESE = 1 << 10,
+	CHAR_JAPANESE = 1 << 11,
 
 	/**
 	 * Flags any character from the supported ASCII set. This includes basically
 	 * the ROMAJI, ROMAJI_PUNCTUATION, and SPACE (except U+3000).
 	 */
-	CHAR_ASCII = 1 << 11,
+	CHAR_ASCII = 1 << 12,
 }

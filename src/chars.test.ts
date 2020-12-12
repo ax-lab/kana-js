@@ -285,16 +285,34 @@ describe('chars', () => {
 			// Katakana iteration marks
 			expect('ヽヾ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_MARK
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_RARE | CharFlags.IS_MARK
 			)
 		})
 
 		test('should support prolonged sound mark', () => {
-			expect('ー').eachToHaveCharInfo(CharKind.LONG_SOUNDMARK, CharFlags.CHAR_JAPANESE)
-			expect('ｰ').eachToHaveCharInfo(CharKind.LONG_SOUNDMARK, CharFlags.CHAR_JAPANESE | CharFlags.IS_HALFWIDTH)
+			expect('ー').eachToHaveCharInfo(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK)
+			expect('ｰ').eachToHaveCharInfo(
+				CharKind.KANA,
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK | CharFlags.IS_HALFWIDTH
+			)
 		})
 
-		test('should support fullwidth characters', () => {
+		test('should support weird kana characters', () => {
+			// Hiragana Yori
+			expect('ゟ').toHaveCharInfo(
+				CharKind.HIRAGANA,
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+			)
+			// Katakana Koto
+			expect('ヿ').toHaveCharInfo(
+				CharKind.KATAKANA,
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+			)
+			// Masu mark
+			expect('〼').toHaveCharInfo(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER)
+		})
+
+		test('should support ASCII fullwidth characters', () => {
 			// Fullwidth ASCII digits
 			expect('０１２３４５６７８９').eachToHaveCharInfo(
 				CharKind.ROMAN_DIGIT,
@@ -304,13 +322,13 @@ describe('chars', () => {
 			// Fullwidth ASCII uppercase letters
 			expect('ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ').eachToHaveCharInfo(
 				CharKind.ROMAN_LETTER,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_LOWER
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_UPPER
 			)
 
 			// Fullwidth ASCII lowercase letters
 			expect('ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ').eachToHaveCharInfo(
 				CharKind.ROMAN_LETTER,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_UPPER
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_LOWER
 			)
 
 			// Fullwidth ASCII punctuation
@@ -318,7 +336,9 @@ describe('chars', () => {
 				CharKind.JAPANESE_PUNCTUATION,
 				CharFlags.CHAR_JAPANESE | CharFlags.IS_ASCII_FULLWIDTH
 			)
+		})
 
+		test('should support Japanese punctuation', () => {
 			// Japanese punctuation
 			expect('・゠、。〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟｟｠').eachToHaveCharInfo(
 				CharKind.JAPANESE_PUNCTUATION,

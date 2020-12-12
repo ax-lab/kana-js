@@ -591,6 +591,343 @@ U+205F	' '	*       	Medium Mathematical Space (MMSP)
 U+3000	'　'	JAPANESE　	Ideographic Space
 ```
 
+## Kanji Radicals
+
+Common Flags: SYMBOL | JAPANESE | IS_KANJI_RADICAL
+
+```
+U+2E80	⺀	CJK Radical Repeat
+U+2E81	⺁	CJK Radical Cliff
+U+2E82	⺂	CJK Radical Second One
+U+2E83	⺃	CJK Radical Second Two
+U+2E84	⺄	CJK Radical Second Three
+U+2E85	⺅	CJK Radical Person
+U+2E86	⺆	CJK Radical Box
+U+2E87	⺇	CJK Radical Table
+U+2E88	⺈	CJK Radical Knife One
+U+2E89	⺉	CJK Radical Knife Two
+U+2E8A	⺊	CJK Radical Divination
+U+2E8B	⺋	CJK Radical Seal
+U+2E8C	⺌	CJK Radical Small One
+U+2E8D	⺍	CJK Radical Small Two
+U+2E8E	⺎	CJK Radical Lame One
+U+2E8F	⺏	CJK Radical Lame Two
+U+2E90	⺐	CJK Radical Lame Three
+U+2E91	⺑	CJK Radical Lame Four
+U+2E92	⺒	CJK Radical Snake
+U+2E93	⺓	CJK Radical Thread
+U+2E94	⺔	CJK Radical Snout One
+U+2E95	⺕	CJK Radical Snout Two
+U+2E96	⺖	CJK Radical Heart One
+U+2E97	⺗	CJK Radical Heart Two
+U+2E98	⺘	CJK Radical Hand
+U+2E99	⺙	CJK Radical Rap
+U+2E9B	⺛	CJK Radical Choke
+U+2E9C	⺜	CJK Radical Sun
+U+2E9D	⺝	CJK Radical Moon
+U+2E9E	⺞	CJK Radical Death
+U+2E9F	⺟	CJK Radical Mother
+U+2EA0	⺠	CJK Radical Civilian
+U+2EA1	⺡	CJK Radical Water One
+U+2EA2	⺢	CJK Radical Water Two
+U+2EA3	⺣	CJK Radical Fire
+U+2EA4	⺤	CJK Radical Paw One
+U+2EA5	⺥	CJK Radical Paw Two
+U+2EA6	⺦	CJK Radical Simplified Half Tree Trunk
+U+2EA7	⺧	CJK Radical Cow
+U+2EA8	⺨	CJK Radical Dog
+U+2EA9	⺩	CJK Radical Jade
+U+2EAA	⺪	CJK Radical Bolt of Cloth
+U+2EAB	⺫	CJK Radical Eye
+U+2EAC	⺬	CJK Radical Spirit One
+U+2EAD	⺭	CJK Radical Spirit Two
+U+2EAE	⺮	CJK Radical Bamboo
+U+2EAF	⺯	CJK Radical Silk
+U+2EB0	⺰	CJK Radical C-Simplified Silk
+U+2EB1	⺱	CJK Radical Net One
+U+2EB2	⺲	CJK Radical Net Two
+U+2EB3	⺳	CJK Radical Net Three
+U+2EB4	⺴	CJK Radical Net Four
+U+2EB5	⺵	CJK Radical Mesh
+U+2EB6	⺶	CJK Radical Sheep
+U+2EB7	⺷	CJK Radical Ram
+U+2EB8	⺸	CJK Radical Ewe
+U+2EB9	⺹	CJK Radical Old
+U+2EBA	⺺	CJK Radical Brush One
+U+2EBB	⺻	CJK Radical Brush Two
+U+2EBC	⺼	CJK Radical Meat
+U+2EBD	⺽	CJK Radical Mortar
+U+2EBE	⺾	CJK Radical Grass One
+U+2EBF	⺿	CJK Radical Grass Two
+U+2EC0	⻀	CJK Radical Grass Three
+U+2EC1	⻁	CJK Radical Tiger
+U+2EC2	⻂	CJK Radical Clothes
+U+2EC3	⻃	CJK Radical West One
+U+2EC4	⻄	CJK Radical West Two
+U+2EC5	⻅	CJK Radical C-Simplified See
+U+2EC6	⻆	CJK Radical Simplified Horn
+U+2EC7	⻇	CJK Radical Horn
+U+2EC8	⻈	CJK Radical C-Simplified Speech
+U+2EC9	⻉	CJK Radical C-Simplified Shell
+U+2ECA	⻊	CJK Radical Foot
+U+2ECB	⻋	CJK Radical C-Simplified Cart
+U+2ECC	⻌	CJK Radical Simplified Walk
+U+2ECD	⻍	CJK Radical Walk One
+U+2ECE	⻎	CJK Radical Walk Two
+U+2ECF	⻏	CJK Radical City
+U+2ED0	⻐	CJK Radical C-Simplified Gold
+U+2ED1	⻑	CJK Radical Long One
+U+2ED2	⻒	CJK Radical Long Two
+U+2ED3	⻓	CJK Radical C-Simplified Long
+U+2ED4	⻔	CJK Radical C-Simplified Gate
+U+2ED5	⻕	CJK Radical Mound One
+U+2ED6	⻖	CJK Radical Mound Two
+U+2ED7	⻗	CJK Radical Rain
+U+2ED8	⻘	CJK Radical Blue
+U+2ED9	⻙	CJK Radical C-Simplified Tanned Leather
+U+2EDA	⻚	CJK Radical C-Simplified Leaf
+U+2EDB	⻛	CJK Radical C-Simplified Wind
+U+2EDC	⻜	CJK Radical C-Simplified Fly
+U+2EDD	⻝	CJK Radical Eat One
+U+2EDE	⻞	CJK Radical Eat Two
+U+2EDF	⻟	CJK Radical Eat Three
+U+2EE0	⻠	CJK Radical C-Simplified Eat
+U+2EE1	⻡	CJK Radical Head
+U+2EE2	⻢	CJK Radical C-Simplified Horse
+U+2EE3	⻣	CJK Radical Bone
+U+2EE4	⻤	CJK Radical Ghost
+U+2EE5	⻥	CJK Radical C-Simplified Fish
+U+2EE6	⻦	CJK Radical C-Simplified Bird
+U+2EE7	⻧	CJK Radical C-Simplified Salt
+U+2EE8	⻨	CJK Radical Simplified Wheat
+U+2EE9	⻩	CJK Radical Simplified Yellow
+U+2EEA	⻪	CJK Radical C-Simplified Frog
+U+2EEB	⻫	CJK Radical J-Simplified Even
+U+2EEC	⻬	CJK Radical C-Simplified Even
+U+2EED	⻭	CJK Radical J-Simplified Tooth
+U+2EEE	⻮	CJK Radical C-Simplified Tooth
+U+2EEF	⻯	CJK Radical J-Simplified Dragon
+U+2EF0	⻰	CJK Radical C-Simplified Dragon
+U+2EF1	⻱	CJK Radical Turtle
+U+2EF2	⻲	CJK Radical J-Simplified Turtle
+U+2EF3	⻳	CJK Radical C-Simplified Turtle
+
+U+2F00	⼀	Kangxi Radical One
+U+2F01	⼁	Kangxi Radical Line
+U+2F02	⼂	Kangxi Radical Dot
+U+2F03	⼃	Kangxi Radical Slash
+U+2F04	⼄	Kangxi Radical Second
+U+2F05	⼅	Kangxi Radical Hook
+U+2F06	⼆	Kangxi Radical Two
+U+2F07	⼇	Kangxi Radical Lid
+U+2F08	⼈	Kangxi Radical Man
+U+2F09	⼉	Kangxi Radical Legs
+U+2F0A	⼊	Kangxi Radical Enter
+U+2F0B	⼋	Kangxi Radical Eight
+U+2F0C	⼌	Kangxi Radical Down Box
+U+2F0D	⼍	Kangxi Radical Cover
+U+2F0E	⼎	Kangxi Radical Ice
+U+2F0F	⼏	Kangxi Radical Table
+U+2F10	⼐	Kangxi Radical Open Box
+U+2F11	⼑	Kangxi Radical Knife
+U+2F12	⼒	Kangxi Radical Power
+U+2F13	⼓	Kangxi Radical Wrap
+U+2F14	⼔	Kangxi Radical Spoon
+U+2F15	⼕	Kangxi Radical Right Open Box
+U+2F16	⼖	Kangxi Radical Hiding Enclosure
+U+2F17	⼗	Kangxi Radical Ten
+U+2F18	⼘	Kangxi Radical Divination
+U+2F19	⼙	Kangxi Radical Seal
+U+2F1A	⼚	Kangxi Radical Cliff
+U+2F1B	⼛	Kangxi Radical Private
+U+2F1C	⼜	Kangxi Radical Again
+U+2F1D	⼝	Kangxi Radical Mouth
+U+2F1E	⼞	Kangxi Radical Enclosure
+U+2F1F	⼟	Kangxi Radical Earth
+U+2F20	⼠	Kangxi Radical Scholar
+U+2F21	⼡	Kangxi Radical Go
+U+2F22	⼢	Kangxi Radical Go Slowly
+U+2F23	⼣	Kangxi Radical Evening
+U+2F24	⼤	Kangxi Radical Big
+U+2F25	⼥	Kangxi Radical Woman
+U+2F26	⼦	Kangxi Radical Child
+U+2F27	⼧	Kangxi Radical Roof
+U+2F28	⼨	Kangxi Radical Inch
+U+2F29	⼩	Kangxi Radical Small
+U+2F2A	⼪	Kangxi Radical Lame
+U+2F2B	⼫	Kangxi Radical Corpse
+U+2F2C	⼬	Kangxi Radical Sprout
+U+2F2D	⼭	Kangxi Radical Mountain
+U+2F2E	⼮	Kangxi Radical River
+U+2F2F	⼯	Kangxi Radical Work
+U+2F30	⼰	Kangxi Radical Oneself
+U+2F31	⼱	Kangxi Radical Turban
+U+2F32	⼲	Kangxi Radical Dry
+U+2F33	⼳	Kangxi Radical Short Thread
+U+2F34	⼴	Kangxi Radical Dotted Cliff
+U+2F35	⼵	Kangxi Radical Long Stride
+U+2F36	⼶	Kangxi Radical Two Hands
+U+2F37	⼷	Kangxi Radical Shoot
+U+2F38	⼸	Kangxi Radical Bow
+U+2F39	⼹	Kangxi Radical Snout
+U+2F3A	⼺	Kangxi Radical Bristle
+U+2F3B	⼻	Kangxi Radical Step
+U+2F3C	⼼	Kangxi Radical Heart
+U+2F3D	⼽	Kangxi Radical Halberd
+U+2F3E	⼾	Kangxi Radical Door
+U+2F3F	⼿	Kangxi Radical Hand
+U+2F40	⽀	Kangxi Radical Branch
+U+2F41	⽁	Kangxi Radical Rap
+U+2F42	⽂	Kangxi Radical Script
+U+2F43	⽃	Kangxi Radical Dipper
+U+2F44	⽄	Kangxi Radical Axe
+U+2F45	⽅	Kangxi Radical Square
+U+2F46	⽆	Kangxi Radical Not
+U+2F47	⽇	Kangxi Radical Sun
+U+2F48	⽈	Kangxi Radical Say
+U+2F49	⽉	Kangxi Radical Moon
+U+2F4A	⽊	Kangxi Radical Tree
+U+2F4B	⽋	Kangxi Radical Lack
+U+2F4C	⽌	Kangxi Radical Stop
+U+2F4D	⽍	Kangxi Radical Death
+U+2F4E	⽎	Kangxi Radical Weapon
+U+2F4F	⽏	Kangxi Radical Do Not
+U+2F50	⽐	Kangxi Radical Compare
+U+2F51	⽑	Kangxi Radical Fur
+U+2F52	⽒	Kangxi Radical Clan
+U+2F53	⽓	Kangxi Radical Steam
+U+2F54	⽔	Kangxi Radical Water
+U+2F55	⽕	Kangxi Radical Fire
+U+2F56	⽖	Kangxi Radical Claw
+U+2F57	⽗	Kangxi Radical Father
+U+2F58	⽘	Kangxi Radical Double X
+U+2F59	⽙	Kangxi Radical Half Tree Trunk
+U+2F5A	⽚	Kangxi Radical Slice
+U+2F5B	⽛	Kangxi Radical Fang
+U+2F5C	⽜	Kangxi Radical Cow
+U+2F5D	⽝	Kangxi Radical Dog
+U+2F5E	⽞	Kangxi Radical Profound
+U+2F5F	⽟	Kangxi Radical Jade
+U+2F60	⽠	Kangxi Radical Melon
+U+2F61	⽡	Kangxi Radical Tile
+U+2F62	⽢	Kangxi Radical Sweet
+U+2F63	⽣	Kangxi Radical Life
+U+2F64	⽤	Kangxi Radical Use
+U+2F65	⽥	Kangxi Radical Field
+U+2F66	⽦	Kangxi Radical Bolt of Cloth
+U+2F67	⽧	Kangxi Radical Sickness
+U+2F68	⽨	Kangxi Radical Dotted Tent
+U+2F69	⽩	Kangxi Radical White
+U+2F6A	⽪	Kangxi Radical Skin
+U+2F6B	⽫	Kangxi Radical Dish
+U+2F6C	⽬	Kangxi Radical Eye
+U+2F6D	⽭	Kangxi Radical Spear
+U+2F6E	⽮	Kangxi Radical Arrow
+U+2F6F	⽯	Kangxi Radical Stone
+U+2F70	⽰	Kangxi Radical Spirit
+U+2F71	⽱	Kangxi Radical Track
+U+2F72	⽲	Kangxi Radical Grain
+U+2F73	⽳	Kangxi Radical Cave
+U+2F74	⽴	Kangxi Radical Stand
+U+2F75	⽵	Kangxi Radical Bamboo
+U+2F76	⽶	Kangxi Radical Rice
+U+2F77	⽷	Kangxi Radical Silk
+U+2F78	⽸	Kangxi Radical Jar
+U+2F79	⽹	Kangxi Radical Net
+U+2F7A	⽺	Kangxi Radical Sheep
+U+2F7B	⽻	Kangxi Radical Feather
+U+2F7C	⽼	Kangxi Radical Old
+U+2F7D	⽽	Kangxi Radical And
+U+2F7E	⽾	Kangxi Radical Plow
+U+2F7F	⽿	Kangxi Radical Ear
+U+2F80	⾀	Kangxi Radical Brush
+U+2F81	⾁	Kangxi Radical Meat
+U+2F82	⾂	Kangxi Radical Minister
+U+2F83	⾃	Kangxi Radical Self
+U+2F84	⾄	Kangxi Radical Arrive
+U+2F85	⾅	Kangxi Radical Mortar
+U+2F86	⾆	Kangxi Radical Tongue
+U+2F87	⾇	Kangxi Radical Oppose
+U+2F88	⾈	Kangxi Radical Boat
+U+2F89	⾉	Kangxi Radical Stopping
+U+2F8A	⾊	Kangxi Radical Color
+U+2F8B	⾋	Kangxi Radical Grass
+U+2F8C	⾌	Kangxi Radical Tiger
+U+2F8D	⾍	Kangxi Radical Insect
+U+2F8E	⾎	Kangxi Radical Blood
+U+2F8F	⾏	Kangxi Radical Walk Enclosure
+U+2F90	⾐	Kangxi Radical Clothes
+U+2F91	⾑	Kangxi Radical West
+U+2F92	⾒	Kangxi Radical See
+U+2F93	⾓	Kangxi Radical Horn
+U+2F94	⾔	Kangxi Radical Speech
+U+2F95	⾕	Kangxi Radical Valley
+U+2F96	⾖	Kangxi Radical Bean
+U+2F97	⾗	Kangxi Radical Pig
+U+2F98	⾘	Kangxi Radical Badger
+U+2F99	⾙	Kangxi Radical Shell
+U+2F9A	⾚	Kangxi Radical Red
+U+2F9B	⾛	Kangxi Radical Run
+U+2F9C	⾜	Kangxi Radical Foot
+U+2F9D	⾝	Kangxi Radical Body
+U+2F9E	⾞	Kangxi Radical Cart
+U+2F9F	⾟	Kangxi Radical Bitter
+U+2FA0	⾠	Kangxi Radical Morning
+U+2FA1	⾡	Kangxi Radical Walk
+U+2FA2	⾢	Kangxi Radical City
+U+2FA3	⾣	Kangxi Radical Wine
+U+2FA4	⾤	Kangxi Radical Distinguish
+U+2FA5	⾥	Kangxi Radical Village
+U+2FA6	⾦	Kangxi Radical Gold
+U+2FA7	⾧	Kangxi Radical Long
+U+2FA8	⾨	Kangxi Radical Gate
+U+2FA9	⾩	Kangxi Radical Mound
+U+2FAA	⾪	Kangxi Radical Slave
+U+2FAB	⾫	Kangxi Radical Short Tailed Bird
+U+2FAC	⾬	Kangxi Radical Rain
+U+2FAD	⾭	Kangxi Radical Blue
+U+2FAE	⾮	Kangxi Radical Wrong
+U+2FAF	⾯	Kangxi Radical Face
+U+2FB0	⾰	Kangxi Radical Leather
+U+2FB1	⾱	Kangxi Radical Tanned Leather
+U+2FB2	⾲	Kangxi Radical Leek
+U+2FB3	⾳	Kangxi Radical Sound
+U+2FB4	⾴	Kangxi Radical Leaf
+U+2FB5	⾵	Kangxi Radical Wind
+U+2FB6	⾶	Kangxi Radical Fly
+U+2FB7	⾷	Kangxi Radical Eat
+U+2FB8	⾸	Kangxi Radical Head
+U+2FB9	⾹	Kangxi Radical Fragrant
+U+2FBA	⾺	Kangxi Radical Horse
+U+2FBB	⾻	Kangxi Radical Bone
+U+2FBC	⾼	Kangxi Radical Tall
+U+2FBD	⾽	Kangxi Radical Hair
+U+2FBE	⾾	Kangxi Radical Fight
+U+2FBF	⾿	Kangxi Radical Sacrificial Wine
+U+2FC0	⿀	Kangxi Radical Cauldron
+U+2FC1	⿁	Kangxi Radical Ghost
+U+2FC2	⿂	Kangxi Radical Fish
+U+2FC3	⿃	Kangxi Radical Bird
+U+2FC4	⿄	Kangxi Radical Salt
+U+2FC5	⿅	Kangxi Radical Deer
+U+2FC6	⿆	Kangxi Radical Wheat
+U+2FC7	⿇	Kangxi Radical Hemp
+U+2FC8	⿈	Kangxi Radical Yellow
+U+2FC9	⿉	Kangxi Radical Millet
+U+2FCA	⿊	Kangxi Radical Black
+U+2FCB	⿋	Kangxi Radical Embroidery
+U+2FCC	⿌	Kangxi Radical Frog
+U+2FCD	⿍	Kangxi Radical Tripod
+U+2FCE	⿎	Kangxi Radical Drum
+U+2FCF	⿏	Kangxi Radical Rat
+U+2FD0	⿐	Kangxi Radical Nose
+U+2FD1	⿑	Kangxi Radical Even
+U+2FD2	⿒	Kangxi Radical Tooth
+U+2FD3	⿓	Kangxi Radical Dragon
+U+2FD4	⿔	Kangxi Radical Turtle
+U+2FD5	⿕	Kangxi Radical Flute
+```
+
 ## Japanese Symbols
 
 Common Flags: SYMBOL | JAPANESE
@@ -628,16 +965,22 @@ U+FFE4	￤	FULLWIDTH	Fullwidth Broken Bar
 U+FFE5	￥	FULLWIDTH	Fullwidth Yen Sign
 U+FFE6	￦	FULLWIDTH	Fullwidth Won Sign
 
-U+3220	㈠	*        	Parenthesized Ideograph One
-U+3221	㈡	*        	Parenthesized Ideograph Two
-U+3222	㈢	*        	Parenthesized Ideograph Three
-U+3223	㈣	*        	Parenthesized Ideograph Four
-U+3224	㈤	*        	Parenthesized Ideograph Five
-U+3225	㈥	*        	Parenthesized Ideograph Six
-U+3226	㈦	*        	Parenthesized Ideograph Seven
-U+3227	㈧	*        	Parenthesized Ideograph Eight
-U+3228	㈨	*        	Parenthesized Ideograph Nine
-U+3229	㈩	*        	Parenthesized Ideograph Ten
+U+3192	㆒	NUMBER   	Ideographic Annotation One Mark
+U+3193	㆓	NUMBER   	Ideographic Annotation Two Mark
+U+3194	㆔	NUMBER   	Ideographic Annotation Three Mark
+U+3195	㆕	NUMBER   	Ideographic Annotation Four Mark
+
+U+3220	㈠	NUMBER   	Parenthesized Ideograph One
+U+3221	㈡	NUMBER   	Parenthesized Ideograph Two
+U+3222	㈢	NUMBER   	Parenthesized Ideograph Three
+U+3223	㈣	NUMBER   	Parenthesized Ideograph Four
+U+3224	㈤	NUMBER   	Parenthesized Ideograph Five
+U+3225	㈥	NUMBER   	Parenthesized Ideograph Six
+U+3226	㈦	NUMBER   	Parenthesized Ideograph Seven
+U+3227	㈧	NUMBER   	Parenthesized Ideograph Eight
+U+3228	㈨	NUMBER   	Parenthesized Ideograph Nine
+U+3229	㈩	NUMBER   	Parenthesized Ideograph Ten
+
 U+322A	㈪	*        	Parenthesized Ideograph Moon
 U+322B	㈫	*        	Parenthesized Ideograph Fire
 U+322C	㈬	*        	Parenthesized Ideograph Water
@@ -668,30 +1011,34 @@ U+3244	㉄	*        	Circled Ideograph Question
 U+3245	㉅	*        	Circled Ideograph Kindergarten
 U+3246	㉆	*        	Circled Ideograph School
 U+3247	㉇	*        	Circled Ideograph Koto
-U+3248	㉈	*        	Circled Number Ten On Black Square
-U+3249	㉉	*        	Circled Number Twenty On Black Square
-U+324A	㉊	*        	Circled Number Thirty On Black Square
-U+324B	㉋	*        	Circled Number Forty On Black Square
-U+324C	㉌	*        	Circled Number Fifty On Black Square
-U+324D	㉍	*        	Circled Number Sixty On Black Square
-U+324E	㉎	*        	Circled Number Seventy On Black Square
-U+324F	㉏	*        	Circled Number Eighty On Black Square
+
+U+3248	㉈	NUMBER   	Circled Number Ten On Black Square
+U+3249	㉉	NUMBER   	Circled Number Twenty On Black Square
+U+324A	㉊	NUMBER   	Circled Number Thirty On Black Square
+U+324B	㉋	NUMBER   	Circled Number Forty On Black Square
+U+324C	㉌	NUMBER   	Circled Number Fifty On Black Square
+U+324D	㉍	NUMBER   	Circled Number Sixty On Black Square
+U+324E	㉎	NUMBER   	Circled Number Seventy On Black Square
+U+324F	㉏	NUMBER   	Circled Number Eighty On Black Square
+
 U+3250	㉐	*        	Partnership Sign
-U+3251	㉑	*        	Circled Number Twenty One
-U+3252	㉒	*        	Circled Number Twenty Two
-U+3253	㉓	*        	Circled Number Twenty Three
-U+3254	㉔	*        	Circled Number Twenty Four
-U+3255	㉕	*        	Circled Number Twenty Five
-U+3256	㉖	*        	Circled Number Twenty Six
-U+3257	㉗	*        	Circled Number Twenty Seven
-U+3258	㉘	*        	Circled Number Twenty Eight
-U+3259	㉙	*        	Circled Number Twenty Nine
-U+325A	㉚	*        	Circled Number Thirty
-U+325B	㉛	*        	Circled Number Thirty One
-U+325C	㉜	*        	Circled Number Thirty Two
-U+325D	㉝	*        	Circled Number Thirty Three
-U+325E	㉞	*        	Circled Number Thirty Four
-U+325F	㉟	*        	Circled Number Thirty Five
+
+U+3251	㉑	NUMBER   	Circled Number Twenty One
+U+3252	㉒	NUMBER   	Circled Number Twenty Two
+U+3253	㉓	NUMBER   	Circled Number Twenty Three
+U+3254	㉔	NUMBER   	Circled Number Twenty Four
+U+3255	㉕	NUMBER   	Circled Number Twenty Five
+U+3256	㉖	NUMBER   	Circled Number Twenty Six
+U+3257	㉗	NUMBER   	Circled Number Twenty Seven
+U+3258	㉘	NUMBER   	Circled Number Twenty Eight
+U+3259	㉙	NUMBER   	Circled Number Twenty Nine
+U+325A	㉚	NUMBER   	Circled Number Thirty
+U+325B	㉛	NUMBER   	Circled Number Thirty One
+U+325C	㉜	NUMBER   	Circled Number Thirty Two
+U+325D	㉝	NUMBER   	Circled Number Thirty Three
+U+325E	㉞	NUMBER   	Circled Number Thirty Four
+U+325F	㉟	NUMBER   	Circled Number Thirty Five
+
 U+3260	㉠	*        	Circled Hangul Kiyeok
 U+3261	㉡	*        	Circled Hangul Nieun
 U+3262	㉢	*        	Circled Hangul Tikeut
@@ -724,16 +1071,18 @@ U+327C	㉼	*        	Circled Korean Character Chamko
 U+327D	㉽	*        	Circled Korean Character Jueui
 U+327E	㉾	*        	Circled Hangul Ieung U
 U+327F	㉿	*        	Korean Standard Symbol
-U+3280	㊀	*        	Circled Ideograph One
-U+3281	㊁	*        	Circled Ideograph Two
-U+3282	㊂	*        	Circled Ideograph Three
-U+3283	㊃	*        	Circled Ideograph Four
-U+3284	㊄	*        	Circled Ideograph Five
-U+3285	㊅	*        	Circled Ideograph Six
-U+3286	㊆	*        	Circled Ideograph Seven
-U+3287	㊇	*        	Circled Ideograph Eight
-U+3288	㊈	*        	Circled Ideograph Nine
-U+3289	㊉	*        	Circled Ideograph Ten
+
+U+3280	㊀	NUMBER   	Circled Ideograph One
+U+3281	㊁	NUMBER   	Circled Ideograph Two
+U+3282	㊂	NUMBER   	Circled Ideograph Three
+U+3283	㊃	NUMBER   	Circled Ideograph Four
+U+3284	㊄	NUMBER   	Circled Ideograph Five
+U+3285	㊅	NUMBER   	Circled Ideograph Six
+U+3286	㊆	NUMBER   	Circled Ideograph Seven
+U+3287	㊇	NUMBER   	Circled Ideograph Eight
+U+3288	㊈	NUMBER   	Circled Ideograph Nine
+U+3289	㊉	NUMBER   	Circled Ideograph Ten
+
 U+328A	㊊	*        	Circled Ideograph Moon
 U+328B	㊋	*        	Circled Ideograph Fire
 U+328C	㊌	*        	Circled Ideograph Water
@@ -773,21 +1122,23 @@ U+32AD	㊭	*        	Circled Ideograph Enterprise
 U+32AE	㊮	*        	Circled Ideograph Resource
 U+32AF	㊯	*        	Circled Ideograph Alliance
 U+32B0	㊰	*        	Circled Ideograph Night
-U+32B1	㊱	*        	Circled Number Thirty Six
-U+32B2	㊲	*        	Circled Number Thirty Seven
-U+32B3	㊳	*        	Circled Number Thirty Eight
-U+32B4	㊴	*        	Circled Number Thirty Nine
-U+32B5	㊵	*        	Circled Number Forty
-U+32B6	㊶	*        	Circled Number Forty One
-U+32B7	㊷	*        	Circled Number Forty Two
-U+32B8	㊸	*        	Circled Number Forty Three
-U+32B9	㊹	*        	Circled Number Forty Four
-U+32BA	㊺	*        	Circled Number Forty Five
-U+32BB	㊻	*        	Circled Number Forty Six
-U+32BC	㊼	*        	Circled Number Forty Seven
-U+32BD	㊽	*        	Circled Number Forty Eight
-U+32BE	㊾	*        	Circled Number Forty Nine
-U+32BF	㊿	*        	Circled Number Fifty
+
+U+32B1	㊱	NUMBER   	Circled Number Thirty Six
+U+32B2	㊲	NUMBER   	Circled Number Thirty Seven
+U+32B3	㊳	NUMBER   	Circled Number Thirty Eight
+U+32B4	㊴	NUMBER   	Circled Number Thirty Nine
+U+32B5	㊵	NUMBER   	Circled Number Forty
+U+32B6	㊶	NUMBER   	Circled Number Forty One
+U+32B7	㊷	NUMBER   	Circled Number Forty Two
+U+32B8	㊸	NUMBER   	Circled Number Forty Three
+U+32B9	㊹	NUMBER   	Circled Number Forty Four
+U+32BA	㊺	NUMBER   	Circled Number Forty Five
+U+32BB	㊻	NUMBER   	Circled Number Forty Six
+U+32BC	㊼	NUMBER   	Circled Number Forty Seven
+U+32BD	㊽	NUMBER   	Circled Number Forty Eight
+U+32BE	㊾	NUMBER   	Circled Number Forty Nine
+U+32BF	㊿	NUMBER   	Circled Number Fifty
+
 U+32C0	㋀	*        	Ideographic Telegraph Symbol For January
 U+32C1	㋁	*        	Ideographic Telegraph Symbol For February
 U+32C2	㋂	*        	Ideographic Telegraph Symbol For March
