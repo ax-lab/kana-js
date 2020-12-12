@@ -35,6 +35,38 @@ export function getCharInfo(char: string): readonly [CharKind, CharFlags] | unde
 		return res
 	}
 
+	// const RE_KANJI = /^$/u
+	const RE_KANJI = /^[\u{3400}-\u{4DBF}\u{4E00}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2A6DF}\u{2A700}-\u{2B73F}\u{2B740}-\u{2B81F}\u{2B820}-\u{2CEAF}\u{2CEB0}-\u{2EBEF}]$/u
+
+	// Test the char using regular expressions
+	if (RE_KANJI.test(char)) {
+		return [CharKind.KANJI, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER]
+	}
+
+	if (/^[\p{Lu}][\p{M}]*$/u.test(char)) {
+		return [CharKind.OTHER_WORD, CharFlags.IS_LETTER | CharFlags.IS_UPPER]
+	}
+
+	if (/^[\p{Ll}][\p{M}]*$/u.test(char)) {
+		return [CharKind.OTHER_WORD, CharFlags.IS_LETTER | CharFlags.IS_LOWER]
+	}
+
+	if (/^[\p{L}][\p{M}]*$/u.test(char)) {
+		return [CharKind.OTHER_WORD, CharFlags.IS_LETTER]
+	}
+
+	if (/^[\p{N}][\p{M}]*$/u.test(char)) {
+		return [CharKind.OTHER_WORD, CharFlags.IS_NUMBER]
+	}
+
+	if (/^[\p{P}]$/u.test(char)) {
+		return [CharKind.OTHER_PUNCTUATION, CharFlags.NONE]
+	}
+
+	if (/^[\p{S}]$/u.test(char)) {
+		return [CharKind.OTHER_SYMBOL, CharFlags.NONE]
+	}
+
 	return [CharKind.NONE, 0]
 }
 

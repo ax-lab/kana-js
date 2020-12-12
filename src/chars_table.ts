@@ -665,6 +665,7 @@ export const TABLE: { [key: string]: [CharKind, CharFlags] } = {
 	//========================================================================//
 
 	// Numeric symbols
+	〇: JS1,
 	'㈠': JS1,
 	'㈡': JS1,
 	'㈢': JS1,
@@ -738,7 +739,6 @@ export const TABLE: { [key: string]: [CharKind, CharFlags] } = {
 	'〄': JS2,
 	々: JS2,
 	〆: JS2,
-	〇: JS2,
 	'〒': JS2,
 	'〓': JS2,
 	'〠': JS2,
