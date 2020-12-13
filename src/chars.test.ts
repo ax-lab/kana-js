@@ -748,6 +748,15 @@ describe('chars', () => {
 				expect(it).eachToHaveCharInfo(CharKind.OTHER_SYMBOL, CharFlags.NONE)
 			}
 		})
+
+		test('should handle non-normalized and combined sequences', () => {
+			expect('は\u{3099}').toHaveCharInfo(CharKind.HIRAGANA)
+			expect('a\u{0302}').toHaveCharInfo(
+				CharKind.ROMAJI,
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER
+			)
+			expect('c\u{0303}\u{0332}').toHaveCharInfo(CharKind.OTHER_WORD, CharFlags.IS_LETTER | CharFlags.IS_LOWER)
+		})
 	})
 })
 

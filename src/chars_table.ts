@@ -4,8 +4,18 @@ export const TABLE: { [key: string]: [CharKind, CharFlags] } = {}
 
 function register(kind: CharKind, flags: CharFlags, ...keys: string[]) {
 	for (const k of keys) {
+		const kc = k.normalize()
+		const kd = k.normalize('NFD')
 		// eslint-disable-next-line functional/immutable-data
 		TABLE[k] = [kind, flags]
+		if (kc !== k) {
+			// eslint-disable-next-line functional/immutable-data
+			TABLE[kc] = [kind, flags]
+		}
+		if (kd !== kc) {
+			// eslint-disable-next-line functional/immutable-data
+			TABLE[kd] = [kind, flags]
+		}
 	}
 }
 
