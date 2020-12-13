@@ -135,7 +135,7 @@ export function removeAccents(input: string, stripAnyLanguage?: boolean): string
 	// Match all A-Z character followed by a sequence of marks. Strip all marks
 	// except for a single combining U+0302 (circumflex accent) or U+0304 (macron).
 	const strippedAZ = strippedAll.replace(/([A-Za-z])([\p{M}]+)/gu, (match, p0: string, p1: string) =>
-		RE_VOWEL.test(p0) ? p0 + firstMatchChar(p1, /[\u{0302}\u{0304}]/u) : p0
+		RE_VOWEL.test(p0) ? p0 + firstMatchChar(p1, /[\u{0302}\u{0304}]/u) : p0,
 	)
 
 	// At this point, the only combining marks left to process should be the

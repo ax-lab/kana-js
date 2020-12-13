@@ -218,74 +218,74 @@ describe('chars', () => {
 		test('should support hiragana', () => {
 			// Common hiragana
 			expect(
-				'あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもやゆよらりるれろわゐゑをん'
+				'あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもやゆよらりるれろわゐゑをん',
 			).eachToHaveCharInfo(CharKind.HIRAGANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER)
 
 			// Common small hiragana
 			expect('ぁぃぅぇぉっゃゅょ').eachToHaveCharInfo(
 				CharKind.HIRAGANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_SMALL
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_SMALL,
 			)
 
 			// Rare small hiragana
 			expect('ゎゕゖ').eachToHaveCharInfo(
 				CharKind.HIRAGANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL,
 			)
 
 			// Rare hiragana letters
 			expect('ゔゟ').eachToHaveCharInfo(
 				CharKind.HIRAGANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE,
 			)
 
 			// Hiragana iteration marks
 			expect('ゝゞ').eachToHaveCharInfo(
 				CharKind.HIRAGANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_MARK | CharFlags.IS_RARE
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_MARK | CharFlags.IS_RARE,
 			)
 		})
 
 		test('should support katakana', () => {
 			// Common katakana
 			expect(
-				'アイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロヮワヰヱヲンヴ'
+				'アイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロヮワヰヱヲンヴ',
 			).eachToHaveCharInfo(CharKind.KATAKANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER)
 
 			// Common small katakana
 			expect('ァィゥェォッャュョ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_SMALL
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_SMALL,
 			)
 
 			// Halfwidth katakana
 			expect('ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_HALFWIDTH
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_HALFWIDTH,
 			)
 
 			// Rare small katakana
 			expect('ヵヶ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL,
 			)
 
 			// Rare small katakana (phonetic extensions for Ainu)
 			expect('ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE | CharFlags.IS_SMALL,
 			)
 
 			// Rare katakana
 			expect('ヷヸヹヺヿ𛀀').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE,
 			)
 
 			// Katakana iteration marks
 			expect('ヽヾ').eachToHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_RARE | CharFlags.IS_MARK
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_RARE | CharFlags.IS_MARK,
 			)
 		})
 
@@ -293,7 +293,7 @@ describe('chars', () => {
 			expect('ー').eachToHaveCharInfo(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK)
 			expect('ｰ').eachToHaveCharInfo(
 				CharKind.KANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK | CharFlags.IS_HALFWIDTH
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK | CharFlags.IS_HALFWIDTH,
 			)
 		})
 
@@ -301,12 +301,12 @@ describe('chars', () => {
 			// Hiragana Yori
 			expect('ゟ').toHaveCharInfo(
 				CharKind.HIRAGANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE,
 			)
 			// Katakana Koto
 			expect('ヿ').toHaveCharInfo(
 				CharKind.KATAKANA,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_RARE,
 			)
 			// Masu mark
 			expect('〼').toHaveCharInfo(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER)
@@ -316,25 +316,25 @@ describe('chars', () => {
 			// Fullwidth ASCII digits
 			expect('０１２３４５６７８９').eachToHaveCharInfo(
 				CharKind.ROMAN_DIGIT,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_NUMBER
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_NUMBER,
 			)
 
 			// Fullwidth ASCII uppercase letters
 			expect('ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ').eachToHaveCharInfo(
 				CharKind.ROMAN_LETTER,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_UPPER
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_UPPER,
 			)
 
 			// Fullwidth ASCII lowercase letters
 			expect('ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ').eachToHaveCharInfo(
 				CharKind.ROMAN_LETTER,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_LOWER
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER | CharFlags.IS_ASCII_FULLWIDTH | CharFlags.IS_LOWER,
 			)
 
 			// Fullwidth ASCII punctuation
 			expect('！＂＃＄％＆＇（）＊＋，－．／：；＜＝＞？＠［＼］＾＿｀｛｜｝～').eachToHaveCharInfo(
 				CharKind.JAPANESE_PUNCTUATION,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_ASCII_FULLWIDTH
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_ASCII_FULLWIDTH,
 			)
 		})
 
@@ -342,13 +342,13 @@ describe('chars', () => {
 			// Japanese punctuation
 			expect('・゠、。〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟｟｠').eachToHaveCharInfo(
 				CharKind.JAPANESE_PUNCTUATION,
-				CharFlags.CHAR_JAPANESE
+				CharFlags.CHAR_JAPANESE,
 			)
 
 			// Japanese punctuation (halfwidth)
 			expect('｡｢｣､･￨￩￪￫￬￭￮').eachToHaveCharInfo(
 				CharKind.JAPANESE_PUNCTUATION,
-				CharFlags.CHAR_JAPANESE | CharFlags.IS_HALFWIDTH
+				CharFlags.CHAR_JAPANESE | CharFlags.IS_HALFWIDTH,
 			)
 		})
 
@@ -420,7 +420,7 @@ describe('chars', () => {
 			for (const it of lines) {
 				expect(it).eachToHaveCharInfo(
 					CharKind.JAPANESE_SYMBOL,
-					CharFlags.CHAR_JAPANESE | CharFlags.IS_KANJI_RADICAL
+					CharFlags.CHAR_JAPANESE | CharFlags.IS_KANJI_RADICAL,
 				)
 			}
 		})
@@ -447,11 +447,11 @@ describe('chars', () => {
 			// A-Z letters
 			expect('abcdefghijklmnopqrstuvwxyz').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER,
 			)
 			expect('ABCDEFGHIJKLMNOPQRSTUVWXYZ').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER,
 			)
 
 			expect('_').toHaveCharInfo(CharKind.ROMAJI, CharFlags.CHAR_ASCII)
@@ -462,23 +462,23 @@ describe('chars', () => {
 			// Extended vowels
 			expect('âêîôû').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER,
 			)
 			expect('ÂÊÎÔÛ').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER,
 			)
 			expect('āēīōū').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER,
 			)
 			expect('ĀĒĪŌŪ').eachToHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_UPPER,
 			)
 			expect(`!"#$%&'()*+,-./:;<=>?@[\\]^\`{|}~`).eachToHaveCharInfo(
 				CharKind.ROMAJI_PUNCTUATION,
-				CharFlags.CHAR_ASCII
+				CharFlags.CHAR_ASCII,
 			)
 		})
 
@@ -495,7 +495,7 @@ describe('chars', () => {
 
 			// Space Separator category
 			expect(
-				'\u{00A0}\u{1680}\u{2000}\u{2001}\u{2002}\u{2003}\u{2004}\u{2005}\u{2006}\u{2007}\u{2008}\u{2009}\u{200A}\u{202F}\u{205F}'
+				'\u{00A0}\u{1680}\u{2000}\u{2001}\u{2002}\u{2003}\u{2004}\u{2005}\u{2006}\u{2007}\u{2008}\u{2009}\u{200A}\u{202F}\u{205F}',
 			).eachToHaveCharInfo(CharKind.SPACE, CharFlags.NONE)
 		})
 
@@ -753,7 +753,7 @@ describe('chars', () => {
 			expect('は\u{3099}').toHaveCharInfo(CharKind.HIRAGANA)
 			expect('a\u{0302}').toHaveCharInfo(
 				CharKind.ROMAJI,
-				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER
+				CharFlags.CHAR_ASCII | CharFlags.IS_LETTER | CharFlags.IS_LOWER,
 			)
 			expect('c\u{0303}\u{0332}').toHaveCharInfo(CharKind.OTHER_WORD, CharFlags.IS_LETTER | CharFlags.IS_LOWER)
 		})

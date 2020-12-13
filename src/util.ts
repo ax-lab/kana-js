@@ -106,7 +106,7 @@ export function enumToString(enumType: SomeEnum, value: number | string | null |
 				}
 				return res
 			},
-			{ value: value, flags: List<string>() }
+			{ value: value, flags: List<string>() },
 		)
 
 		const flags =
