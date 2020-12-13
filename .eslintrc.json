@@ -39,6 +39,7 @@
 
 		// Custom rules:
 		"@typescript-eslint/no-non-null-assertion": "off",
+		"functional/functional-parameters": "off",
 		"functional/no-loop-statement": "off",
 		"functional/no-mixed-type": "off",
 		"functional/no-return-void": "off",
