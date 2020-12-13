@@ -1,5 +1,37 @@
 import { List, Map, Seq } from 'immutable'
 
+/**
+ * Constructor for a tuple. Used for type inference.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function tuple<T extends any[]>(...args: T): T {
+	return args
+}
+
+/**
+ * Returns an instance of a TextBuilder that allows for mutable fast
+ * concatenation of text.
+ */
+export function TextBuilder() {
+	const buffer: unknown[] = []
+	return {
+		/** Append to the TextBuilder's buffer. */
+		push(...args: unknown[]) {
+			for (const it of args) {
+				if (it != null) {
+					// eslint-disable-next-line functional/immutable-data
+					buffer.push(it)
+				}
+			}
+		},
+
+		/** Returns the concatenated string. */
+		toString() {
+			return buffer.join('')
+		},
+	}
+}
+
 type SomeEnum = {
 	[key: string]: number | string
 	[key: number]: number | string
