@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+	<script src="kana.js"></script>
+	<script>
+		const TXT = 'あいうえお かきくけこ がぎぐげご さしすせそ ざじずぜぞ たちつてと だぢづでど なにぬねの はひふへほ ばびぶべぼ ぱぴぷぺぽ まみむめも やゆよ らりるれろ わゐゑをん ぁぃぅぇぉっゃゅょゎゕゖゔゝゞゟ'
+		document.write(kana.to_katakana('ありがとう'))
+
+		const input = []
+		for (let i = 0; i < 10000; i++) {
+			input.push(TXT)
+		}
+
+		function doit() {
+			console.time('to_katakana')
+			console.log(`Converted ${kana.to_katakana(INPUT).length} chars`)
+			console.timeEnd('to_katakana')
+		}
+
+		const INPUT = input.join('\n')
+	</script>
+</html>

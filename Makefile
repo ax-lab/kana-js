@@ -1,10 +1,10 @@
-.PHONY: run build test clean lint check
+.PHONY: run build test clean lint check serve
 
 # Run the TypeScript application directly,
 run:
 	@npm start -s
 
-# Build output files in `build`,
+# Build output files in `build`.
 build:
 	npm run build
 
@@ -12,7 +12,7 @@ build:
 test:
 	npm test
 
-# Delete build directory and files,
+# Delete build directory and files.
 clean:
 	rm -rf build
 
@@ -23,3 +23,7 @@ lint:
 # Runs all available checks, including linting.
 check:
 	npm run check
+
+# Starts a webserve to serve the web build files.
+serve:
+	npm run serve
