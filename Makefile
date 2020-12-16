@@ -1,4 +1,4 @@
-.PHONY: run build test clean lint check serve
+.PHONY: run build test clean lint check serve coverage
 
 # Run the TypeScript application directly,
 run:
@@ -27,3 +27,6 @@ check:
 # Starts a webserve to serve the web build files.
 serve:
 	npm run serve
+
+coverage: test
+	npm run open-coverage

@@ -136,10 +136,17 @@ _Describe any code dependencies and rationale for them. Provide links to reposit
 * `npm-run-all` - Used for the `run-s`/`run-p` commands in `package.json` 
   scripts. Allows running multiple npm commands in sequence or parallel.
 	* https://github.com/mysticatea/npm-run-all
+* `open-cli` - Used to open files from npm scripts
+	* https://github.com/sindresorhus/open-cli
+	* ISSUE: for some reason, using forward slashes in the path does not work
+	  on Windows when inside `scripts`. Added a sequence of operations to cover
+	  both cases.
 * `prettier` - Code formatting.
 	* https://prettier.io/
 * `ts-loader` - TypeScript loader for Webpack.
 	* https://github.com/TypeStrong/ts-loader
+* `ts-node` - TypeScript execution and REPL for Node. Used by `npm start`.
+	* https://github.com/TypeStrong/ts-node
 * `typescript` - Actual TypeScript support.
 	* https://github.com/microsoft/TypeScript
 * `webpack` - Used to build the single file bundle for the web dist.
