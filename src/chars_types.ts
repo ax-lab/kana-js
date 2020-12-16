@@ -12,9 +12,6 @@ export enum CharKind {
 	/**
 	 * Any hiragana character, including small versions, archaic, rare, and
 	 * iteration marks.
-	 *
-	 * NOTE: when parsing hiragana, one must also consider the `KANA_COMBINING`
-	 * and possibly the `SOUNDMARK` category.
 	 */
 	HIRAGANA,
 
@@ -22,10 +19,10 @@ export enum CharKind {
 	 * Any katakana character, including small and halfwidth versions, archaic,
 	 * rare, and iteration marks.
 	 *
-	 * NOTE: This does not include the long sound mark (see `SOUNDMARK`).
+	 * NOTE: This does not include the long sound mark, which is classified as
+	 * `KANA`.
 	 *
-	 * NOTE: when parsing katakana, one must also consider the `KANA_COMBINING`
-	 * and `SOUNDMARK` categories.
+	 * @see KANA
 	 */
 	KATAKANA,
 
