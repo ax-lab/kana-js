@@ -7,7 +7,5 @@ function answer() {
 
 export { answer }
 
-console.log('DUMMY')
-
 import { to_katakana } from './katakana'
 console.log(to_katakana('かたかな　ありがとう'))

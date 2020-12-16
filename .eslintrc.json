@@ -39,6 +39,7 @@
 
 		// Custom rules:
 		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/prefer-regexp-exec": "off",
 		"functional/functional-parameters": "off",
 		"functional/no-loop-statement": "off",
 		"functional/no-mixed-type": "off",

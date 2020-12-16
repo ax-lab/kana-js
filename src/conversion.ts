@@ -106,7 +106,10 @@ export function compile(rules: RuleSet) {
 		.map((x) => x.first({ length: 0 }).length)
 		.toMap()
 
-	return { mappings, maxLengthByPrefix }
+	return {
+		mappings: mappings.toJS() as { [key: string]: MappingRule },
+		maxLengthByPrefix: maxLengthByPrefix.toJS() as { [key: number]: number },
+	}
 }
 
 /**
@@ -123,7 +126,7 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 		const prefix = input.charCodeAt(0)
 		// Note that if length is zero, we simply pass the string through
 		// unmodified.
-		const length = rules.maxLengthByPrefix.get(prefix, 0)
+		const length = rules.maxLengthByPrefix[prefix] || 0
 
 		// This will return the string length to skip and if a mapping has been
 		// found.
@@ -134,7 +137,7 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 				// not apply.
 				for (const keyLength of Range(1, length + 1).reverse()) {
 					const key = input.slice(0, keyLength)
-					const rule = rules.mappings.get(key)
+					const rule = rules.mappings[key]
 					if (rule) {
 						out.push(rule.out)
 						return tuple(keyLength, true)
