@@ -118,12 +118,18 @@ export function compile(rules: RuleSet) {
 export function convert(input: string, rules: CompiledRuleSet): string {
 	const out = TextBuilder()
 
+	// Note on case-sensitiveness: we want the conversion lookup to be
+	// completely case-insensitive, so all keys are lowercased before lookup.
+	//
+	// At the same time, we don't want to change the case of the passthrough
+	// unconverted text, so the lowercase transform is done only to the keys.
+
 	// Scan the input string
 	while (input.length) {
 		// Lookup what is the maximum possible key length given the next char
 		// code. Note that we don't care about Unicode codepoints at this point,
 		// as the mapping algorithm will work regardless of them.
-		const prefix = input.charCodeAt(0)
+		const prefix = input.slice(0, 2).toLowerCase().charCodeAt(0)
 		// Note that if length is zero, we simply pass the string through
 		// unmodified.
 		const length = rules.maxLengthByPrefix[prefix] || 0
@@ -136,7 +142,7 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 				// we either extract a key from the input or figure out it does
 				// not apply.
 				for (const keyLength of Range(1, length + 1).reverse()) {
-					const key = input.slice(0, keyLength)
+					const key = input.slice(0, keyLength).toLowerCase()
 					const rule = rules.mappings[key]
 					if (rule) {
 						out.push(rule.out)

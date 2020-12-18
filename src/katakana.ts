@@ -1,6 +1,6 @@
 import { compile, convert, m, rules } from './conversion'
 
-const TO_KATAKANA = compile(hiragana_to_katakana())
+const TO_KATAKANA = compile(rules(set_hiragana_to_katakana(), set_romaji_to_katakana(), set_romaji_to_katakana_ime()))
 
 /**
  * Converts the input text to katakana.
@@ -15,7 +15,7 @@ export function to_katakana(input: string) {
 /**
  * RuleSet for converting hiragana to katakana.
  */
-function hiragana_to_katakana() {
+function set_hiragana_to_katakana() {
 	return rules(
 		m('ぁ', 'ァ'), // Letter Small A
 		m('あ', 'ア'), // Letter A
@@ -106,5 +106,219 @@ function hiragana_to_katakana() {
 		m('ゝ', 'ヽ'), // Iteration Mark
 		m('ゞ', 'ヾ'), // Voiced Iteration Mark
 		m('ゟ', 'ヨリ'), // Digraph Yori
+	)
+}
+
+/**
+ * RuleSet for converting romaji to katakana.
+ */
+function set_romaji_to_katakana() {
+	return rules(subset_romaji_to_katakana_basics())
+}
+
+function subset_romaji_to_katakana_basics() {
+	return rules(
+		m('a', 'ア'),
+		m('i', 'イ'),
+		m('u', 'ウ'),
+		m('e', 'エ'),
+		m('o', 'オ'),
+
+		m('n', 'ン'),
+		m("n'", 'ン'),
+
+		m('ka', 'カ'),
+		m('ki', 'キ'),
+		m('ku', 'ク'),
+		m('ke', 'ケ'),
+		m('ko', 'コ'),
+		m('ga', 'ガ'),
+		m('gi', 'ギ'),
+		m('gu', 'グ'),
+		m('ge', 'ゲ'),
+		m('go', 'ゴ'),
+
+		m('kya', 'キャ'),
+		m('kyu', 'キュ'),
+		m('kye', 'キェ'),
+		m('kyo', 'キョ'),
+
+		m('gya', 'ギャ'),
+		m('gyu', 'ギュ'),
+		m('gye', 'ギェ'),
+		m('gyo', 'ギョ'),
+
+		m('sa', 'サ'),
+		m('si', 'シ'),
+		m('shi', 'シ'),
+		m('su', 'ス'),
+		m('se', 'セ'),
+		m('so', 'ソ'),
+		m('za', 'ザ'),
+		m('zi', 'ジ'),
+		m('ji', 'ジ'),
+		m('zu', 'ズ'),
+		m('ze', 'ゼ'),
+		m('zo', 'ゾ'),
+
+		m('sha', 'シャ'),
+		m('shu', 'シュ'),
+		m('she', 'シェ'),
+		m('sho', 'ショ'),
+
+		m('ja', 'ジャ'),
+		m('ju', 'ジュ'),
+		m('je', 'ジェ'),
+		m('jo', 'ジョ'),
+
+		m('ta', 'タ'),
+		m('ti', 'チ'),
+		m('chi', 'チ'),
+		m('tu', 'ツ'),
+		m('tsu', 'ツ'),
+		m('te', 'テ'),
+		m('to', 'ト'),
+		m('da', 'ダ'),
+		m('di', 'ヂ'),
+		m('dji', 'ヂ'),
+		m('dzi', 'ヂ'),
+		m('du', 'ヅ'),
+		m('dzu', 'ヅ'),
+		m('de', 'デ'),
+		m('do', 'ド'),
+
+		m('cha', 'チャ'),
+		m('chu', 'チュ'),
+		m('che', 'チェ'),
+		m('cho', 'チョ'),
+
+		m('dja', 'ヂャ'),
+		m('dju', 'ヂュ'),
+		m('dje', 'ヂェ'),
+		m('djo', 'ヂョ'),
+
+		m('dya', 'ヂャ'),
+		m('dyu', 'ヂュ'),
+		m('dye', 'ヂェ'),
+		m('dyo', 'ヂョ'),
+
+		m('na', 'ナ'),
+		m('ni', 'ニ'),
+		m('nu', 'ヌ'),
+		m('ne', 'ネ'),
+		m('no', 'ノ'),
+
+		m('nya', 'ニャ'),
+		m('nyu', 'ニュ'),
+		m('nye', 'ニェ'),
+		m('nyo', 'ニョ'),
+
+		m('ha', 'ハ'),
+		m('hi', 'ヒ'),
+		m('hu', 'フ'),
+		m('fu', 'フ'),
+		m('he', 'ヘ'),
+		m('ho', 'ホ'),
+		m('ba', 'バ'),
+		m('bi', 'ビ'),
+		m('bu', 'ブ'),
+		m('be', 'ベ'),
+		m('bo', 'ボ'),
+		m('pa', 'パ'),
+		m('pi', 'ピ'),
+		m('pu', 'プ'),
+		m('pe', 'ペ'),
+		m('po', 'ポ'),
+
+		m('hya', 'ヒャ'),
+		m('hyu', 'ヒュ'),
+		m('hye', 'ヒェ'),
+		m('hyo', 'ヒョ'),
+
+		m('bya', 'ビャ'),
+		m('byu', 'ビュ'),
+		m('bye', 'ビェ'),
+		m('byo', 'ビョ'),
+
+		m('pya', 'ピャ'),
+		m('pyu', 'ピュ'),
+		m('pye', 'ピェ'),
+		m('pyo', 'ピョ'),
+
+		m('fa', 'ファ'),
+		m('fi', 'フィ'),
+		m('fe', 'フェ'),
+		m('fo', 'フォ'),
+
+		m('ma', 'マ'),
+		m('mi', 'ミ'),
+		m('mu', 'ム'),
+		m('me', 'メ'),
+		m('mo', 'モ'),
+
+		m('mya', 'ミャ'),
+		m('myu', 'ミュ'),
+		m('mye', 'ミェ'),
+		m('myo', 'ミョ'),
+
+		m('ya', 'ヤ'),
+		m('yu', 'ユ'),
+		m('yo', 'ヨ'),
+
+		m('ra', 'ラ'),
+		m('ri', 'リ'),
+		m('ru', 'ル'),
+		m('re', 'レ'),
+		m('ro', 'ロ'),
+
+		m('rya', 'リャ'),
+		m('ryu', 'リュ'),
+		m('rye', 'リェ'),
+		m('ryo', 'リョ'),
+
+		m('wa', 'ワ'),
+		m('wi', 'ウィ'),
+		m('we', 'ウェ'),
+		m('wo', 'ヲ'),
+		m('wu', 'ウ'),
+
+		m('va', 'ヴァ'),
+		m('vi', 'ヴィ'),
+		m('vu', 'ヴ'),
+		m('ve', 'ヴェ'),
+		m('vo', 'ヴォ'),
+	)
+}
+
+function set_romaji_to_katakana_ime() {
+	return rules(
+		m('xa', 'ァ'),
+		m('xi', 'ィ'),
+		m('xu', 'ゥ'),
+		m('xe', 'ェ'),
+		m('xo', 'ォ'),
+
+		m('xwe', 'ヱ'),
+		m('xwi', 'ヰ'),
+
+		m('xva', 'ヷ'),
+		m('xvi', 'ヸ'),
+		m('xve', 'ヹ'),
+		m('xvo', 'ヺ'),
+
+		m('xya', 'ャ'),
+		m('xyu', 'ュ'),
+		m('xyo', 'ョ'),
+
+		m('xtu', 'ッ'),
+		m('xtsu', 'ッ'),
+
+		m('nn', 'ン'),
+		m('xwa', 'ヮ'),
+		m('xka', 'ヵ'),
+		m('xke', 'ヶ'),
+
+		m('/', '・'),
+		m('-', 'ー'),
 	)
 }

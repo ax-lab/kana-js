@@ -38,9 +38,10 @@ describe('to_katakana', () => {
 		const INPUT = katakana_and_romaji(x)
 
 		for (const { katakana, romaji } of INPUT) {
-			expect(to_katakana(romaji)).toEqual(katakana)
-			expect(to_katakana(romaji.toUpperCase())).toEqual(katakana)
-			expect(to_katakana(romaji.toLowerCase())).toEqual(katakana)
+			const pre = `${romaji} = `
+			expect(pre + to_katakana(romaji)).toEqual(pre + katakana)
+			expect(pre + to_katakana(romaji.toUpperCase())).toEqual(pre + katakana)
+			expect(pre + to_katakana(romaji.toLowerCase())).toEqual(pre + katakana)
 		}
 
 		function x(katakana: string, romaji: string, extra: boolean) {
@@ -143,7 +144,6 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		x('シ', 'Shi'),
 		x('ジ', 'Zi'),
 		x('ジ', 'Ji'),
-		x('ジ', 'Dji'),
 		x('ス', 'Su'),
 		x('ズ', 'Zu'),
 		x('セ', 'Se'),
@@ -155,6 +155,7 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		x('チ', 'Ti'),
 		x('チ', 'Chi'),
 		x('ヂ', 'Di'),
+		x('ヂ', 'Dji'),
 		x('ヂ', 'Dzi'),
 		x('ツ', 'Tsu'),
 		x('ヅ', 'Du'),
@@ -198,8 +199,8 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		x('レ', 'Re'),
 		x('ロ', 'Ro'),
 		x('ワ', 'Wa'),
-		x('ヰ', 'Wi'),
-		x('ヱ', 'We'),
+		x('ヰ', 'Wi', true),
+		x('ヱ', 'We', true),
 		x('ヲ', 'Wo'),
 		x('ン', 'N'),
 		x('ヴ', 'Vu'),
@@ -247,6 +248,10 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		x('ヂュ', 'Dyu'),
 		x('ヂェ', 'Dye'),
 		x('ヂョ', 'Dyo'),
+		x('ヂャ', 'Dja'), // dj
+		x('ヂュ', 'Dju'),
+		x('ヂェ', 'Dje'),
+		x('ヂョ', 'Djo'),
 		x('ニャ', 'Nya'), // ni
 		x('ニュ', 'Nyu'),
 		x('ニェ', 'Nye'),
@@ -284,17 +289,20 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		x('ヴェ', 'Ve'),
 		x('ヴォ', 'Vo'),
 
-		x('ワ', 'wa'),
-		x('ウィ', 'wi'),
-		x('ウ', 'wu'),
-		x('ウェ', 'we'),
-		x('ヲ', 'wo'),
+		x('ワ', 'Wa'),
+		x('ウィ', 'Wi'),
+		x('ウ', 'Wu'),
+		x('ウェ', 'We'),
+		x('ヲ', 'Wo'),
 
-		x('ドゥ', 'du', true),
-		x('ティ', 'ti', true),
-		x('ディ', 'di', true),
+		x('ドゥ', 'Du', true),
+		x('ティ', 'Ti', true),
+		x('ディ', 'Di', true),
 
 		// Obsolete
+		x('ヰ', 'xWi'),
+		x('ヱ', 'xWe'),
+
 		x('ヷ', 'xVa'),
 		x('ヸ', 'xVi'),
 		x('ヹ', 'xVe'),
