@@ -19,13 +19,25 @@ import { TextBuilder, tuple } from './util'
 /**
  * A simple rule that maps the input to the output, verbatim.
  */
-type MappingRule = { key: string; out: string; len: number }
+type MappingRule = { key: string; out: string; len: number; outFn?: MappingRuleFn }
 
 /**
  * Shorthand to create a MappingRule.
  */
 export function m(key: string, out: string, len = 0): MappingRule {
 	return { key, out, len }
+}
+
+type MappingRuleContext = {
+	lastInput: string
+	lastOutput: string
+	input: string
+}
+
+type MappingRuleFn = (ctx: MappingRuleContext) => [string, number]
+
+export function mFn(key: string, outFn: MappingRuleFn): MappingRule {
+	return { key, outFn, out: '', len: 0 }
 }
 
 /**
@@ -124,6 +136,20 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 	// At the same time, we don't want to change the case of the passthrough
 	// unconverted text, so the lowercase transform is done only to the keys.
 
+	// eslint-disable-next-line functional/no-let
+	let ctx = {
+		lastInput: '',
+		lastOutput: '',
+	}
+
+	const push = (txt: string, key: string) => {
+		out.push(txt)
+		ctx = {
+			lastInput: key,
+			lastOutput: txt,
+		}
+	}
+
 	// Scan the input string
 	while (input.length) {
 		// Lookup what is the maximum possible key length given the next char
@@ -142,11 +168,20 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 				// we either extract a key from the input or figure out it does
 				// not apply.
 				for (const keyLength of Range(1, length + 1).reverse()) {
-					const key = input.slice(0, keyLength).toLowerCase()
+					const chunk = input.slice(0, keyLength)
+					const key = chunk.toLowerCase()
 					const rule = rules.mappings[key]
 					if (rule) {
-						out.push(rule.out)
-						return tuple(rule.len || keyLength, true)
+						if (rule.outFn) {
+							const [txt, len] = rule.outFn({ ...ctx, input: input.slice(keyLength) })
+							if (len >= 0) {
+								push(txt || rule.out, chunk)
+								return tuple(len || rule.len || keyLength, true)
+							}
+						} else {
+							push(rule.out, chunk)
+							return tuple(rule.len || keyLength, true)
+						}
 					}
 				}
 			}

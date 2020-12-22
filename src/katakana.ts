@@ -1,4 +1,5 @@
-import { compile, convert, m, rules } from './conversion'
+import { compile, convert, m, mFn, rules } from './conversion'
+import { tuple } from './util'
 
 const TO_KATAKANA = compile(rules(set_hiragana_to_katakana(), set_romaji_to_katakana(), set_romaji_to_katakana_ime()))
 
@@ -116,183 +117,229 @@ function set_romaji_to_katakana() {
 	return rules(subset_romaji_to_katakana_basics())
 }
 
-function subset_romaji_to_katakana_basics() {
-	return rules(
-		m('a', 'ア'),
-		m('i', 'イ'),
-		m('u', 'ウ'),
-		m('e', 'エ'),
-		m('o', 'オ'),
+// Generate long vowel variations for a syllable
+function gen_rules_long_vowels(key: string, out: string, withoutLongBar = false) {
+	const A = 'aeiou'
+	const B = 'âêîôû'
+	const C = 'āēīōū'
+	const D = ['ア', 'エ', 'イ', 'オ', 'ウ']
+	const pre = key.slice(0, key.length - 1)
+	const idx = A.indexOf(key[key.length - 1])
+	const chr = withoutLongBar ? D[idx] : 'ー'
 
+	const list = [m(key, out), m(pre + B[idx], out + chr), m(pre + C[idx], out + chr)]
+	return rules(...list)
+}
+
+function subset_romaji_to_katakana_basics() {
+	const extraLong = true
+
+	const l = gen_rules_long_vowels
+
+	// Generate a vowel quote sequence (e.g. "a'a")
+	const q = (key: string, out: string) =>
+		mFn(`'${key}`, (ctx) => {
+			// Only translate a sequence like "a'a"
+			const last = ctx.lastInput
+			if (last && last[last.length - 1].toLowerCase() === key) {
+				return tuple(out, 0)
+			}
+			return tuple('', -1)
+		})
+
+	// Handle a double vowel as a long sequence
+	const x = (key: string, out: string) =>
+		mFn(key, (ctx) => {
+			const last = ctx.lastInput
+			const isLongVowel = last && last[last.length - 1].toLowerCase() === key
+			const sameVowelNext = ctx.input.slice(0, 1).toLowerCase() === key
+			return tuple(isLongVowel && !sameVowelNext ? 'ー' : out, 0)
+		})
+
+	return rules(
 		m('n', 'ン'),
 		m("n'", 'ン'),
 
-		m('ka', 'カ'),
-		m('ki', 'キ'),
-		m('ku', 'ク'),
-		m('ke', 'ケ'),
-		m('ko', 'コ'),
-		m('ga', 'ガ'),
-		m('gi', 'ギ'),
-		m('gu', 'グ'),
-		m('ge', 'ゲ'),
-		m('go', 'ゴ'),
+		q('a', 'ア'),
+		q('i', 'イ'),
+		q('u', 'ウ'),
+		q('e', 'エ'),
+		q('o', 'オ'),
 
-		m('kya', 'キャ'),
-		m('kyu', 'キュ'),
-		m('kye', 'キェ'),
-		m('kyo', 'キョ'),
+		l('a', 'ア'),
+		l('i', 'イ'),
+		l('u', 'ウ'),
+		l('e', 'エ'),
+		l('o', 'オ'),
 
-		m('gya', 'ギャ'),
-		m('gyu', 'ギュ'),
-		m('gye', 'ギェ'),
-		m('gyo', 'ギョ'),
+		extraLong ? rules(x('a', 'ア'), x('i', 'イ'), x('u', 'ウ'), x('e', 'エ'), x('o', 'オ')) : rules(),
 
-		m('sa', 'サ'),
-		m('si', 'シ'),
-		m('shi', 'シ'),
-		m('su', 'ス'),
-		m('se', 'セ'),
-		m('so', 'ソ'),
-		m('za', 'ザ'),
-		m('zi', 'ジ'),
-		m('ji', 'ジ'),
-		m('zu', 'ズ'),
-		m('ze', 'ゼ'),
-		m('zo', 'ゾ'),
+		l('ka', 'カ'),
+		l('ki', 'キ'),
+		l('ku', 'ク'),
+		l('ke', 'ケ'),
+		l('ko', 'コ'),
+		l('ga', 'ガ'),
+		l('gi', 'ギ'),
+		l('gu', 'グ'),
+		l('ge', 'ゲ'),
+		l('go', 'ゴ'),
 
-		m('sha', 'シャ'),
-		m('shu', 'シュ'),
-		m('she', 'シェ'),
-		m('sho', 'ショ'),
+		l('kya', 'キャ'),
+		l('kyu', 'キュ'),
+		l('kye', 'キェ'),
+		l('kyo', 'キョ'),
 
-		m('ja', 'ジャ'),
-		m('ju', 'ジュ'),
-		m('je', 'ジェ'),
-		m('jo', 'ジョ'),
+		l('gya', 'ギャ'),
+		l('gyu', 'ギュ'),
+		l('gye', 'ギェ'),
+		l('gyo', 'ギョ'),
 
-		m('ta', 'タ'),
-		m('ti', 'チ'),
-		m('chi', 'チ'),
-		m('tu', 'ツ'),
-		m('tsu', 'ツ'),
-		m('te', 'テ'),
-		m('to', 'ト'),
-		m('da', 'ダ'),
-		m('di', 'ヂ'),
-		m('dji', 'ヂ'),
-		m('dzi', 'ヂ'),
-		m('du', 'ヅ'),
-		m('dzu', 'ヅ'),
-		m('de', 'デ'),
-		m('do', 'ド'),
+		l('sa', 'サ'),
+		l('si', 'シ'),
+		l('shi', 'シ'),
+		l('su', 'ス'),
+		l('se', 'セ'),
+		l('so', 'ソ'),
+		l('za', 'ザ'),
+		l('zi', 'ジ'),
+		l('ji', 'ジ'),
+		l('zu', 'ズ'),
+		l('ze', 'ゼ'),
+		l('zo', 'ゾ'),
 
-		m('cha', 'チャ'),
-		m('chu', 'チュ'),
-		m('che', 'チェ'),
-		m('cho', 'チョ'),
+		l('sha', 'シャ'),
+		l('shu', 'シュ'),
+		l('she', 'シェ'),
+		l('sho', 'ショ'),
 
-		m('dja', 'ヂャ'),
-		m('dju', 'ヂュ'),
-		m('dje', 'ヂェ'),
-		m('djo', 'ヂョ'),
+		l('ja', 'ジャ'),
+		l('ju', 'ジュ'),
+		l('je', 'ジェ'),
+		l('jo', 'ジョ'),
 
-		m('dya', 'ヂャ'),
-		m('dyu', 'ヂュ'),
-		m('dye', 'ヂェ'),
-		m('dyo', 'ヂョ'),
+		l('ta', 'タ'),
+		l('ti', 'チ'),
+		l('chi', 'チ'),
+		l('tu', 'ツ'),
+		l('tsu', 'ツ'),
+		l('te', 'テ'),
+		l('to', 'ト'),
+		l('da', 'ダ'),
+		l('di', 'ヂ'),
+		l('dji', 'ヂ'),
+		l('dzi', 'ヂ'),
+		l('du', 'ヅ'),
+		l('dzu', 'ヅ'),
+		l('de', 'デ'),
+		l('do', 'ド'),
 
-		m('na', 'ナ'),
-		m('ni', 'ニ'),
-		m('nu', 'ヌ'),
-		m('ne', 'ネ'),
-		m('no', 'ノ'),
+		l('cha', 'チャ'),
+		l('chu', 'チュ'),
+		l('che', 'チェ'),
+		l('cho', 'チョ'),
 
-		m('nya', 'ニャ'),
-		m('nyu', 'ニュ'),
-		m('nye', 'ニェ'),
-		m('nyo', 'ニョ'),
+		l('dja', 'ヂャ'),
+		l('dju', 'ヂュ'),
+		l('dje', 'ヂェ'),
+		l('djo', 'ヂョ'),
 
-		m('ha', 'ハ'),
-		m('hi', 'ヒ'),
-		m('hu', 'フ'),
-		m('fu', 'フ'),
-		m('he', 'ヘ'),
-		m('ho', 'ホ'),
-		m('ba', 'バ'),
-		m('bi', 'ビ'),
-		m('bu', 'ブ'),
-		m('be', 'ベ'),
-		m('bo', 'ボ'),
-		m('pa', 'パ'),
-		m('pi', 'ピ'),
-		m('pu', 'プ'),
-		m('pe', 'ペ'),
-		m('po', 'ポ'),
+		l('dya', 'ヂャ'),
+		l('dyu', 'ヂュ'),
+		l('dye', 'ヂェ'),
+		l('dyo', 'ヂョ'),
 
-		m('hya', 'ヒャ'),
-		m('hyu', 'ヒュ'),
-		m('hye', 'ヒェ'),
-		m('hyo', 'ヒョ'),
+		l('na', 'ナ'),
+		l('ni', 'ニ'),
+		l('nu', 'ヌ'),
+		l('ne', 'ネ'),
+		l('no', 'ノ'),
 
-		m('bya', 'ビャ'),
-		m('byu', 'ビュ'),
-		m('bye', 'ビェ'),
-		m('byo', 'ビョ'),
+		l('nya', 'ニャ'),
+		l('nyu', 'ニュ'),
+		l('nye', 'ニェ'),
+		l('nyo', 'ニョ'),
 
-		m('pya', 'ピャ'),
-		m('pyu', 'ピュ'),
-		m('pye', 'ピェ'),
-		m('pyo', 'ピョ'),
+		l('ha', 'ハ'),
+		l('hi', 'ヒ'),
+		l('hu', 'フ'),
+		l('fu', 'フ'),
+		l('he', 'ヘ'),
+		l('ho', 'ホ'),
+		l('ba', 'バ'),
+		l('bi', 'ビ'),
+		l('bu', 'ブ'),
+		l('be', 'ベ'),
+		l('bo', 'ボ'),
+		l('pa', 'パ'),
+		l('pi', 'ピ'),
+		l('pu', 'プ'),
+		l('pe', 'ペ'),
+		l('po', 'ポ'),
 
-		m('fa', 'ファ'),
-		m('fi', 'フィ'),
-		m('fe', 'フェ'),
-		m('fo', 'フォ'),
+		l('hya', 'ヒャ'),
+		l('hyu', 'ヒュ'),
+		l('hye', 'ヒェ'),
+		l('hyo', 'ヒョ'),
 
-		m('ma', 'マ'),
-		m('mi', 'ミ'),
-		m('mu', 'ム'),
-		m('me', 'メ'),
-		m('mo', 'モ'),
+		l('bya', 'ビャ'),
+		l('byu', 'ビュ'),
+		l('bye', 'ビェ'),
+		l('byo', 'ビョ'),
 
-		m('mya', 'ミャ'),
-		m('myu', 'ミュ'),
-		m('mye', 'ミェ'),
-		m('myo', 'ミョ'),
+		l('pya', 'ピャ'),
+		l('pyu', 'ピュ'),
+		l('pye', 'ピェ'),
+		l('pyo', 'ピョ'),
 
-		m('ya', 'ヤ'),
-		m('yu', 'ユ'),
-		m('yo', 'ヨ'),
+		l('fa', 'ファ'),
+		l('fi', 'フィ'),
+		l('fe', 'フェ'),
+		l('fo', 'フォ'),
 
-		m('ra', 'ラ'),
-		m('ri', 'リ'),
-		m('ru', 'ル'),
-		m('re', 'レ'),
-		m('ro', 'ロ'),
+		l('ma', 'マ'),
+		l('mi', 'ミ'),
+		l('mu', 'ム'),
+		l('me', 'メ'),
+		l('mo', 'モ'),
 
-		m('rya', 'リャ'),
-		m('ryu', 'リュ'),
-		m('rye', 'リェ'),
-		m('ryo', 'リョ'),
+		l('mya', 'ミャ'),
+		l('myu', 'ミュ'),
+		l('mye', 'ミェ'),
+		l('myo', 'ミョ'),
 
-		m('wa', 'ワ'),
-		m('wi', 'ウィ'),
-		m('we', 'ウェ'),
-		m('wo', 'ヲ'),
-		m('wu', 'ウ'),
+		l('ya', 'ヤ'),
+		l('yu', 'ユ'),
+		l('yo', 'ヨ'),
 
-		m('va', 'ヴァ'),
-		m('vi', 'ヴィ'),
-		m('vu', 'ヴ'),
-		m('ve', 'ヴェ'),
-		m('vo', 'ヴォ'),
+		l('ra', 'ラ'),
+		l('ri', 'リ'),
+		l('ru', 'ル'),
+		l('re', 'レ'),
+		l('ro', 'ロ'),
 
-		double_consonants(),
+		l('rya', 'リャ'),
+		l('ryu', 'リュ'),
+		l('rye', 'リェ'),
+		l('ryo', 'リョ'),
+
+		l('wa', 'ワ'),
+		l('wi', 'ウィ'),
+		l('we', 'ウェ'),
+		l('wo', 'ヲ'),
+		l('wu', 'ウ'),
+
+		l('va', 'ヴァ'),
+		l('vi', 'ヴィ'),
+		l('vu', 'ヴ'),
+		l('ve', 'ヴェ'),
+		l('vo', 'ヴォ'),
+
+		subset_romaji_double_consonants(),
 	)
 }
 
-function double_consonants() {
+function subset_romaji_double_consonants() {
 	const CONSONANTS = [
 		'b',
 		'c',
@@ -321,32 +368,35 @@ function double_consonants() {
 }
 
 function set_romaji_to_katakana_ime() {
+	const l = gen_rules_long_vowels
+
 	return rules(
-		m('xa', 'ァ'),
-		m('xi', 'ィ'),
-		m('xu', 'ゥ'),
-		m('xe', 'ェ'),
-		m('xo', 'ォ'),
+		l('xa', 'ァ'),
+		l('xi', 'ィ'),
+		l('xu', 'ゥ'),
+		l('xe', 'ェ'),
+		l('xo', 'ォ'),
 
-		m('xwe', 'ヱ'),
-		m('xwi', 'ヰ'),
+		l('xwe', 'ヱ'),
+		l('xwi', 'ヰ'),
 
-		m('xva', 'ヷ'),
-		m('xvi', 'ヸ'),
-		m('xve', 'ヹ'),
-		m('xvo', 'ヺ'),
+		l('xva', 'ヷ'),
+		l('xvi', 'ヸ'),
+		l('xve', 'ヹ'),
+		l('xvo', 'ヺ'),
 
-		m('xya', 'ャ'),
-		m('xyu', 'ュ'),
-		m('xyo', 'ョ'),
+		l('xya', 'ャ'),
+		l('xyu', 'ュ'),
+		l('xyo', 'ョ'),
 
-		m('xtu', 'ッ'),
-		m('xtsu', 'ッ'),
+		l('xtu', 'ッ'),
+		l('xtsu', 'ッ'),
+
+		l('xwa', 'ヮ'),
+		l('xka', 'ヵ'),
+		l('xke', 'ヶ'),
 
 		m('nn', 'ン'),
-		m('xwa', 'ヮ'),
-		m('xka', 'ヵ'),
-		m('xke', 'ヶ'),
 
 		m('/', '・'),
 		m('-', 'ー'),

@@ -66,6 +66,37 @@ describe('to_katakana', () => {
 		}
 	})
 
+	test('should convert romaji really long vowels', () => {
+		expect(to_katakana('a')).toEqual('ア')
+		expect(to_katakana('aa')).toEqual('アー')
+		expect(to_katakana('aaa')).toEqual('アアー')
+		expect(to_katakana('aaaa')).toEqual('アアアー')
+
+		expect(to_katakana('AAAA')).toEqual('アアアー')
+		expect(to_katakana('AaAa')).toEqual('アアアー')
+		expect(to_katakana('aAaA')).toEqual('アアアー')
+
+		expect(to_katakana('i')).toEqual('イ')
+		expect(to_katakana('ii')).toEqual('イー')
+		expect(to_katakana('iii')).toEqual('イイー')
+		expect(to_katakana('iiii')).toEqual('イイイー')
+
+		expect(to_katakana('u')).toEqual('ウ')
+		expect(to_katakana('uu')).toEqual('ウー')
+		expect(to_katakana('uuu')).toEqual('ウウー')
+		expect(to_katakana('uuuu')).toEqual('ウウウー')
+
+		expect(to_katakana('e')).toEqual('エ')
+		expect(to_katakana('ee')).toEqual('エー')
+		expect(to_katakana('eee')).toEqual('エエー')
+		expect(to_katakana('eeee')).toEqual('エエエー')
+
+		expect(to_katakana('o')).toEqual('オ')
+		expect(to_katakana('oo')).toEqual('オー')
+		expect(to_katakana('ooo')).toEqual('オオー')
+		expect(to_katakana('oooo')).toEqual('オオオー')
+	})
+
 	test('should convert romaji long vowels', () => {
 		// Sample input => {
 		//     inputLong     : ["Kaa", "Kâ", "Kā"],
@@ -86,7 +117,7 @@ describe('to_katakana', () => {
 				)
 			}
 
-			const pre = `${it.inputNotLong}`
+			const pre = `${it.inputNotLong} = `
 			expect(pre + to_katakana(it.inputNotLong)).toEqual(pre + it.outputNotLong)
 			expect(pre.toLowerCase() + to_katakana(it.inputNotLong.toLowerCase())).toEqual(
 				pre.toLowerCase() + it.outputNotLong,
