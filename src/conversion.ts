@@ -19,13 +19,13 @@ import { TextBuilder, tuple } from './util'
 /**
  * A simple rule that maps the input to the output, verbatim.
  */
-type MappingRule = { key: string; out: string }
+type MappingRule = { key: string; out: string; len: number }
 
 /**
  * Shorthand to create a MappingRule.
  */
-export function m(key: string, out: string): MappingRule {
-	return { key, out }
+export function m(key: string, out: string, len = 0): MappingRule {
+	return { key, out, len }
 }
 
 /**
@@ -91,7 +91,7 @@ export function compile(rules: RuleSet) {
 
 	// Digest the rules and sort them starting with the longest keys.
 	const allSorted = mappings
-		.map((_rule, key) => ({
+		.map((rule, key) => ({
 			// The prefix is used for a quick lookup for the maximum key length
 			// given the current point in the input string.
 			prefix: key.charCodeAt(0),
@@ -146,7 +146,7 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 					const rule = rules.mappings[key]
 					if (rule) {
 						out.push(rule.out)
-						return tuple(keyLength, true)
+						return tuple(rule.len || keyLength, true)
 					}
 				}
 			}

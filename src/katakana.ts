@@ -287,7 +287,37 @@ function subset_romaji_to_katakana_basics() {
 		m('vu', 'ヴ'),
 		m('ve', 'ヴェ'),
 		m('vo', 'ヴォ'),
+
+		double_consonants(),
 	)
+}
+
+function double_consonants() {
+	const CONSONANTS = [
+		'b',
+		'c',
+		'd',
+		'f',
+		'g',
+		'h',
+		'j',
+		'k',
+		'l',
+		'm',
+		'n',
+		'p',
+		'q',
+		'r',
+		's',
+		't',
+		'v',
+		'w',
+		'x',
+		'y',
+		'z',
+	]
+	const list = CONSONANTS.map((x) => m(x + x, 'ッ', 1))
+	return rules(...list)
 }
 
 function set_romaji_to_katakana_ime() {

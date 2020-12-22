@@ -59,7 +59,7 @@ describe('to_katakana', () => {
 		}
 		function x(katakana: string, romaji: string, extra: boolean) {
 			// Ignore vowel syllables and the 'ン' (n)
-			if (extra || /^([aeiou]|x|n|nn)/i.test(romaji)) {
+			if (extra || /^([aeiou]|x|n|nn|[^a-z])/i.test(romaji)) {
 				return undefined
 			}
 			return { input: romaji + romaji[0] + romaji, output: katakana + 'ッ' + katakana }
@@ -76,14 +76,24 @@ describe('to_katakana', () => {
 		const INPUT = katakana_and_romaji(x)
 		for (const it of INPUT) {
 			for (const inputLong of it.inputLong) {
-				expect(to_katakana(inputLong)).toEqual(it.outputLong)
-				expect(to_katakana(inputLong.toLowerCase())).toEqual(it.outputLong)
-				expect(to_katakana(inputLong.toUpperCase())).toEqual(it.outputLong)
+				const pre = `${inputLong} = `
+				expect(pre + to_katakana(inputLong)).toEqual(pre + it.outputLong)
+				expect(pre.toLowerCase() + to_katakana(inputLong.toLowerCase())).toEqual(
+					pre.toLowerCase() + it.outputLong,
+				)
+				expect(pre.toUpperCase() + to_katakana(inputLong.toUpperCase())).toEqual(
+					pre.toUpperCase() + it.outputLong,
+				)
 			}
 
-			expect(to_katakana(it.inputNotLong)).toEqual(it.outputNotLong)
-			expect(to_katakana(it.inputNotLong.toLowerCase())).toEqual(it.outputNotLong)
-			expect(to_katakana(it.inputNotLong.toUpperCase())).toEqual(it.outputNotLong)
+			const pre = `${it.inputNotLong}`
+			expect(pre + to_katakana(it.inputNotLong)).toEqual(pre + it.outputNotLong)
+			expect(pre.toLowerCase() + to_katakana(it.inputNotLong.toLowerCase())).toEqual(
+				pre.toLowerCase() + it.outputNotLong,
+			)
+			expect(pre.toUpperCase() + to_katakana(it.inputNotLong.toUpperCase())).toEqual(
+				pre.toUpperCase() + it.outputNotLong,
+			)
 		}
 
 		function x(katakana: string, romaji: string, extra: boolean) {
