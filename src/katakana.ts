@@ -335,6 +335,13 @@ function subset_romaji_to_katakana_basics() {
 		l('ve', 'ヴェ'),
 		l('vo', 'ヴォ'),
 
+		// Extra sillables (e.g. for IME)
+		l('ca', 'カ'),
+		l('ci', 'シ'),
+		l('cu', 'ク'),
+		l('ce', 'セ'),
+		l('co', 'コ'),
+
 		subset_romaji_double_consonants(),
 	)
 }

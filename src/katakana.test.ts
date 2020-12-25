@@ -352,6 +352,13 @@ function katakana_and_romaji<T>(x: (katana: string, romaji: string, extra?: bool
 		// Katakana symbols
 		x('・', '/'),
 		x('ー', '-'),
+
+		// Extra IME
+		x('カ', 'ca'),
+		x('シ', 'ci'),
+		x('セ', 'ce'),
+		x('コ', 'co'),
+		x('ク', 'cu'),
 	]
 	return OUTPUT.filter((x) => !!x)
 }
