@@ -6,8 +6,8 @@ const TO_KATAKANA = compile(rules(set_hiragana_to_katakana(), set_romaji_to_kata
 /**
  * Converts the input text to katakana.
  *
- * This works on any mix of romaji and hiragana inputs. On romaji it will
- * convert text and punctuation.
+ * This works on any mix of romaji and hiragana inputs. It will also convert
+ * romaji punctuation and spacing to the Japanese equivalents.
  */
 export function to_katakana(input: string) {
 	return convert(input, TO_KATAKANA)
