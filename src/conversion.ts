@@ -19,7 +19,7 @@ import { TextBuilder, tuple } from './util'
 /**
  * A simple rule that maps the input to the output, verbatim.
  */
-type MappingRule = { key: string; out: string; len: number; outFn?: MappingRuleFn }
+type MappingRule = { key: string; out: string; len?: number; outFn?: MappingRuleFn }
 
 /**
  * Shorthand to create a MappingRule.
@@ -37,7 +37,7 @@ type MappingRuleContext = {
 type MappingRuleFn = (ctx: MappingRuleContext) => [string, number]
 
 export function mFn(key: string, outFn: MappingRuleFn): MappingRule {
-	return { key, outFn, out: '', len: 0 }
+	return { key, outFn, out: '' }
 }
 
 /**
@@ -48,7 +48,7 @@ export type Rule = MappingRule
 /**
  * Collection of text transformation rules.
  */
-type RuleSet = List<Rule>
+export type RuleSet = List<Rule>
 
 /**
  * Shorthand for building a RuleSet from a sequence of Rules or RuleSet.
@@ -58,6 +58,21 @@ type RuleSet = List<Rule>
  */
 export function rules(...set: (Rule | RuleSet)[]): RuleSet {
 	return List<Rule>().concat(...set)
+}
+
+/**
+ * Map every individual rule in the RuleSet using the given mapper and returns
+ * a new RuleSet.
+ */
+export function transform_rules(rules: RuleSet, mapper: (input: Rule) => Rule | Rule[]): RuleSet {
+	return rules.flatMap((input) => {
+		const output = mapper(input)
+		const mapping = Array.isArray(output) ? output : [output]
+		return mapping.map((x) => ({
+			...input,
+			...x,
+		}))
+	})
 }
 
 //============================================================================//

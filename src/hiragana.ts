@@ -1,3 +1,8 @@
+import { compile, convert } from './conversion'
+import { rules_to_hiragana } from './kana_rules'
+
+const TO_HIRAGANA = compile(rules_to_hiragana())
+
 /**
  * Converts the input text to hiragana.
  *
@@ -5,5 +10,5 @@
  * romaji punctuation and spacing to the Japanese equivalents.
  */
 export function to_hiragana(input: string) {
-	return input
+	return convert(input, TO_HIRAGANA)
 }

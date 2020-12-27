@@ -62,6 +62,9 @@ export function romaji_inputs(entry: Kana): string[] {
 	return []
 }
 
+const B = '\u{3099}'
+const P = '\u{309A}'
+
 /**
  * Basic kana tests.
  */
@@ -222,10 +225,10 @@ export const BASIC_KANA: Kana[] = [
 	x('ゐ', 'ヰ', 'Wi', { ime: 'xWi' }),
 	x('ゑ', 'ヱ', 'We', { ime: 'xWe' }),
 
-	x('ゔぁ', 'ヷ', 'Va', { ime: 'xVa', katakana_only: true }),
-	x('ゔぃ', 'ヸ', 'Vi', { ime: 'xVi', katakana_only: true }),
-	x('ゔぇ', 'ヹ', 'Ve', { ime: 'xVe', katakana_only: true }),
-	x('ゔぉ', 'ヺ', 'Vo', { ime: 'xVo', katakana_only: true }),
+	n('わ\u{3099}', 'ヷ', 'Va', { ime: 'xVa', katakana_only: true }),
+	n('ゐ\u{3099}', 'ヸ', 'Vi', { ime: 'xVi', katakana_only: true }),
+	n('ゑ\u{3099}', 'ヹ', 'Ve', { ime: 'xVe', katakana_only: true }),
+	n('を\u{3099}', 'ヺ', 'Vo', { ime: 'xVo', katakana_only: true }),
 
 	x('こと', 'ヿ', 'Koto', { from_kana: true, katakana_only: true }),
 	x('ゟ', 'ヨリ', 'Yori', { from_kana: true, hiragana_only: true }),
@@ -422,8 +425,8 @@ export const BASIC_KANA: Kana[] = [
 	x('ゅ', 'ュ', 'Yu', { ime: ['xYu'] }),
 	x('ょ', 'ョ', 'Yo', { ime: ['xYo'] }),
 	x('ゎ', 'ヮ', 'Wa', { ime: ['xWa'] }),
-	x('ヵ', 'ヵ', 'Ka', { ime: ['xKa'] }),
-	x('ヶ', 'ヶ', 'Ke', { ime: ['xKe'] }),
+	x('ゕ', 'ヵ', 'Ka', { ime: ['xKa'] }),
+	x('ゖ', 'ヶ', 'Ke', { ime: ['xKe'] }),
 
 	//
 	// Symbols & Punctuation
@@ -686,11 +689,38 @@ export const BASIC_KANA: Kana[] = [
 	x('わ', 'ﾜ', 'Wa', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Wa
 	x('ん', 'ﾝ', 'N', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter N
 
+	// Special cases for half-width
+	n(`う${B}`, `ｳ${B}`, `Vu`, { from_kana: true, katakana_only: true }),
+	n(`か${B}`, `ｶ${B}`, `Ga`, { from_kana: true, katakana_only: true }),
+	n(`き${B}`, `ｷ${B}`, `Gi`, { from_kana: true, katakana_only: true }),
+	n(`く${B}`, `ｸ${B}`, `Gu`, { from_kana: true, katakana_only: true }),
+	n(`け${B}`, `ｹ${B}`, `Ge`, { from_kana: true, katakana_only: true }),
+	n(`こ${B}`, `ｺ${B}`, `Go`, { from_kana: true, katakana_only: true }),
+	n(`さ${B}`, `ｻ${B}`, `Za`, { from_kana: true, katakana_only: true }),
+	n(`し${B}`, `ｼ${B}`, `Ji`, { from_kana: true, katakana_only: true }),
+	n(`す${B}`, `ｽ${B}`, `Zu`, { from_kana: true, katakana_only: true }),
+	n(`せ${B}`, `ｾ${B}`, `Ze`, { from_kana: true, katakana_only: true }),
+	n(`そ${B}`, `ｿ${B}`, `Zo`, { from_kana: true, katakana_only: true }),
+	n(`た${B}`, `ﾀ${B}`, `Da`, { from_kana: true, katakana_only: true }),
+	n(`ち${B}`, `ﾁ${B}`, `Di`, { from_kana: true, katakana_only: true }),
+	n(`つ${B}`, `ﾂ${B}`, `Du`, { from_kana: true, katakana_only: true }),
+	n(`て${B}`, `ﾃ${B}`, `De`, { from_kana: true, katakana_only: true }),
+	n(`と${B}`, `ﾄ${B}`, `Do`, { from_kana: true, katakana_only: true }),
+	n(`は${B}`, `ﾊ${B}`, `Ba`, { from_kana: true, katakana_only: true }),
+	n(`ひ${B}`, `ﾋ${B}`, `Bi`, { from_kana: true, katakana_only: true }),
+	n(`ふ${B}`, `ﾌ${B}`, `Bu`, { from_kana: true, katakana_only: true }),
+	n(`へ${B}`, `ﾍ${B}`, `Be`, { from_kana: true, katakana_only: true }),
+	n(`ほ${B}`, `ﾎ${B}`, `Bo`, { from_kana: true, katakana_only: true }),
+	n(`ほ${P}`, `ﾎ${P}`, `Po`, { from_kana: true, katakana_only: true }),
+	n(`は${P}`, `ﾊ${P}`, `Pa`, { from_kana: true, katakana_only: true }),
+	n(`ひ${P}`, `ﾋ${P}`, `Pi`, { from_kana: true, katakana_only: true }),
+	n(`ふ${P}`, `ﾌ${P}`, `Pu`, { from_kana: true, katakana_only: true }),
+	n(`へ${P}`, `ﾍ${P}`, `Pe`, { from_kana: true, katakana_only: true }),
+	n(`わ${B}`, `ﾜ${B}`, `Va`, { from_kana: true, katakana_only: true }),
+
 	// Test a few of the composite half katakana cases. Those should be derived
 	// from the base cases, so no need to test them all.
 
-	x('び', 'ﾋ\u{3099}', 'Bi', { from_kana: true, katakana_only: true }),
-	x('ぴ', 'ﾋ\u{309A}', 'Pi', { from_kana: true, katakana_only: true }),
 	x('ふぁ', 'ﾌｧ', 'Fa', { from_kana: true, katakana_only: true }),
 	x('ひゃ', 'ﾋｬ', 'Hya', { from_kana: true, katakana_only: true }),
 	x('びゃ', 'ﾋ\u{3099}ｬ', 'Bya', { from_kana: true, katakana_only: true }),
@@ -814,10 +844,14 @@ export const LONG_VOWELS: Kana[] = BASIC_KANA.filter((it) => {
 	])
 })
 
+function n(h: string, k: string, r: string, args: KanaArgs = {}): Kana {
+	return x(h.normalize(), k.normalize(), r, args)
+}
+
 function x(h: string, k: string, r: string, args: KanaArgs = {}): Kana {
 	return {
-		h,
-		k,
+		h: h,
+		k: k,
 		r,
 		...args,
 	}
