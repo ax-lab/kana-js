@@ -697,8 +697,11 @@ export const BASIC_KANA: Kana[] = [
 	x('ぴゃ', 'ﾋ\u{309A}ｬ', 'Pya', { from_kana: true, katakana_only: true }),
 ]
 
+/**
+ * Double consonant entries generated from the basic entries.
+ */
 export const DOUBLE_CONSONANTS: Kana[] = BASIC_KANA.filter((it) => {
-	// Ignore punctuation, vowel-only syllables and other exceptional entries
+	// Ignore punctuation, vowel-only syllables and other weirdness
 	if (!it.r || /^([aeiou]|x|[^a-z])/i.test(it.r) || it.h === 'ん') {
 		return false
 	}
@@ -715,6 +718,101 @@ export const DOUBLE_CONSONANTS: Kana[] = BASIC_KANA.filter((it) => {
 	k: it.k + 'ッ' + it.k,
 	r: it.r + it.r[0] + it.r,
 }))
+
+/**
+ * Long vowel entries.
+ */
+export const LONG_VOWELS: Kana[] = BASIC_KANA.filter((it) => {
+	// Ignore punctuation, entries that do not finish in a vowel, and other weirdness
+	if (!it.r || !/[aeiou]$/i.test(it.r) || it.h === 'ん') {
+		return false
+	}
+	// Ignore extra ime inputs
+	for (const r of romaji_inputs(it)) {
+		if (r[0] === 'x') {
+			return false
+		}
+	}
+	return true
+}).flatMap((it) => {
+	// Long vowel replacements
+	const X = 'AEIOUaeiou' // input
+	const A = 'ÂÊÎÔÛâêîôû' // with circumflex
+	const B = 'ĀĒĪŌŪāēīōū' // with macron
+	const K = 'アエイオウアエイオウ' // Katakana
+	const H = 'あえいおうあえいおう' // Hiragana
+	const RE_VOWEL = /[aeiou]$/i
+
+	// Replace the vowel in a syllable by a long vowel
+	const replace = (input: string, tbOutput: string) => {
+		return input.replace(RE_VOWEL, (s) => {
+			const index = X.indexOf(s)
+			return tbOutput[index]
+		})
+	}
+
+	// Repeat the last vowel in the input `count` times, translating with the
+	// given table
+	const repeat = (count: number, input: string, tbOutput: string) => {
+		const v = input[input.length - 1]
+		const s = tbOutput ? replace(v, tbOutput) : v
+		return s.repeat(count)
+	}
+
+	return romaji_inputs(it).flatMap((r) => [
+		// Long vowel mappings are ambiguous because 'ē' normally maps to 'ei'
+		// but can also map to 'ee', and 'ō' usually maps to 'ou' but can also
+		// be 'oo'.
+		//
+		// For that reason we expect explicit long vowels in the romaji to
+		// generate a prolonged sound mark on the kana output (including on
+		// hiragana).
+		//
+		// The reverse is also true. We expect a prolonged sound mark on the
+		// kana to generate a '-' on the romaji output.
+		{
+			...it,
+			h: it.h + 'ー',
+			k: it.k + 'ー',
+
+			// this is the canonical mapping for the above in romaji
+			r: r + '-',
+
+			// any of the long vowel representations in romaji should map back
+			// to the prolonged sound mark
+			ime: [r + '-', replace(r, A), replace(r, B)],
+		},
+
+		// Simple double vowels in romaji map back to a prolonged sound mark on
+		// katakana.
+		{
+			...it,
+			from_romaji: true,
+			h: it.h + repeat(1, r, H),
+			k: it.k + 'ー',
+			r: r + repeat(1, r, ''),
+		},
+
+		// Long repeats on romaji map with a single prolonged sound mark.
+		{
+			...it,
+			from_romaji: true,
+			h: it.h + repeat(4, r, H),
+			k: it.k + repeat(3, r, K) + 'ー',
+			r: r + repeat(4, r, ''),
+		},
+
+		// An apostrophe in the romaji can be used to disambiguate a sequence
+		// that should not generate a long vowel (e.g. カア -> ka'a)
+		{
+			...it,
+			from_romaji: true,
+			h: it.h + repeat(1, r, H),
+			k: it.k + repeat(1, r, K),
+			r: r + `'` + repeat(1, r, ''),
+		},
+	])
+})
 
 function x(h: string, k: string, r: string, args: KanaArgs = {}): Kana {
 	return {
