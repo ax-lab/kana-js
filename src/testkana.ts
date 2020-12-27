@@ -1,17 +1,9 @@
 // Kana tables used on the tests conversion tests.
 
 /**
- * Entry describing the equivalence between hiragana, katakana, and romaji
- * for the tests.
+ * Arguments for the test entries.
  */
-type Kana = {
-	/** Hiragana text */
-	h?: string
-	/** Katakana text */
-	k?: string
-	/** Romaji text */
-	r?: string
-
+type KanaArgs = {
 	/**
 	 * IME input. Replaces the romaji input on the romaji -> kana tests.
 	 */
@@ -39,6 +31,19 @@ type Kana = {
 	 * has no effect on the romaji mapping.
 	 */
 	hiragana_only?: boolean
+}
+
+/**
+ * Entry describing the equivalence between hiragana, katakana, and romaji
+ * for the tests.
+ */
+type Kana = KanaArgs & {
+	/** Hiragana text */
+	h: string
+	/** Katakana text */
+	k: string
+	/** Romaji text */
+	r: string
 }
 
 export function romaji_inputs(entry: Kana): string[] {
@@ -692,7 +697,26 @@ export const BASIC_KANA: Kana[] = [
 	x('ぴゃ', 'ﾋ\u{309A}ｬ', 'Pya', { from_kana: true, katakana_only: true }),
 ]
 
-function x(h: string, k: string, r: string, args: Kana = {}): Kana {
+export const DOUBLE_CONSONANTS: Kana[] = BASIC_KANA.filter((it) => {
+	// Ignore punctuation, vowel-only syllables and other exceptional entries
+	if (!it.r || /^([aeiou]|x|[^a-z])/i.test(it.r) || it.h === 'ん') {
+		return false
+	}
+	// Ignore extra ime inputs
+	for (const r of romaji_inputs(it)) {
+		if (r[0] === 'x') {
+			return false
+		}
+	}
+	return true
+}).map((it) => ({
+	...it,
+	h: it.h + 'っ' + it.h,
+	k: it.k + 'ッ' + it.k,
+	r: it.r + it.r[0] + it.r,
+}))
+
+function x(h: string, k: string, r: string, args: KanaArgs = {}): Kana {
 	return {
 		h,
 		k,

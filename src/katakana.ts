@@ -428,7 +428,14 @@ function set_romaji_to_katakana_ime() {
 		l('xka', 'ヵ'),
 		l('xke', 'ヶ'),
 
-		m('nn', 'ン'),
+		mFn('nn', (ctx) => {
+			if (!/^([aeiou]|ya|yu|ye|yo)/i.test(ctx.input)) {
+				// Only generate if we are not in a syllable...
+				return tuple('ン', 0)
+			}
+			// ...otherwise we are a double consonant
+			return tuple('ッ', 1)
+		}),
 
 		m('/', '・'),
 		m('-', 'ー'),

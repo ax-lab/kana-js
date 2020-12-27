@@ -68,19 +68,18 @@ describe('to_katakana', () => {
 	})
 
 	test('should convert romaji double consonants', () => {
-		// Sample input => { input: "KaKKa", output: "カッカ" }
-		const INPUT = katakana_and_romaji(x)
-		for (const { input, output } of INPUT) {
-			expect(to_katakana(input)).toEqual(output)
-			expect(to_katakana(input.toUpperCase())).toEqual(output)
-			expect(to_katakana(input.toLowerCase())).toEqual(output)
+		const check = (romaji: string, expected: string) => {
+			const pre = `${romaji} = `
+			expect(pre + to_katakana(romaji)).toEqual(pre + expected)
 		}
-		function x(katakana: string, romaji: string, extra: boolean) {
-			// Ignore vowel syllables and the 'ン' (n)
-			if (extra || /^([aeiou]|x|n|nn|[^a-z])/i.test(romaji)) {
-				return undefined
+
+		for (const it of testkana.DOUBLE_CONSONANTS) {
+			const expected = it.k
+			for (const romaji of testkana.romaji_inputs(it)) {
+				check(romaji, expected)
+				check(romaji.toLowerCase(), expected)
+				check(romaji.toUpperCase(), expected)
 			}
-			return { input: romaji + romaji[0] + romaji, output: katakana + 'ッ' + katakana }
 		}
 	})
 
