@@ -1,4 +1,5 @@
 import { to_katakana } from './katakana'
+import * as testkana from './testkana'
 import { describe, expect, test } from './testutil'
 
 describe('to_katakana', () => {
@@ -10,7 +11,7 @@ describe('to_katakana', () => {
 		const IN =
 			'あいうえお かきくけこ がぎぐげご さしすせそ ざじずぜぞ たちつてと だぢづでど なにぬねの はひふへほ ばびぶべぼ ぱぴぷぺぽ まみむめも やゆよ らりるれろ わゐゑをん'
 		const TO =
-			'アイウエオ カキクケコ ガギグゲゴ サシスセソ ザジズゼゾ タチツテト ダヂヅデド ナニヌネノ ハヒフヘホ バビブベボ パピプペポ マミムメモ ヤユヨ ラリルレロ ワヰヱヲン'
+			'アイウエオ　カキクケコ　ガギグゲゴ　サシスセソ　ザジズゼゾ　タチツテト　ダヂヅデド　ナニヌネノ　ハヒフヘホ　バビブベボ　パピプペポ　マミムメモ　ヤユヨ　ラリルレロ　ワヰヱヲン'
 		expect(to_katakana(IN)).toEqual(TO)
 	})
 
@@ -30,22 +31,39 @@ describe('to_katakana', () => {
 		const B = '\u{3099}' // Combining Katakana-Hiragana Voiced Sound Mark
 		const P = '\u{309A}' // Combining Katakana-Hiragana Semi-Voiced Sound Mark
 		const IN = `は${B}ひ${B}ふ${B}へ${B}ほ${B} は${P}ひ${P}ふ${P}へ${P}ほ${P}`
-		const TO = 'バビブベボ パピプペポ'
+		const TO = 'バビブベボ　パピプペポ'
 		expect(to_katakana(IN)).toEqual(TO)
 	})
 
-	test('should convert from romaji syllables', () => {
-		const INPUT = katakana_and_romaji(x)
-
-		for (const { katakana, romaji } of INPUT) {
-			const pre = `${romaji} = `
-			expect(pre + to_katakana(romaji)).toEqual(pre + katakana)
-			expect(pre + to_katakana(romaji.toUpperCase())).toEqual(pre + katakana)
-			expect(pre + to_katakana(romaji.toLowerCase())).toEqual(pre + katakana)
+	test('should convert from hiragana', () => {
+		const check = (hiragana: string, expected: string) => {
+			const pre = `${hiragana} = `
+			expect(pre + to_katakana(hiragana)).toEqual(pre + expected)
 		}
 
-		function x(katakana: string, romaji: string, extra: boolean) {
-			return extra ? undefined : { katakana, romaji }
+		for (const it of testkana.BASIC_KANA) {
+			if (it.katakana_only) {
+				continue
+			}
+			const expected = it.k
+			const hiragana = it.h
+			check(hiragana, expected)
+		}
+	})
+
+	test('should convert from romaji', () => {
+		const check = (romaji: string, expected: string) => {
+			const pre = `${romaji} = `
+			expect(pre + to_katakana(romaji)).toEqual(pre + expected)
+		}
+
+		for (const it of testkana.BASIC_KANA) {
+			const expected = it.k
+			for (const romaji of testkana.romaji_inputs(it)) {
+				check(romaji, expected)
+				check(romaji.toLowerCase(), expected)
+				check(romaji.toUpperCase(), expected)
+			}
 		}
 	})
 

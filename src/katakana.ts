@@ -160,6 +160,8 @@ function subset_romaji_to_katakana_basics() {
 		m('n', 'ン'),
 		m("n'", 'ン'),
 
+		subset_romaji_punctuation(),
+
 		q('a', 'ア'),
 		q('i', 'イ'),
 		q('u', 'ウ'),
@@ -218,6 +220,16 @@ function subset_romaji_to_katakana_basics() {
 		l('je', 'ジェ'),
 		l('jo', 'ジョ'),
 
+		l('jya', 'ジャ'),
+		l('jyu', 'ジュ'),
+		l('jye', 'ジェ'),
+		l('jyo', 'ジョ'),
+
+		l('zya', 'ジャ'),
+		l('zyu', 'ジュ'),
+		l('zye', 'ジェ'),
+		l('zyo', 'ジョ'),
+
 		l('ta', 'タ'),
 		l('ti', 'チ'),
 		l('chi', 'チ'),
@@ -239,6 +251,11 @@ function subset_romaji_to_katakana_basics() {
 		l('che', 'チェ'),
 		l('cho', 'チョ'),
 
+		l('tya', 'チャ'),
+		l('tyu', 'チュ'),
+		l('tye', 'チェ'),
+		l('tyo', 'チョ'),
+
 		l('dja', 'ヂャ'),
 		l('dju', 'ヂュ'),
 		l('dje', 'ヂェ'),
@@ -248,6 +265,10 @@ function subset_romaji_to_katakana_basics() {
 		l('dyu', 'ヂュ'),
 		l('dye', 'ヂェ'),
 		l('dyo', 'ヂョ'),
+
+		l('dza', 'ヂャ'),
+		l('dze', 'ヂェ'),
+		l('dzo', 'ヂョ'),
 
 		l('na', 'ナ'),
 		l('ni', 'ニ'),
@@ -399,6 +420,10 @@ function set_romaji_to_katakana_ime() {
 		l('xtu', 'ッ'),
 		l('xtsu', 'ッ'),
 
+		l('xdu', 'ドゥ'),
+		l('xti', 'ティ'),
+		l('xdi', 'ディ'),
+
 		l('xwa', 'ヮ'),
 		l('xka', 'ヵ'),
 		l('xke', 'ヶ'),
@@ -407,5 +432,54 @@ function set_romaji_to_katakana_ime() {
 
 		m('/', '・'),
 		m('-', 'ー'),
+	)
+}
+
+function subset_romaji_punctuation() {
+	return rules(
+		m(' ', '\u{3000}'),
+		m('/', '・'),
+		m(',', '、'),
+		m('.', '。'),
+		m('[', '「'),
+		m(']', '」'),
+		m('«', '《'),
+		m('»', '》'),
+		m('»', '》'),
+		m('!', '！'),
+		m('"', '＂'),
+		m('#', '＃'),
+		m('$', '＄'),
+		m('%', '％'),
+		m('&', '＆'),
+		m(`'`, '＇'),
+		m('(', '（'),
+		m(')', '）'),
+		m('*', '＊'),
+		m('+', '＋'),
+		m('-', '－'),
+		m(':', '：'),
+		m(';', '；'),
+		m('<', '＜'),
+		m('=', '＝'),
+		m('>', '＞'),
+		m('?', '？'),
+		m('@', '＠'),
+		m('\\', '＼'),
+		m('^', '＾'),
+		m('_', '＿'),
+		m('`', '｀'),
+		m('{', '｛'),
+		m('|', '｜'),
+		m('}', '｝'),
+		m('~', '～'),
+
+		// Monetary symbols
+		m('¢', '￠'),
+		m('£', '￡'),
+		m('¬', '￢'),
+		m('¯', '￣'),
+		m('¥', '￥'),
+		m('₩', '￦'),
 	)
 }

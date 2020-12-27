@@ -41,10 +41,26 @@ type Kana = {
 	hiragana_only?: boolean
 }
 
+export function romaji_inputs(entry: Kana): string[] {
+	if (entry.from_kana) {
+		return []
+	}
+	if (entry.ime) {
+		if (typeof entry.ime === 'string') {
+			return [entry.ime]
+		}
+		return entry.ime
+	}
+	if (entry.r) {
+		return [entry.r]
+	}
+	return []
+}
+
 /**
  * Basic kana tests.
  */
-export const TEST_KANA: Kana[] = [
+export const BASIC_KANA: Kana[] = [
 	//
 	// Plain syllables
 	//
@@ -459,9 +475,9 @@ export const TEST_KANA: Kana[] = [
 	x('）', '）', ')'), // U+FF09 - Fullwidth Right Parenthesis
 	x('＊', '＊', '*'), // U+FF0A - Fullwidth Asterisk
 	x('＋', '＋', '+'), // U+FF0B - Fullwidth Plus Sign
-	x('，', '，', ','), // U+FF0C - Fullwidth Comma
-	x('－', '－', '-'), // U+FF0D - Fullwidth Hyphen-Minus
-	x('．', '．', '.'), // U+FF0E - Fullwidth Full Stop
+	x('，', '，', ',', { from_kana: true }), // U+FF0C - Fullwidth Comma
+	x('－', '－', '-', { from_kana: true }), // U+FF0D - Fullwidth Hyphen-Minus
+	x('．', '．', '.', { from_kana: true }), // U+FF0E - Fullwidth Full Stop
 	x('／', '／', '/', { from_kana: true }), // U+FF0F - Fullwidth Solidus
 	x('：', '：', ':'), // U+FF1A - Fullwidth Colon
 	x('；', '；', ';'), // U+FF1B - Fullwidth Semicolon
