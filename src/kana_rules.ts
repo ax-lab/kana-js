@@ -16,6 +16,11 @@ export function rules_to_hiragana() {
 	return rules(set_katakana_to_hiragana(), set_romaji_to_hiragana())
 }
 
+/** Main rule set to convert kana to romaji. */
+export function rules_to_romaji() {
+	return rules()
+}
+
 //============================================================================//
 // Mappers
 //============================================================================//
