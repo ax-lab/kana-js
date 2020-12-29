@@ -195,6 +195,10 @@ register(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK, 'ー')
 register(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LONG_MARK | CharFlags.IS_HALFWIDTH, 'ｰ')
 register(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_LETTER, '〼')
 
+// Combining
+register(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_MARK, '\u{3099}')
+register(CharKind.KANA, CharFlags.CHAR_JAPANESE | CharFlags.IS_MARK, '\u{309A}')
+
 //========================================================================//
 // Hiragana
 //========================================================================//

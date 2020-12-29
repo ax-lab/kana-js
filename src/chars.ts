@@ -10,6 +10,32 @@ import { CharFlags, CharKind } from './chars_types'
 export * from './chars_types'
 
 /**
+ * Check if the entire string is composed of kana characters.
+ */
+export function is_kana(input: string): boolean {
+	if (!input) {
+		return false
+	}
+
+	for (const chr of input) {
+		const it = CHAR_TABLE[chr]
+		if (!it) {
+			return false
+		}
+		switch (it[0]) {
+			case CharKind.KANA:
+			case CharKind.HIRAGANA:
+			case CharKind.KATAKANA:
+				break
+			default:
+				return false
+		}
+	}
+
+	return true
+}
+
+/**
  * Looks up information about a single character unit. Character units are
  * generally a single Unicode codepoint, but can also include combining marks
  * for non-normalized or rare characters.
@@ -25,7 +51,7 @@ export * from './chars_types'
  * This function uses lookup tables for the most common characters and then
  * fallsback to regular expressions based on Unicode ranges.
  */
-export function getCharInfo(char: string): readonly [CharKind, CharFlags] | undefined {
+export function get_char_info(char: string): readonly [CharKind, CharFlags] | undefined {
 	if (!char) {
 		return undefined
 	}
@@ -76,7 +102,7 @@ export function getCharInfo(char: string): readonly [CharKind, CharFlags] | unde
  * This method handles UTF-16 surrogate pairs and combining marks, returning
  * them as a single unit.
  */
-export function nextChar(input: string): string {
+export function next_char(input: string): string {
 	const m = /^[\s\S][\p{M}]*/u.exec(input)
 	return m ? m[0] : ''
 }
@@ -98,7 +124,7 @@ export function nextChar(input: string): string {
  *   marks from all other Unicode characters. Otherwise, only A-Z character
  *   will be affected.
  */
-export function removeAccents(input: string, stripAnyLanguage?: boolean): string {
+export function remove_accents(input: string, stripAnyLanguage?: boolean): string {
 	// Relevant Unicode characters:
 	//
 	// U+0302 - Combining Circumflex Accent

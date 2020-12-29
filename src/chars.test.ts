@@ -6,52 +6,52 @@ import * as util from './util'
 describe('chars', () => {
 	const expect = customizeExpect()
 
-	describe('chars.nextChar', () => {
+	describe('chars.next_char', () => {
 		test('should return first character in a string', () => {
-			expect(chars.nextChar('abc')).toEqual('a')
+			expect(chars.next_char('abc')).toEqual('a')
 		})
 
 		test('should return empty for empty string', () => {
-			expect(chars.nextChar('')).toEqual('')
+			expect(chars.next_char('')).toEqual('')
 		})
 
 		test('should support UTF-16 surrogate pairs', () => {
-			expect(chars.nextChar('\u{24B62}!')).toEqual('𤭢')
-			expect(chars.nextChar('𤭢!')).toEqual('𤭢')
+			expect(chars.next_char('\u{24B62}!')).toEqual('𤭢')
+			expect(chars.next_char('𤭢!')).toEqual('𤭢')
 
-			expect(chars.nextChar('\u{1F600}!')).toEqual('😀')
-			expect(chars.nextChar('😀!')).toEqual('😀')
+			expect(chars.next_char('\u{1F600}!')).toEqual('😀')
+			expect(chars.next_char('😀!')).toEqual('😀')
 		})
 
 		test('should handle line breaks', () => {
-			expect(chars.nextChar('\r\r')).toEqual('\r')
-			expect(chars.nextChar('\n\n')).toEqual('\n')
-			expect(chars.nextChar('\r\n')).toEqual('\r')
+			expect(chars.next_char('\r\r')).toEqual('\r')
+			expect(chars.next_char('\n\n')).toEqual('\n')
+			expect(chars.next_char('\r\n')).toEqual('\r')
 		})
 
 		test('should handle combining marks', () => {
-			expect(chars.nextChar('c\u{0327}').normalize()).toEqual('ç')
-			expect(chars.nextChar('c\u{0327}\u{0304}').normalize()).toEqual('ç̄'.normalize())
+			expect(chars.next_char('c\u{0327}').normalize()).toEqual('ç')
+			expect(chars.next_char('c\u{0327}\u{0304}').normalize()).toEqual('ç̄'.normalize())
 
-			expect(chars.nextChar('は\u{3099}').normalize()).toEqual('ば')
-			expect(chars.nextChar('は\u{309A}').normalize()).toEqual('ぱ')
-			expect(chars.nextChar('ゝ\u{3099}').normalize()).toEqual('ゞ')
-			expect(chars.nextChar('ヽ\u{3099}').normalize()).toEqual('ヾ')
+			expect(chars.next_char('は\u{3099}').normalize()).toEqual('ば')
+			expect(chars.next_char('は\u{309A}').normalize()).toEqual('ぱ')
+			expect(chars.next_char('ゝ\u{3099}').normalize()).toEqual('ゞ')
+			expect(chars.next_char('ヽ\u{3099}').normalize()).toEqual('ヾ')
 
-			expect(chars.nextChar('ワ\u{3099}').normalize()).toEqual('ヷ')
-			expect(chars.nextChar('ヰ\u{3099}').normalize()).toEqual('ヸ')
-			expect(chars.nextChar('ヱ\u{3099}').normalize()).toEqual('ヹ')
-			expect(chars.nextChar('ヲ\u{3099}').normalize()).toEqual('ヺ')
+			expect(chars.next_char('ワ\u{3099}').normalize()).toEqual('ヷ')
+			expect(chars.next_char('ヰ\u{3099}').normalize()).toEqual('ヸ')
+			expect(chars.next_char('ヱ\u{3099}').normalize()).toEqual('ヹ')
+			expect(chars.next_char('ヲ\u{3099}').normalize()).toEqual('ヺ')
 
-			expect(chars.nextChar('わ\u{3099}')).toEqual('わ゙')
-			expect(chars.nextChar('ゐ\u{3099}')).toEqual('ゐ゙')
-			expect(chars.nextChar('ゑ\u{3099}')).toEqual('ゑ゙')
-			expect(chars.nextChar('を\u{3099}')).toEqual('を゙')
+			expect(chars.next_char('わ\u{3099}')).toEqual('わ゙')
+			expect(chars.next_char('ゐ\u{3099}')).toEqual('ゐ゙')
+			expect(chars.next_char('ゑ\u{3099}')).toEqual('ゑ゙')
+			expect(chars.next_char('を\u{3099}')).toEqual('を゙')
 		})
 
 		test('should always return a string prefix', () => {
 			const check = (input: string) => {
-				const output = chars.nextChar(input)
+				const output = chars.next_char(input)
 				expect(output).toBeTruthy()
 				expect(output.length).toBeLessThanOrEqual(input.length)
 				expect(output).toStrictEqual(input.slice(0, output.length))
@@ -80,16 +80,16 @@ describe('chars', () => {
 		})
 	})
 
-	describe('chars.removeAccents', () => {
+	describe('chars.remove_accents', () => {
 		test('should strip combining diacritics from A-Z characters', () => {
 			// Test text, courtesy of https://onlineunicodetools.com/add-combining-characters
 			//
 			// (space for rendering)
 			const WEIRD = ['c̥͛ḁ͛r̥͛p̥͛e̥͛ d̥͛i̥͛e̥͛m̥͛', 'l̡̟̖̟᷿̣̖̮͊̎᷄̈̉̍ͯ︡͜ơ͖̺͖͖̭̘̝̟̈̿ͫ͌̏͘͟͠v̧̨̡̦᷿᷂̣͕̐᷇ͣ︠᷇̏͜͝͡ȅ̫͉̺̖̙͕̯͒̃᷆ͨ᷅͘͢ͅ', 's̶t̶r̶o̶k̶e̶d̶ t̶e̶x̶t̶']
 
-			expect(chars.removeAccents(WEIRD[0])).toEqual('carpe diem')
-			expect(chars.removeAccents(WEIRD[1])).toEqual('love')
-			expect(chars.removeAccents(WEIRD[2])).toEqual('stroked text')
+			expect(chars.remove_accents(WEIRD[0])).toEqual('carpe diem')
+			expect(chars.remove_accents(WEIRD[1])).toEqual('love')
+			expect(chars.remove_accents(WEIRD[2])).toEqual('stroked text')
 		})
 
 		test('should preserve romaji long vowels', () => {
@@ -103,21 +103,21 @@ describe('chars', () => {
 			const OUTPUT_C = 'ābcdēfghījklmnōpqrstūvwxyz'.normalize('NFC')
 			const OUTPUT_D = 'ĀBCDĒFGHĪJKLMNŌPQRSTŪVWXYZ'.normalize('NFC')
 
-			expect(chars.removeAccents(INPUT_A)).toEqual(OUTPUT_A)
-			expect(chars.removeAccents(INPUT_A, true)).toEqual(OUTPUT_A)
-			expect(chars.removeAccents(INPUT_A, false)).toEqual(OUTPUT_A)
+			expect(chars.remove_accents(INPUT_A)).toEqual(OUTPUT_A)
+			expect(chars.remove_accents(INPUT_A, true)).toEqual(OUTPUT_A)
+			expect(chars.remove_accents(INPUT_A, false)).toEqual(OUTPUT_A)
 
-			expect(chars.removeAccents(INPUT_B)).toEqual(OUTPUT_B)
-			expect(chars.removeAccents(INPUT_B, true)).toEqual(OUTPUT_B)
-			expect(chars.removeAccents(INPUT_B, false)).toEqual(OUTPUT_B)
+			expect(chars.remove_accents(INPUT_B)).toEqual(OUTPUT_B)
+			expect(chars.remove_accents(INPUT_B, true)).toEqual(OUTPUT_B)
+			expect(chars.remove_accents(INPUT_B, false)).toEqual(OUTPUT_B)
 
-			expect(chars.removeAccents(INPUT_C)).toEqual(OUTPUT_C)
-			expect(chars.removeAccents(INPUT_C, true)).toEqual(OUTPUT_C)
-			expect(chars.removeAccents(INPUT_C, false)).toEqual(OUTPUT_C)
+			expect(chars.remove_accents(INPUT_C)).toEqual(OUTPUT_C)
+			expect(chars.remove_accents(INPUT_C, true)).toEqual(OUTPUT_C)
+			expect(chars.remove_accents(INPUT_C, false)).toEqual(OUTPUT_C)
 
-			expect(chars.removeAccents(INPUT_D)).toEqual(OUTPUT_D)
-			expect(chars.removeAccents(INPUT_D, true)).toEqual(OUTPUT_D)
-			expect(chars.removeAccents(INPUT_D, false)).toEqual(OUTPUT_D)
+			expect(chars.remove_accents(INPUT_D)).toEqual(OUTPUT_D)
+			expect(chars.remove_accents(INPUT_D, true)).toEqual(OUTPUT_D)
+			expect(chars.remove_accents(INPUT_D, false)).toEqual(OUTPUT_D)
 		})
 
 		test('should remove invalid voiced sound marks', () => {
@@ -130,17 +130,17 @@ describe('chars', () => {
 			const outputB = '(a あ  ぱ [])'.normalize('NFC')
 			const outputC = outputA
 
-			expect(chars.removeAccents(inputA)).toEqual(outputA)
-			expect(chars.removeAccents(inputA, true)).toEqual(outputA)
-			expect(chars.removeAccents(inputA, false)).toEqual(outputA)
+			expect(chars.remove_accents(inputA)).toEqual(outputA)
+			expect(chars.remove_accents(inputA, true)).toEqual(outputA)
+			expect(chars.remove_accents(inputA, false)).toEqual(outputA)
 
-			expect(chars.removeAccents(inputB)).toEqual(outputB)
-			expect(chars.removeAccents(inputB, true)).toEqual(outputB)
-			expect(chars.removeAccents(inputB, false)).toEqual(outputB)
+			expect(chars.remove_accents(inputB)).toEqual(outputB)
+			expect(chars.remove_accents(inputB, true)).toEqual(outputB)
+			expect(chars.remove_accents(inputB, false)).toEqual(outputB)
 
-			expect(chars.removeAccents(inputC)).toEqual(outputC)
-			expect(chars.removeAccents(inputC, true)).toEqual(outputC)
-			expect(chars.removeAccents(inputC, false)).toEqual(outputC)
+			expect(chars.remove_accents(inputC)).toEqual(outputC)
+			expect(chars.remove_accents(inputC, true)).toEqual(outputC)
+			expect(chars.remove_accents(inputC, false)).toEqual(outputC)
 		})
 
 		test('should preserve valid voiced sound marks', () => {
@@ -193,26 +193,26 @@ describe('chars', () => {
 			for (const it of TESTS) {
 				const input = it.a.normalize('NFD')
 				const output = it.b.normalize('NFC')
-				expect(chars.removeAccents(input)).toEqual(output)
-				expect(chars.removeAccents(input, true)).toEqual(output)
-				expect(chars.removeAccents(input, false)).toEqual(output)
+				expect(chars.remove_accents(input)).toEqual(output)
+				expect(chars.remove_accents(input, true)).toEqual(output)
+				expect(chars.remove_accents(input, false)).toEqual(output)
 			}
 		})
 
 		test('should strip diacritics if stripAnyLanguage is true', () => {
 			const input = '𝘤̥͛𝘢̥͛𝘳̥͛𝘱̥͛𝘦̥͛ 𝘥̥͛𝘪̥͛𝘦̥͛𝘮̥͛'.normalize('NFD')
 			const output = '𝘤𝘢𝘳𝘱𝘦 𝘥𝘪𝘦𝘮'.normalize('NFC')
-			expect(chars.removeAccents(input)).toEqual(input.normalize('NFC'))
-			expect(chars.removeAccents(input, false)).toEqual(input.normalize('NFC'))
-			expect(chars.removeAccents(input, true)).toEqual(output)
+			expect(chars.remove_accents(input)).toEqual(input.normalize('NFC'))
+			expect(chars.remove_accents(input, false)).toEqual(input.normalize('NFC'))
+			expect(chars.remove_accents(input, true)).toEqual(output)
 		})
 	})
 
-	describe('chars.getCharInfo', () => {
+	describe('chars.get_char_info', () => {
 		test('should return undefined for empty', () => {
-			expect(chars.getCharInfo('')).toBeUndefined()
-			expect(chars.getCharInfo(null)).toBeUndefined()
-			expect(chars.getCharInfo(undefined)).toBeUndefined()
+			expect(chars.get_char_info('')).toBeUndefined()
+			expect(chars.get_char_info(null)).toBeUndefined()
+			expect(chars.get_char_info(undefined)).toBeUndefined()
 		})
 
 		test('should support hiragana', () => {
@@ -758,6 +758,54 @@ describe('chars', () => {
 			expect('c\u{0303}\u{0332}').toHaveCharInfo(CharKind.OTHER_WORD, CharFlags.IS_LETTER | CharFlags.IS_LOWER)
 		})
 	})
+
+	describe('chars.is_kana', () => {
+		test('should return false for empty', () => {
+			expect(chars.is_kana('')).toBe(false)
+		})
+
+		test('should return true for hiragana', () => {
+			expect(
+				chars.is_kana(
+					'あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもやゆよらりるれろわゐゑをん',
+				),
+			).toBe(true)
+
+			expect(chars.is_kana('ぁぃぅぇぉっゃゅょ')).toBe(true)
+			expect(chars.is_kana('ゎゕゖゔゟゝゞ')).toBe(true)
+		})
+
+		test('should return true for katakana', () => {
+			expect(
+				chars.is_kana(
+					'アイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロヮワヰヱヲンヴ',
+				),
+			).toBe(true)
+
+			expect(chars.is_kana('ァィゥェォッャュョ')).toBe(true)
+			expect(chars.is_kana('ヵヶヷヸヹヺヽヾヿ𛀀')).toBe(true)
+			expect(chars.is_kana('ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ')).toBe(true)
+			expect(chars.is_kana('ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ')).toBe(true)
+		})
+
+		test('should return true for kana marks', () => {
+			expect(chars.is_kana('〼ーｰ')).toBe(true)
+		})
+
+		test('should support combining marks', () => {
+			const B = '\u{3099}'
+			const P = '\u{309A}'
+			expect(
+				chars.is_kana(
+					`は${B}ひ${B}ふ${B}へ${B}ほ${B}は` +
+						`${P}ひ${P}ふ${P}へ${P}ほ${P}` +
+						`ハ${B}ヒ${B}フ${B}ヘ${B}ホ${B}` +
+						`ハ${P}ヒ${P}フ${P}ヘ${P}ホ${P}` +
+						`う${B}わ${B}ワ${B}`,
+				),
+			).toBe(true)
+		})
+	})
 })
 
 function customizeExpect() {
@@ -832,10 +880,10 @@ function customizeExpect() {
 			// eslint-disable-next-line functional/no-let
 			let text = args.received
 			while (text.length) {
-				const next = chars.nextChar(text)
+				const next = chars.next_char(text)
 				text = text.slice(next.length)
 
-				const actual = chars.getCharInfo(next)
+				const actual = chars.get_char_info(next)
 				if (actual === undefined) {
 					return {
 						message: () => getMessage(next, actual),
@@ -855,7 +903,7 @@ function customizeExpect() {
 
 			return { message: () => 'passed', pass: !isNot }
 		} else {
-			const actual = chars.getCharInfo(args.received)
+			const actual = chars.get_char_info(args.received)
 			if (actual === undefined) {
 				return {
 					message: () => getMessage(args.received, actual),
