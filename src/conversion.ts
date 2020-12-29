@@ -28,13 +28,23 @@ export function m(key: string, out: string, len = 0): MappingRule {
 	return { key, out, len }
 }
 
-type MappingRuleContext = {
+type SimpleRuleContext = {
+	/** Input to the last rule matched */
 	lastInput: string
+	/** Output of the last rule matched */
 	lastOutput: string
-	input: string
 }
 
-type MappingRuleFn = (ctx: MappingRuleContext) => [string, number]
+export type MappingRuleContext = SimpleRuleContext & {
+	/** Current rules being used. */
+	rules: CompiledRuleSet
+	/** Input for the current rule */
+	input: string
+	/** Remaining input after this rule */
+	nextInput: string
+}
+
+type MappingRuleFn = (ctx: MappingRuleContext) => [string, number] | [string, number, string]
 
 export function mFn(key: string, outFn: MappingRuleFn): MappingRule {
 	return { key, outFn, out: '' }
@@ -79,7 +89,7 @@ export function transform_rules(rules: RuleSet, mapper: (input: Rule) => Rule | 
 // Transformation
 //============================================================================//
 
-type CompiledRuleSet = ReturnType<typeof compile>
+export type CompiledRuleSet = ReturnType<typeof compile>
 
 /**
  * Compiles a RuleSet to be used for text conversion with `convert`.
@@ -140,16 +150,75 @@ export function compile(rules: RuleSet) {
 }
 
 /**
+ * Converts the next text in input using the compiled rule set. This applies a
+ * single conversion rule to the beginning of the text.
+ *
+ * Returns a tuple containing:
+ * - The generated output for the rule. Empty for no match.
+ * - The length of the consumed input. Zero for no match.
+ * - Context for the next rule.
+ */
+export function convert_next(
+	input: string,
+	rules: CompiledRuleSet,
+	context: SimpleRuleContext = { lastInput: '', lastOutput: '' },
+): [string, number, SimpleRuleContext] {
+	// Lookup what is the maximum possible key length given the next char
+	// code. Note that we don't care about Unicode codepoints at this point,
+	// as the mapping algorithm will work regardless of them.
+	//
+	// About case conversion: we first try to lookup keys without converting
+	// the case (this is to allow for case-specific rules). If that fails,
+	// we fallback to lowercasing the key.
+	const prefix = input.slice(0, 2)
+	const length =
+		(prefix &&
+			(rules.maxLengthByPrefix[prefix.charCodeAt(0)] ||
+				rules.maxLengthByPrefix[prefix.toLowerCase().charCodeAt(0)])) ||
+		0
+
+	// This will return the string length to skip and if a mapping has been
+	// found.
+	if (length > 0) {
+		// Start with the longest possible keys and work downward until
+		// we either extract a key from the input or figure out it does
+		// not apply.
+		for (const keyLength of Range(1, length + 1).reverse()) {
+			const chunk = input.slice(0, keyLength)
+			const key = chunk
+			const rule = rules.mappings[key] || rules.mappings[key.toLowerCase()]
+			if (rule) {
+				if (rule.outFn) {
+					// Rule is a function called with the context.
+					const [txt, len, nextOutput] = rule.outFn({
+						...context,
+						rules: rules,
+						input: chunk,
+						nextInput: input.slice(keyLength),
+					})
+					if (len >= 0) {
+						const output = txt || rule.out
+						const length = len || rule.len || keyLength
+						return tuple(output, length, { lastOutput: nextOutput || output, lastInput: chunk })
+					}
+				} else {
+					const output = rule.out
+					const length = rule.len || keyLength
+					return tuple(output, length, { lastOutput: output, lastInput: chunk })
+				}
+			}
+		}
+	}
+
+	// No rules applicable, pass through the text unmodified.
+	return tuple('', 0, context)
+}
+
+/**
  * Converts the input text using the given CompiledRuleSet returned by `compile`.
  */
 export function convert(input: string, rules: CompiledRuleSet): string {
 	const out = TextBuilder()
-
-	// Note on case-sensitiveness: we want the conversion lookup to be
-	// completely case-insensitive, so all keys are lowercased before lookup.
-	//
-	// At the same time, we don't want to change the case of the passthrough
-	// unconverted text, so the lowercase transform is done only to the keys.
 
 	// eslint-disable-next-line functional/no-let
 	let ctx = {
@@ -157,60 +226,22 @@ export function convert(input: string, rules: CompiledRuleSet): string {
 		lastOutput: '',
 	}
 
-	const push = (txt: string, key: string) => {
-		out.push(txt)
-		ctx = {
-			lastInput: key,
-			lastOutput: txt,
-		}
-	}
-
 	// Scan the input string
 	while (input.length) {
-		// Lookup what is the maximum possible key length given the next char
-		// code. Note that we don't care about Unicode codepoints at this point,
-		// as the mapping algorithm will work regardless of them.
-		const prefix = input.slice(0, 2).toLowerCase().charCodeAt(0)
-		// Note that if length is zero, we simply pass the string through
-		// unmodified.
-		const length = rules.maxLengthByPrefix[prefix] || 0
-
-		// This will return the string length to skip and if a mapping has been
-		// found.
-		const [skip, found] = (() => {
-			if (length > 0) {
-				// Start with the longest possible keys and work downward until
-				// we either extract a key from the input or figure out it does
-				// not apply.
-				for (const keyLength of Range(1, length + 1).reverse()) {
-					const chunk = input.slice(0, keyLength)
-					const key = chunk.toLowerCase()
-					const rule = rules.mappings[key]
-					if (rule) {
-						if (rule.outFn) {
-							const [txt, len] = rule.outFn({ ...ctx, input: input.slice(keyLength) })
-							if (len >= 0) {
-								push(txt || rule.out, chunk)
-								return tuple(len || rule.len || keyLength, true)
-							}
-						} else {
-							push(rule.out, chunk)
-							return tuple(rule.len || keyLength, true)
-						}
-					}
-				}
-			}
-			// No rules applicable, pass through the text unmodified.
-			return tuple(1, false)
-		})()
-
-		// If no rule was applied, just output the text verbatim.
-		if (!found) {
-			out.push(input.slice(0, skip))
+		const [output, length, next_ctx] = convert_next(input, rules, ctx)
+		if (length) {
+			out.push(output)
+			ctx = next_ctx
+			input = input.slice(length)
+		} else {
+			// If no rule was applied, just output the text verbatim.
+			const next = input.charCodeAt(0)
+			const surr = next >= 0xd800 && next <= 0xdbff
+			const text = surr ? String.fromCodePoint(input.codePointAt(0)!) : input[0]
+			out.push(text)
+			input = input.slice(text.length)
+			ctx = { lastInput: text, lastOutput: text }
 		}
-
-		// Skip to the next input to process.
-		input = input.slice(skip)
 	}
 
 	return out.toString()

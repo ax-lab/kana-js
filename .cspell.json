@@ -5,6 +5,7 @@
 	"words": [
 		"〱〲〳〴〵",
 		"abcdefghijklmnopqrstuvwxyz",
+		"bcdfghjklmnpqrstvwxyz",
 		"āīūēō",
 		"âîûêô",
 		"áéíóú",
@@ -39,6 +40,7 @@
 		"romaji",
 		"sandboxed",
 		"serializers",
+		"surr",
 		"transpiled",
 		"typedoc",
 		"unmocked",

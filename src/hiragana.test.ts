@@ -22,8 +22,14 @@ describe('to_hiragana', () => {
 	})
 
 	test('should convert from rare katakana', () => {
-		const IN = 'ヴヽヾヿ'
-		const TO = 'ゔゝゞこと'
+		const IN = 'ヴヽヾヿ𛀀ヷヸヹヺ'
+		const TO = `ゔゝゞことえわ\u{3099}ゐ\u{3099}ゑ\u{3099}を\u{3099}`
+		expect(to_hiragana(IN)).toEqual(TO)
+	})
+
+	test('should convert from rare small katakana', () => {
+		const IN = 'ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ'
+		const TO = 'くしすとぬはひふへほむらりるれろ'
 		expect(to_hiragana(IN)).toEqual(TO)
 	})
 
@@ -97,5 +103,20 @@ describe('to_hiragana', () => {
 				check(romaji.toUpperCase(), expected)
 			}
 		}
+	})
+
+	test('should convert long double vowel sequences', () => {
+		// spell-checker: disable
+		expect(to_hiragana('akkkkkkkkkkka')).toEqual('あっっっっっっっっっっか')
+		expect(to_hiragana('akkkkkkkkkka')).toEqual('あっっっっっっっっっか')
+		expect(to_hiragana('akkkkkkkkka')).toEqual('あっっっっっっっっか')
+		expect(to_hiragana('akkkkkkkka')).toEqual('あっっっっっっっか')
+		expect(to_hiragana('akkkkkkka')).toEqual('あっっっっっっか')
+		expect(to_hiragana('akkkkkka')).toEqual('あっっっっっか')
+		expect(to_hiragana('akkkkka')).toEqual('あっっっっか')
+		expect(to_hiragana('akkkka')).toEqual('あっっっか')
+		expect(to_hiragana('akkka')).toEqual('あっっか')
+		expect(to_hiragana('akka')).toEqual('あっか')
+		// spell-checker: enable
 	})
 })

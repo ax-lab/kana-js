@@ -420,7 +420,7 @@ export const BASIC_KANA: Kana[] = [
 	x('ぅ', 'ゥ', 'U', { ime: ['xU'] }),
 	x('ぇ', 'ェ', 'E', { ime: ['xE'] }),
 	x('ぉ', 'ォ', 'O', { ime: ['xO'] }),
-	x('っ', 'ッ', 'Tsu', { ime: ['xtsu'] }),
+	x('っ', 'ッ', '~Tsu', { ime: ['xtsu'] }),
 	x('ゃ', 'ャ', 'Ya', { ime: ['xYa'] }),
 	x('ゅ', 'ュ', 'Yu', { ime: ['xYu'] }),
 	x('ょ', 'ョ', 'Yo', { ime: ['xYo'] }),
@@ -461,8 +461,8 @@ export const BASIC_KANA: Kana[] = [
 	x('】', '】', ']', { from_kana: true }), // U+3011 - Right Black Lenticular Bracket
 	x('〔', '〔', '{', { from_kana: true }), // U+3014 - Left Tortoise Shell Bracket
 	x('〕', '〕', '}', { from_kana: true }), // U+3015 - Right Tortoise Shell Bracket
-	x('〖', '〖', '{', { from_kana: true }), // U+3016 - Left White Lenticular Bracket
-	x('〗', '〗', '}', { from_kana: true }), // U+3017 - Right White Lenticular Bracket
+	x('〖', '〖', '[', { from_kana: true }), // U+3016 - Left White Lenticular Bracket
+	x('〗', '〗', ']', { from_kana: true }), // U+3017 - Right White Lenticular Bracket
 	x('〘', '〘', '{', { from_kana: true }), // U+3018 - Left White Tortoise Shell Bracket
 	x('〙', '〙', '}', { from_kana: true }), // U+3019 - Right White Tortoise Shell Bracket
 	x('〚', '〚', '[', { from_kana: true }), // U+301A - Left White Square Bracket
@@ -614,12 +614,12 @@ export const BASIC_KANA: Kana[] = [
 	x('ばゝ', 'バヽ', 'baba', { from_kana: true }),
 	x('ぱゝ', 'パヽ', 'papa', { from_kana: true }),
 
-	x('はゞ', 'ハヾ', 'baba', { from_kana: true }),
+	x('はゞ', 'ハヾ', 'haba', { from_kana: true }),
 	x('ばゞ', 'バヾ', 'baba', { from_kana: true }),
 	x('ぱゞ', 'パヾ', 'papa', { from_kana: true }),
 
 	x('はゝゝ', 'ハヽヽ', 'hahaha', { from_kana: true }),
-	x('はゝゞゝゞ', 'ハヽヾヽヾ', 'habahaba', { from_kana: true }),
+	x('はゞゝゞ', 'ハヾヽヾ', 'habahaba', { from_kana: true }),
 
 	x('ことゝ', 'ヿヽ', 'Kototo', { from_kana: true, katakana_only: true }),
 	x('ことゞ', 'ヿヾ', 'Kotodo', { from_kana: true, katakana_only: true }),
@@ -641,7 +641,7 @@ export const BASIC_KANA: Kana[] = [
 	x('ゃ', 'ｬ', 'Ya', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Small Ya
 	x('ゅ', 'ｭ', 'Yu', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Small Yu
 	x('ょ', 'ｮ', 'Yo', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Small Yo
-	x('っ', 'ｯ', 'Tsu', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Small Tu
+	x('っ', 'ｯ', '~Tsu', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter Small Tu
 	x('ー', 'ｰ', '-', { from_kana: true, katakana_only: true }), // Halfwidth Katakana-Hiragana Prolonged Sound Mark
 	x('あ', 'ｱ', 'A', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter A
 	x('い', 'ｲ', 'I', { from_kana: true, katakana_only: true }), // Halfwidth Katakana Letter I
@@ -732,7 +732,7 @@ export const BASIC_KANA: Kana[] = [
  */
 export const DOUBLE_CONSONANTS: Kana[] = BASIC_KANA.filter((it) => {
 	// Ignore punctuation, vowel-only syllables and other weirdness
-	if (!it.r || /^([aeiou]|x|[^a-z])/i.test(it.r) || it.h === 'ん') {
+	if (!it.r || /^([aeiou]|x|[^a-z])/i.test(it.r) || /[Ａ-Ｚａ-ｚ]/.test(it.h) || it.h === 'ん') {
 		return false
 	}
 	// Ignore extra ime inputs

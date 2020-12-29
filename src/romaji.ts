@@ -1,5 +1,6 @@
 import { compile, convert } from './conversion'
 import { rules_to_romaji } from './kana_rules'
+import { fullwidth_katakana } from './katakana'
 
 const TO_ROMAJI = compile(rules_to_romaji())
 
@@ -10,5 +11,5 @@ const TO_ROMAJI = compile(rules_to_romaji())
  * any Japanese punctuation and spacing to latin equivalents (mostly ASCII).
  */
 export function to_romaji(input: string) {
-	return convert(input, TO_ROMAJI)
+	return convert(fullwidth_katakana(input), TO_ROMAJI)
 }

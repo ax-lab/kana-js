@@ -786,6 +786,7 @@ describe('chars', () => {
 			expect(chars.is_kana('ヵヶヷヸヹヺヽヾヿ𛀀')).toBe(true)
 			expect(chars.is_kana('ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ')).toBe(true)
 			expect(chars.is_kana('ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ')).toBe(true)
+			expect(chars.is_kana('𛀀')).toBe(true)
 		})
 
 		test('should return true for kana marks', () => {

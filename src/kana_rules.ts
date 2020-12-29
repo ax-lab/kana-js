@@ -1,6 +1,9 @@
-import { m, mFn, rules, RuleSet, transform_rules } from './conversion'
+import { is_kana } from './chars'
+import { convert_next, m, MappingRuleContext, mFn, rules, RuleSet, transform_rules } from './conversion'
 import { tuple } from './util'
-import { to_semi_voiced, to_voiced } from './voiced'
+import { to_voiced } from './voiced'
+
+// TODO: halfwidth katakana filter
 
 /** Main rule set to convert from any input to katakana. */
 export function rules_to_katakana() {
@@ -18,7 +21,38 @@ export function rules_to_hiragana() {
 
 /** Main rule set to convert kana to romaji. */
 export function rules_to_romaji() {
-	return rules()
+	return rules(
+		set_kana_to_romaji(false),
+		set_kana_to_romaji(true),
+		set_punctuation_to_romaji(),
+
+		// Weird and rare characters
+		m('ゟ', 'yori'),
+		m('ヿ', 'KOTO'),
+
+		// Small tsu rule
+		mFn('っ', (ctx) => small_tsu(ctx, true)),
+		mFn('ッ', (ctx) => small_tsu(ctx, false)),
+	)
+
+	function small_tsu(ctx: MappingRuleContext, hiragana: boolean) {
+		// Count the number of small tsu following the current one
+		const match = ctx.nextInput.match(/^[っッ]+/)
+		const count = 1 + (match ? match[0].length : 0)
+		const [output, length, context] = convert_next(ctx.nextInput.slice(count - 1), ctx.rules)
+		const valid = length && /^[bcdfghjklmnpqrstvwxyz]/i.test(output)
+		if (valid) {
+			const prefix = output[0].repeat(count)
+			return tuple(prefix + output, count + length, context.lastOutput)
+		}
+
+		if (is_kana(ctx.lastInput)) {
+			const prefix = '~'.repeat(count)
+			return tuple(prefix, count)
+		}
+
+		return tuple('~' + (hiragana ? 'tsu' : 'TSU') + '~'.repeat(count - 1), count)
+	}
 }
 
 //============================================================================//
@@ -67,7 +101,6 @@ function set_katakana_to_hiragana() {
 		m('ヿ', 'こと'), // Digraph Koto
 		m('ｰ', 'ー'), // Halfwidth Katakana-Hiragana Prolonged Sound Mark
 		...map_rare_katakana((h, k) => m(k, h)),
-		...map_halfwidth_katakana((h, k) => m(k, h)),
 	]
 	return rules(...ls)
 }
@@ -104,7 +137,7 @@ function set_romaji_to_kana(hiragana: boolean, ime = true) {
 	const mapper = (h: string, k: string, r: string) => (hiragana ? m(r, h) : m(r, k))
 	const ls = [
 		...map_kana(mapper),
-		...map_digraphs(mapper), // This must come after map_kana
+		...map_digraphs(mapper), // after map_kana to override archaic characters
 		...map_romaji_punctuation(mapper),
 	]
 	const output = rules(
@@ -116,7 +149,7 @@ function set_romaji_to_kana(hiragana: boolean, ime = true) {
 			: rules(
 					...map_romaji_ime(mapper),
 					mFn('nn', (ctx) => {
-						if (!/^([aeiou]|ya|yu|ye|yo)/i.test(ctx.input)) {
+						if (!/^([aeiou]|ya|yu|ye|yo)/i.test(ctx.nextInput)) {
 							// Only generate if we are not in a syllable...
 							return tuple(hiragana ? 'ん' : 'ン', 0)
 						}
@@ -189,7 +222,7 @@ function set_romaji_double_vowels_as_prolonged_sound_mark() {
 		mFn(key, (ctx) => {
 			const last = ctx.lastInput
 			const isLongVowel = last && last[last.length - 1].toLowerCase() === key
-			const sameVowelNext = ctx.input.slice(0, 1).toLowerCase() === key
+			const sameVowelNext = ctx.nextInput.slice(0, 1).toLowerCase() === key
 			return tuple(isLongVowel && !sameVowelNext ? 'ー' : out, 0)
 		})
 	return rules(
@@ -200,6 +233,55 @@ function set_romaji_double_vowels_as_prolonged_sound_mark() {
 		q('e', 'エ'),
 		q('o', 'オ'),
 	)
+}
+
+/** Conversion rules for kana to romaji. */
+function set_kana_to_romaji(hiragana: boolean) {
+	const repeat_marks = (mark: string, voiced: boolean) =>
+		mFn(mark, (ctx) => {
+			if (is_kana(ctx.lastInput) && /^[a-z]+$/i.test(ctx.lastOutput)) {
+				const last = /yori|koto|masu/i.test(ctx.lastOutput) ? ctx.lastOutput.slice(-2) : ctx.lastOutput
+				return tuple(voiced ? to_voiced(last) : last, 0, last)
+			}
+			return tuple('', -1)
+		})
+	const nc_mapper = hiragana
+		? (h: string, k: string, r: string) => m(h, r)
+		: (h: string, k: string, r: string) => m(k, r)
+	const mapper = hiragana
+		? (h: string, k: string, r: string) => m(h, r.toLowerCase())
+		: (h: string, k: string, r: string) => m(k, r.toUpperCase())
+	const ls = [
+		...map_small_kana(mapper),
+		...map_kana(mapper),
+		...map_digraphs(mapper),
+		...map_romaji_fullwidth_ascii(nc_mapper),
+
+		// Additional common digraph combinations for foreign syllables
+		m(hiragana ? 'てぃ' : 'ティ', hiragana ? 'ti' : 'TI'),
+		m(hiragana ? 'でぃ' : 'ディ', hiragana ? 'di' : 'DI'),
+		m(hiragana ? 'どぅ' : 'ドゥ', hiragana ? 'du' : 'DU'),
+
+		//
+		// Rare stuff
+		//
+
+		...map_rare_katakana(mapper),
+		repeat_marks(hiragana ? 'ゝ' : 'ヽ', false),
+		repeat_marks(hiragana ? 'ゞ' : 'ヾ', true),
+		m('〼', hiragana ? 'masu' : 'MASU'),
+	]
+	return rules(...ls)
+}
+
+/** Conversion rules for Japanese punctuation to romaji. */
+function set_punctuation_to_romaji() {
+	const mapper = (h: string, k: string, r: string) => m(h, r)
+	const ls = [
+		...map_extra_romaji_punctuation(mapper), // lower precedence than map_romaji_punctuation
+		...map_romaji_punctuation(mapper),
+	]
+	return rules(...ls)
 }
 
 //============================================================================//
@@ -231,6 +313,26 @@ function map_rare_katakana<T>(m: MapFn<T>): T[] {
 		m('ゐ\u{3099}', 'ヸ', 'vi'),
 		m('ゑ\u{3099}', 'ヹ', 've'),
 		m('を\u{3099}', 'ヺ', 'vo'),
+
+		// Other rare katakana
+		m('え', '𛀀', 'e'),
+
+		m('く', 'ㇰ', 'ku'), // small ku
+		m('し', 'ㇱ', 'shi'), // small si
+		m('す', 'ㇲ', 'su'), // small su
+		m('と', 'ㇳ', 'to'), // small to
+		m('ぬ', 'ㇴ', 'nu'), // small nu
+		m('は', 'ㇵ', 'ha'), // small ha
+		m('ひ', 'ㇶ', 'hi'), // small hi
+		m('ふ', 'ㇷ', 'fu'), // small hu
+		m('へ', 'ㇸ', 'he'), // small he
+		m('ほ', 'ㇹ', 'ho'), // small ho
+		m('む', 'ㇺ', 'mu'), // small mu
+		m('ら', 'ㇻ', 'ra'), // small ra
+		m('り', 'ㇼ', 'ri'), // small ri
+		m('る', 'ㇽ', 'ru'), // small ru
+		m('れ', 'ㇾ', 're'), // small re
+		m('ろ', 'ㇿ', 'ro'), // small ro
 	]
 }
 
@@ -244,8 +346,8 @@ function map_kana<T>(m: MapFn<T>): T[] {
 		m('ゖ', 'ヶ', 'ke'),
 
 		// "N" mappings
+		m('ん', 'ン', `n'`), // This first so it has lesser precedence
 		m('ん', 'ン', 'n'),
-		m('ん', 'ン', `n'`),
 
 		// Non-standard romaji mappings (those must come before so they are
 		// overridden when mapping from kana)
@@ -369,10 +471,10 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 		m('ちぇ', 'チェ', 'tye'),
 		m('ちょ', 'チョ', 'tyo'),
 
-		m('ぢゃ', 'ヂャ', 'dya'),
-		m('ぢゅ', 'ヂュ', 'dyu'),
-		m('ぢぇ', 'ヂェ', 'dye'),
-		m('ぢょ', 'ヂョ', 'dyo'),
+		m('ぢゃ', 'ヂャ', 'dja'),
+		m('ぢゅ', 'ヂュ', 'dju'),
+		m('ぢぇ', 'ヂェ', 'dje'),
+		m('ぢょ', 'ヂョ', 'djo'),
 
 		m('ぢゃ', 'ヂャ', 'dza'),
 		m('ぢぇ', 'ヂェ', 'dze'),
@@ -405,10 +507,10 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 		m('ちぇ', 'チェ', 'che'),
 		m('ちょ', 'チョ', 'cho'),
 
-		m('ぢゃ', 'ヂャ', 'dja'),
-		m('ぢゅ', 'ヂュ', 'dju'),
-		m('ぢぇ', 'ヂェ', 'dje'),
-		m('ぢょ', 'ヂョ', 'djo'),
+		m('ぢゃ', 'ヂャ', 'dya'),
+		m('ぢゅ', 'ヂュ', 'dyu'),
+		m('ぢぇ', 'ヂェ', 'dye'),
+		m('ぢょ', 'ヂョ', 'dyo'),
 
 		m('にゃ', 'ニャ', 'nya'),
 		m('にゅ', 'ニュ', 'nyu'),
@@ -457,88 +559,6 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 	]
 }
 
-/** Halfwidth katakana characters. */
-function map_halfwidth_katakana<T>(m: MapFn<T>): T[] {
-	const d = (h: string, k: string, r: string) => [
-		m(h, k, r),
-		m(to_voiced(h), to_voiced(k), to_voiced(r)), // voiced (e.g. が)
-	]
-
-	const h = (h: string, k: string, r: string) => [
-		m(h, k, r),
-		m(to_voiced(h), to_voiced(k), to_voiced(r)), // voiced (e.g. ば)
-		m(to_semi_voiced(h), to_semi_voiced(k), to_semi_voiced(r)), // semi-voiced (e.g. ぱ)
-	]
-
-	return [
-		m('ー', 'ｰ', '-', true), // Prolonged Sound Mark
-
-		m('ぁ', 'ｧ', 'a', true), // Halfwidth Katakana Letter Small A
-		m('ぃ', 'ｨ', 'i', true), // Halfwidth Katakana Letter Small I
-		m('ぅ', 'ｩ', 'u', true), // Halfwidth Katakana Letter Small U
-		m('ぇ', 'ｪ', 'e', true), // Halfwidth Katakana Letter Small E
-		m('ぉ', 'ｫ', 'o', true), // Halfwidth Katakana Letter Small O
-
-		m('ゃ', 'ｬ', 'ya', true), // Halfwidth Katakana Letter Small Ya
-		m('ゅ', 'ｭ', 'yu', true), // Halfwidth Katakana Letter Small Yu
-		m('ょ', 'ｮ', 'yo', true), // Halfwidth Katakana Letter Small Yo
-		m('っ', 'ｯ', 'tsu', true), // Halfwidth Katakana Letter Small Tu
-
-		m('を', 'ｦ', 'wo'), // Halfwidth Katakana Letter Wo
-		m('あ', 'ｱ', 'a'), // Halfwidth Katakana Letter A
-		m('い', 'ｲ', 'i'), // Halfwidth Katakana Letter I
-		...d('う', 'ｳ', 'u'), // Halfwidth Katakana Letter U
-		m('え', 'ｴ', 'e'), // Halfwidth Katakana Letter E
-		m('お', 'ｵ', 'o'), // Halfwidth Katakana Letter O
-
-		...d('か', 'ｶ', 'ka'), // Halfwidth Katakana Letter Ka
-		...d('き', 'ｷ', 'ki'), // Halfwidth Katakana Letter Ki
-		...d('く', 'ｸ', 'ku'), // Halfwidth Katakana Letter Ku
-		...d('け', 'ｹ', 'ke'), // Halfwidth Katakana Letter Ke
-		...d('こ', 'ｺ', 'ko'), // Halfwidth Katakana Letter Ko
-
-		...d('さ', 'ｻ', 'sa'), // Halfwidth Katakana Letter Sa
-		...d('し', 'ｼ', 'shi'), // Halfwidth Katakana Letter Si
-		...d('す', 'ｽ', 'su'), // Halfwidth Katakana Letter Su
-		...d('せ', 'ｾ', 'se'), // Halfwidth Katakana Letter Se
-		...d('そ', 'ｿ', 'so'), // Halfwidth Katakana Letter So
-
-		...d('た', 'ﾀ', 'ta'), // Halfwidth Katakana Letter Ta
-		...d('ち', 'ﾁ', 'chi'), // Halfwidth Katakana Letter Ti
-		...d('つ', 'ﾂ', 'tsu'), // Halfwidth Katakana Letter Tu
-		...d('て', 'ﾃ', 'te'), // Halfwidth Katakana Letter Te
-		...d('と', 'ﾄ', 'to'), // Halfwidth Katakana Letter To
-
-		m('な', 'ﾅ', 'na'), // Halfwidth Katakana Letter Na
-		m('に', 'ﾆ', 'ni'), // Halfwidth Katakana Letter Ni
-		m('ぬ', 'ﾇ', 'nu'), // Halfwidth Katakana Letter Nu
-		m('ね', 'ﾈ', 'ne'), // Halfwidth Katakana Letter Ne
-		m('の', 'ﾉ', 'no'), // Halfwidth Katakana Letter No
-
-		...h('は', 'ﾊ', 'ha'), // Halfwidth Katakana Letter Ha
-		...h('ひ', 'ﾋ', 'hi'), // Halfwidth Katakana Letter Hi
-		...h('ふ', 'ﾌ', 'hu'), // Halfwidth Katakana Letter Hu
-		...h('へ', 'ﾍ', 'he'), // Halfwidth Katakana Letter He
-		...h('ほ', 'ﾎ', 'ho'), // Halfwidth Katakana Letter Ho
-
-		m('ま', 'ﾏ', 'ma'), // Halfwidth Katakana Letter Ma
-		m('み', 'ﾐ', 'mi'), // Halfwidth Katakana Letter Mi
-		m('む', 'ﾑ', 'mu'), // Halfwidth Katakana Letter Mu
-		m('め', 'ﾒ', 'me'), // Halfwidth Katakana Letter Me
-		m('も', 'ﾓ', 'mo'), // Halfwidth Katakana Letter Mo
-		m('や', 'ﾔ', 'ya'), // Halfwidth Katakana Letter Ya
-		m('ゆ', 'ﾕ', 'yu'), // Halfwidth Katakana Letter Yu
-		m('よ', 'ﾖ', 'yo'), // Halfwidth Katakana Letter Yo
-		m('ら', 'ﾗ', 'ra'), // Halfwidth Katakana Letter Ra
-		m('り', 'ﾘ', 'ri'), // Halfwidth Katakana Letter Ri
-		m('る', 'ﾙ', 'ru'), // Halfwidth Katakana Letter Ru
-		m('れ', 'ﾚ', 're'), // Halfwidth Katakana Letter Re
-		m('ろ', 'ﾛ', 'ro'), // Halfwidth Katakana Letter Ro
-		...d('わ', 'ﾜ', 'wa'), // Halfwidth Katakana Letter Wa
-		m('ん', 'ﾝ', 'n'), // Halfwidth Katakana Letter N
-	]
-}
-
 /** Extra romaji triples for IME input only. */
 function map_romaji_ime<T>(m: MapFn<T>): T[] {
 	return [
@@ -570,52 +590,47 @@ function map_romaji_ime<T>(m: MapFn<T>): T[] {
 		m('ゎ', 'ヮ', 'xwa'),
 		m('ゕ', 'ヵ', 'xka'),
 		m('ゖ', 'ヶ', 'xke'),
-
-		m('・', '・', '/'),
-		m('ー', 'ー', '-'),
 	]
 }
 
-/** Romaji punctuation */
+/** The standard romaji punctuation */
 function map_romaji_punctuation<T>(mFn: MapFn<T>): T[] {
 	const m = (r: string, k: string) => mFn(k, k, r)
 	return [
 		m(' ', '\u{3000}'),
-		m('/', '・'),
-		m(',', '、'),
-		m('.', '。'),
-		m('[', '「'),
-		m(']', '」'),
-		m('«', '《'),
-		m('»', '》'),
-		m('»', '》'),
-		m('!', '！'),
-		m('"', '＂'),
-		m('#', '＃'),
-		m('$', '＄'),
-		m('%', '％'),
-		m('&', '＆'),
-		m(`'`, '＇'),
-		m('(', '（'),
-		m(')', '）'),
-		m('*', '＊'),
-		m('+', '＋'),
-		m('-', '－'),
-		m(':', '：'),
-		m(';', '；'),
-		m('<', '＜'),
-		m('=', '＝'),
-		m('>', '＞'),
-		m('?', '？'),
-		m('@', '＠'),
-		m('\\', '＼'),
-		m('^', '＾'),
-		m('_', '＿'),
-		m('`', '｀'),
-		m('{', '｛'),
-		m('|', '｜'),
-		m('}', '｝'),
-		m('~', '～'),
+		m('/', '・'), // Katakana Middle Dot
+		m(',', '、'), // Ideographic Comma
+		m('.', '。'), // Ideographic Full Stop
+		m('[', '「'), // Left Corner Bracket
+		m(']', '」'), // Right Corner Bracket
+		m('«', '《'), // Left Double Angle Bracket
+		m('»', '》'), // Right Double Angle Bracket
+		m('!', '！'), // fullwidth exclamation mark
+		m('"', '＂'), // fullwidth quotation mark
+		m('#', '＃'), // fullwidth number sign
+		m('$', '＄'), // fullwidth dollar sign
+		m('%', '％'), // fullwidth percent sign
+		m('&', '＆'), // fullwidth ampersand
+		m(`'`, '＇'), // fullwidth apostrophe
+		m('(', '（'), // fullwidth left parenthesis
+		m(')', '）'), // fullwidth right parenthesis
+		m('*', '＊'), // fullwidth asterisk
+		m('+', '＋'), // fullwidth plus sign
+		m(':', '：'), // fullwidth colon
+		m(';', '；'), // fullwidth semicolon
+		m('<', '＜'), // fullwidth less-than sign
+		m('=', '＝'), // fullwidth equals sign
+		m('>', '＞'), // fullwidth greater-than sign
+		m('?', '？'), // fullwidth question mark
+		m('@', '＠'), // fullwidth commercial at
+		m('\\', '＼'), // fullwidth reverse solidus
+		m('^', '＾'), // fullwidth circumflex accent
+		m('_', '＿'), // fullwidth low line
+		m('`', '｀'), // fullwidth grave accent
+		m('{', '｛'), // fullwidth left curly bracket
+		m('|', '｜'), // fullwidth vertical line
+		m('}', '｝'), // fullwidth right curly bracket
+		m('~', '～'), // fullwidth tilde
 
 		// Monetary symbols
 		m('¢', '￠'),
@@ -624,5 +639,135 @@ function map_romaji_punctuation<T>(mFn: MapFn<T>): T[] {
 		m('¯', '￣'),
 		m('¥', '￥'),
 		m('₩', '￦'),
+
+		// Override the '-' generation from romaji to kana
+		m('-', 'ー'),
+	]
+}
+
+/**
+ * Lower precedence symbols that are never generated from the romaji, but need
+ * to be mapped to romaji as well.
+ */
+function map_extra_romaji_punctuation<T>(mFn: MapFn<T>): T[] {
+	const m = (r: string, k: string) => mFn(k, k, r)
+	return [
+		m('-', 'ｰ'), // Halfwidth prolonged sound mark
+		m('=', '゠'), // Katakana-Hiragana Double Hyphen
+		m('<', '〈'), // Left Angle Bracket
+		m('>', '〉'), // Right Angle Bracket
+		m('[', '『'), // Left White Corner Bracket
+		m(']', '』'), // Right White Corner Bracket
+		m('[', '【'), // Left Black Lenticular Bracket
+		m(']', '】'), // Right Black Lenticular Bracket
+		m('{', '〔'), // Left Tortoise Shell Bracket
+		m('}', '〕'), // Right Tortoise Shell Bracket
+		m('[', '〖'), // Left White Lenticular Bracket
+		m(']', '〗'), // Right White Lenticular Bracket
+		m('{', '〘'), // Left White Tortoise Shell Bracket
+		m('}', '〙'), // Right White Tortoise Shell Bracket
+		m('[', '〚'), // Left White Square Bracket
+		m(']', '〛'), // Right White Square Bracket
+		m('~', '〜'), // Wave Dash
+		m('"', '〝'), // Reversed Double Prime Quotation Mark
+		m('"', '〞'), // Double Prime Quotation Mark
+		m('"', '〟'), // Low Double Prime Quotation Mark
+
+		// Fullwidth and halfwidth symbols
+		m(',', '，'), // fullwidth comma
+		m('-', '－'), // fullwidth hyphen-minus
+		m('.', '．'), // fullwidth full stop
+		m('/', '／'), // fullwidth solidus
+		m('[', '［'), // fullwidth left square bracket
+		m(']', '］'), // fullwidth right square bracket
+		m('(', '｟'), // fullwidth left white parenthesis
+		m(')', '｠'), // fullwidth right white parenthesis
+
+		m('|', '￤'), // Fullwidth Broken Bar
+
+		m('.', '｡'), // halfwidth ideographic full stop
+		m('[', '｢'), // halfwidth left corner bracket
+		m(']', '｣'), // halfwidth right corner bracket
+		m(',', '､'), // halfwidth ideographic comma
+		m('/', '･'), // halfwidth katakana middle dot
+
+		m('|', '￨'), // halfwidth forms light vertical
+		m('←', '￩'), // halfwidth leftwards arrow
+		m('↑', '￪'), // halfwidth upwards arrow
+		m('→', '￫'), // halfwidth rightwards arrow
+		m('↓', '￬'), // halfwidth downwards arrow
+		m('■', '￭'), // halfwidth black square
+		m('○', '￮'), // halfwidth white circle
+	]
+}
+
+/**
+ * Fullwidth ASCII (roman) characters to romaji mappings
+ */
+function map_romaji_fullwidth_ascii<T>(mFn: MapFn<T>): T[] {
+	const m = (r: string, k: string) => mFn(k, k, r)
+	return [
+		m('0', '０'),
+		m('1', '１'),
+		m('2', '２'),
+		m('3', '３'),
+		m('4', '４'),
+		m('5', '５'),
+		m('6', '６'),
+		m('7', '７'),
+		m('8', '８'),
+		m('9', '９'),
+		m('A', 'Ａ'),
+		m('B', 'Ｂ'),
+		m('C', 'Ｃ'),
+		m('D', 'Ｄ'),
+		m('E', 'Ｅ'),
+		m('F', 'Ｆ'),
+		m('G', 'Ｇ'),
+		m('H', 'Ｈ'),
+		m('I', 'Ｉ'),
+		m('J', 'Ｊ'),
+		m('K', 'Ｋ'),
+		m('L', 'Ｌ'),
+		m('M', 'Ｍ'),
+		m('N', 'Ｎ'),
+		m('O', 'Ｏ'),
+		m('P', 'Ｐ'),
+		m('Q', 'Ｑ'),
+		m('R', 'Ｒ'),
+		m('S', 'Ｓ'),
+		m('T', 'Ｔ'),
+		m('U', 'Ｕ'),
+		m('V', 'Ｖ'),
+		m('W', 'Ｗ'),
+		m('X', 'Ｘ'),
+		m('Y', 'Ｙ'),
+		m('Z', 'Ｚ'),
+		m('a', 'ａ'),
+		m('b', 'ｂ'),
+		m('c', 'ｃ'),
+		m('d', 'ｄ'),
+		m('e', 'ｅ'),
+		m('f', 'ｆ'),
+		m('g', 'ｇ'),
+		m('h', 'ｈ'),
+		m('i', 'ｉ'),
+		m('j', 'ｊ'),
+		m('k', 'ｋ'),
+		m('l', 'ｌ'),
+		m('m', 'ｍ'),
+		m('n', 'ｎ'),
+		m('o', 'ｏ'),
+		m('p', 'ｐ'),
+		m('q', 'ｑ'),
+		m('r', 'ｒ'),
+		m('s', 'ｓ'),
+		m('t', 'ｔ'),
+		m('u', 'ｕ'),
+		m('v', 'ｖ'),
+		m('w', 'ｗ'),
+		m('x', 'ｘ'),
+		m('y', 'ｙ'),
+		m('z', 'ｚ'),
 	]
 }

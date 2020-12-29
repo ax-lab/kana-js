@@ -129,4 +129,19 @@ describe('to_katakana', () => {
 			}
 		}
 	})
+
+	test('should convert long double vowel sequences', () => {
+		// spell-checker: disable
+		expect(to_katakana('akkkkkkkkkkka')).toEqual('アッッッッッッッッッッカ')
+		expect(to_katakana('akkkkkkkkkka')).toEqual('アッッッッッッッッッカ')
+		expect(to_katakana('akkkkkkkkka')).toEqual('アッッッッッッッッカ')
+		expect(to_katakana('akkkkkkkka')).toEqual('アッッッッッッッカ')
+		expect(to_katakana('akkkkkkka')).toEqual('アッッッッッッカ')
+		expect(to_katakana('akkkkkka')).toEqual('アッッッッッカ')
+		expect(to_katakana('akkkkka')).toEqual('アッッッッカ')
+		expect(to_katakana('akkkka')).toEqual('アッッッカ')
+		expect(to_katakana('akkka')).toEqual('アッッカ')
+		expect(to_katakana('akka')).toEqual('アッカ')
+		// spell-checker: enable
+	})
 })
