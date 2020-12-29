@@ -1,28 +1,37 @@
+function casefy(output: string, input: string) {
+	if (/[A-Z]/.test(input[0])) {
+		return output.toUpperCase()
+	}
+	return output
+}
+
 export function to_voiced(input: string) {
-	if (/^[a-z]+$/.test(input)) {
-		if (/chi|ti/.test(input)) {
-			return 'di'
-		} else if (/shi|si|ci/.test(input)) {
-			return 'ji'
-		} else if (/tsu|tu/.test(input)) {
-			return 'du'
-		} else if (/ce/.test(input)) {
-			return 'ze'
-		} else if (input === 'u') {
-			return 'vu'
-		} else if (input === 'wa') {
-			return 'va'
+	if (/^[a-z]+$/i.test(input)) {
+		if (/^(chi|ti)$/i.test(input)) {
+			return casefy('di', input)
+		} else if (/^(shi|si|ci)$/i.test(input)) {
+			return casefy('ji', input)
+		} else if (/^(tsu|tu)$/i.test(input)) {
+			return casefy('du', input)
+		} else if (/^ce$/i.test(input)) {
+			return casefy('ze', input)
+		} else if (/^u$/i.test(input)) {
+			return casefy('vu', input)
+		} else if (/^wa$/i.test(input)) {
+			return casefy('va', input)
+		} else if (/^fu$/i.test(input)) {
+			return casefy('bu', input)
 		}
-		switch (input[0]) {
+		switch (input[0].toLowerCase()) {
 			case 'k':
 			case 'c':
-				return 'g' + input.slice(1)
+				return casefy('g' + input.slice(1), input)
 			case 's':
-				return 'z' + input.slice(1)
+				return casefy('z' + input.slice(1), input)
 			case 't':
-				return 'd' + input.slice(1)
+				return casefy('d' + input.slice(1), input)
 			case 'h':
-				return 'b' + input.slice(1)
+				return casefy('b' + input.slice(1), input)
 		}
 	}
 
@@ -105,9 +114,12 @@ export function to_voiced(input: string) {
 }
 
 export function to_semi_voiced(input: string) {
-	if (/^[a-z]+$/.test(input)) {
-		if (input[0] === 'h') {
-			return 'p' + input.slice(1)
+	if (/^[a-z]+$/i.test(input)) {
+		if (/^fu$/i.test(input)) {
+			return casefy('pu', input)
+		}
+		if (input[0].toLowerCase() === 'h') {
+			return casefy('p' + input.slice(1), input)
 		}
 	}
 
