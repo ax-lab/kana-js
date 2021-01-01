@@ -196,7 +196,7 @@ function set_romaji_double_consonants(hiragana: boolean) {
 		'm',
 		'n',
 		'p',
-		// 'q',
+		'q',
 		'r',
 		's',
 		't',
@@ -499,6 +499,11 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 		m('ぢぇ', 'ヂェ', 'dze'),
 		m('ぢょ', 'ヂョ', 'dzo'),
 
+		m('くぁ', 'クァ', 'qwa'),
+		m('くぃ', 'クィ', 'qwi'),
+		m('くぇ', 'クェ', 'qwe'),
+		m('くぉ', 'クォ', 'qwo'),
+
 		// Default combinations
 
 		m('きゃ', 'キャ', 'kya'),
@@ -510,6 +515,11 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 		m('ぎゅ', 'ギュ', 'gyu'),
 		m('ぎぇ', 'ギェ', 'gye'),
 		m('ぎょ', 'ギョ', 'gyo'),
+
+		m('くぁ', 'クァ', 'qua'),
+		m('くぃ', 'クィ', 'qui'),
+		m('くぇ', 'クェ', 'que'),
+		m('くぉ', 'クォ', 'quo'),
 
 		m('しゃ', 'シャ', 'sha'),
 		m('しゅ', 'シュ', 'shu'),

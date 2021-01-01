@@ -410,6 +410,19 @@ export const BASIC_KANA: Kana[] = [
 	x('りょ', 'リョ', 'Ryo'),
 
 	//
+	// qu & qw
+	//
+	x('くぁ', 'クァ', 'Qua'),
+	x('くぃ', 'クィ', 'Qui'),
+	x('くぇ', 'クェ', 'Que'),
+	x('くぉ', 'クォ', 'Quo'),
+
+	x('くぁ', 'クァ', 'Qwa', { from_romaji: true }),
+	x('くぃ', 'クィ', 'Qwi', { from_romaji: true }),
+	x('くぇ', 'クェ', 'Qwe', { from_romaji: true }),
+	x('くぉ', 'クォ', 'Qwo', { from_romaji: true }),
+
+	//
 	// Small letters
 	//
 

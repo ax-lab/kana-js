@@ -7,6 +7,19 @@ describe('to_hiragana', () => {
 		expect(to_hiragana('')).toEqual('')
 	})
 
+	test('should convert manual cases', () => {
+		// spell-checker: disable
+
+		const check = (input: string, expected: string) => {
+			const pre = `${input} = `
+			expect(pre + to_hiragana(input)).toEqual(pre + expected)
+		}
+
+		check('quaqqua', 'くぁっくぁ')
+
+		// spell-checker: enable
+	})
+
 	test('should convert from common katakana', () => {
 		const IN =
 			'アイウエオ カキクケコ ガギグゲゴ サシスセソ ザジズゼゾ タチツテト ダヂヅデド ナニヌネノ ハヒフヘホ バビブベボ パピプペポ マミムメモ ヤユヨ ラリルレロ ワヰヱヲン'

@@ -15,6 +15,19 @@ describe('to_katakana', () => {
 		expect(to_katakana(IN)).toEqual(TO)
 	})
 
+	test('should convert manual cases', () => {
+		// spell-checker: disable
+
+		const check = (input: string, expected: string) => {
+			const pre = `${input} = `
+			expect(pre + to_katakana(input)).toEqual(pre + expected)
+		}
+
+		check('quaqqua', 'クァックァ')
+
+		// spell-checker: enable
+	})
+
 	test('should convert from small hiragana', () => {
 		const IN = 'ぁぃぅぇぉっゃゅょゎゕゖ'
 		const TO = 'ァィゥェォッャュョヮヵヶ'
