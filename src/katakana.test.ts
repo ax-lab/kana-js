@@ -28,6 +28,121 @@ describe('to_katakana', () => {
 		// spell-checker: enable
 	})
 
+	test('should convert from manual romaji cases', () => {
+		// spell-checker: disable
+
+		const check = (kana: string, romaji: string) => {
+			const pre = `${romaji} = `
+			expect(pre + to_katakana(romaji)).toEqual(pre + kana)
+		}
+
+		check('シャギャツッジャーンナン　ンアンンザ　xzm', `shagyatsujjaan'nan n'an'nza xzm`)
+
+		// Long vogals
+		check('アーイーウーエーオー', 'a-i-u-e-o-')
+		check('クァー', 'qua-')
+
+		// Double consonants
+		check('バッバ', 'babba')
+		check('カッカ', 'kakka')
+		check('チャッチャ', 'chaccha')
+		check('ダッダ', 'dadda')
+		check('フッフ', 'fuffu')
+		check('ガッガ', 'gagga')
+		check('ハッハ', 'hahha')
+		check('ジャッジャ', 'jajja')
+		check('カッカ', 'kakka')
+		check('マッマ', 'mamma')
+		check('ナンナ', `nan'na`)
+		check('パッパ', 'pappa')
+		check('クァックァ', 'quaqqua')
+		check('ラッラ', 'rarra')
+		check('サッサ', 'sassa')
+		check('シャッシャ', 'shassha')
+		check('タッタ', 'tatta')
+		check('ツッツ', 'tsuttsu')
+		check('ヴァッヴァ', 'vavva')
+		check('ワッワ', 'wawwa')
+		check('ヤッヤ', 'yayya')
+		check('ザッザ', 'zazza')
+		check('クァックァ', 'quaqqua')
+
+		check('ソウシンウィンドウ', 'soushinWINDOU')
+		check('アーンイェアー', `aan'yeaa`)
+		check('ヴァヴィヴヴェヴォ', 'vavivuvevo')
+
+		// Small tsu at weird places
+		check('ッッベア', `bbbea`)
+
+		//
+		// Additional kana tests from wana-kana
+		//
+
+		check('オナジ', 'onaji')
+		check('ブッツージ', 'buttsuuji')
+		check('ワニカニ', 'wanikani')
+		check('ワニカニ　アイウエオ　鰐蟹　12345　＠＃＄％', 'wanikani aiueo 鰐蟹 12345 @#$%')
+		check('座禅「ザゼン」スタイル', '座禅[zazen]sutairu')
+		check('バツゲーム', 'batsuge-mu')
+
+		// Quick Brown Fox Hiragana to Romaji
+		check('イロハニホヘト', 'irohanihoheto')
+		check('チリヌルヲ', 'chirinuruwo')
+		check('ワカヨタレソ', 'wakayotareso')
+		check('ツネナラム', 'tsunenaramu')
+		check('ウウィノークヤマ', 'uwinookuyama')
+		check('ケフコエテ', 'kefukoete')
+		check('アサキユメミシ', 'asakiyumemishi')
+		check('ウェヒモセスン', 'wehimosesun')
+
+		check('ワニカニ　ガ　スゴイ　ダ', 'WANIKANI GA SUGOI DA')
+		check('ワニカニ　ガ　スゴイ　ダ', 'wanikani ga sugoi da')
+		check('ワニカニ　ガ　スゴイ　ダ', 'WANIKANI ga sugoi da')
+		// Doesn't mangle the long dash 'ー' or slashdot '・'"
+		check('罰ゲーム・バツゲーム', '罰GE-MU/batsuge-mu')
+
+		// Double and single n"
+		check('キンニクマン', `kin'nikuman`)
+		// N extravaganza"
+		check('ンンニンニンニャンヤン', `n'n'nin'nin'nyan'yan`)
+		// Double consonants"
+		check('カッパ　タッタ　シュッシュ　チャッチャ　ヤッツ', 'kappa tatta shusshu chaccha yattsu')
+
+		// Apostrophes in vague consonant vowel combos:
+
+		check('オンヨミ', `on'yomi`)
+		check('ンヨ　ンア　ンユ', `n'yo n'a n'yu`)
+
+		// Small kana:
+
+		// Small tsu
+		check('ッ', `xtsu`)
+		// Small ya
+		check('ャ', 'xya')
+		// Small yu
+		check('ュ', 'xyu')
+		// Small yo
+		check('ョ', 'xyo')
+		// Small a
+		check('ァ', 'xa')
+		// Small i
+		check('ィ', 'xi')
+		// Small u
+		check('ゥ', 'xu')
+		// Small e
+		check('ェ', 'xe')
+		// Small o
+		check('ォ', 'xo')
+		// Small ka`
+		check('ヵ', 'xKA')
+		// Small wa`
+		check('ヮ', 'xwa')
+
+		check('ヶ', 'xke')
+
+		// spell-checker: enable
+	})
+
 	test('should convert from small hiragana', () => {
 		const IN = 'ぁぃぅぇぉっゃゅょゎゕゖ'
 		const TO = 'ァィゥェォッャュョヮヵヶ'
