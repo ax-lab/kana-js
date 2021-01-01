@@ -423,6 +423,12 @@ export const BASIC_KANA: Kana[] = [
 	x('くぉ', 'クォ', 'Qwo', { from_romaji: true }),
 
 	//
+	// ye
+	//
+
+	x('いぇ', 'イェ', 'Ye'),
+
+	//
 	// Small letters
 	//
 
@@ -439,7 +445,7 @@ export const BASIC_KANA: Kana[] = [
 	x('ょ', 'ョ', 'Yo', { ime: ['xYo'] }),
 	x('ゎ', 'ヮ', 'Wa', { ime: ['xWa'] }),
 	x('ゕ', 'ヵ', 'Ka', { ime: ['xKa'] }),
-	x('ゖ', 'ヶ', 'Ke', { ime: ['xKe'] }),
+	x('ゖ', 'ヶ', 'Ka', { ime: ['xKe'] }), // https://en.wikipedia.org/wiki/Small_ke
 
 	//
 	// Symbols & Punctuation

@@ -27,10 +27,143 @@ describe('to_romaji', () => {
 		expect(to_romaji(IN)).toEqual(TO)
 	})
 
+	test('should convert from manual cases', () => {
+		// spell-checker: disable
+
+		const check = (input: string, expected: string) => {
+			const pre = `${input} = `
+			expect(pre + to_romaji(input)).toEqual(pre + expected)
+		}
+
+		// Hiragana
+		check('しゃぎゃつっじゃあんなん　んあんんざ　xzm', `shagyatsujjaan'nan n'an'nza xzm`)
+
+		// Long vogals
+		check('あーいーうーえーおー', 'a-i-u-e-o-')
+		check('くぁー', 'qua-')
+
+		// Double consonants
+		check('ばっば', 'babba')
+		check('かっか', 'kakka')
+		check('ちゃっちゃ', 'chaccha')
+		check('だっだ', 'dadda')
+		check('ふっふ', 'fuffu')
+		check('がっが', 'gagga')
+		check('はっは', 'hahha')
+		check('じゃっじゃ', 'jajja')
+		check('かっか', 'kakka')
+		check('まっま', 'mamma')
+		check('なんな', `nan'na`)
+		check('ぱっぱ', 'pappa')
+		check('くぁっくぁ', 'quaqqua')
+		check('らっら', 'rarra')
+		check('さっさ', 'sassa')
+		check('しゃっしゃ', 'shassha')
+		check('たった', 'tatta')
+		check('つっつ', 'tsuttsu')
+		check('ゔぁっゔぁ', 'vavva')
+		check('わっわ', 'wawwa')
+		check('やっや', 'yayya')
+		check('ざっざ', 'zazza')
+		check('くぁっくぁ', 'quaqqua')
+
+		check('そうしんウィンドウ', 'soushinWINDOU')
+		check('ああんいぇああ', `aan'yeaa`)
+		check('ヷヸヴヹヺ ゔぁゔぃゔゔぇゔぉ', 'VAVIVUVEVO vavivuvevo')
+
+		// Archaic
+		check('ゐゑ ゟ ヿ', 'wiwe yori KOTO')
+		check('ます〼', 'masumasu')
+
+		// Small tsu at weird places
+		check('ふっ', `fu~`)
+		check('ふっ ふっ', `fu~ fu~`)
+		check('ぎゃっ！', `gya~!`)
+		check('っっべあっ…ぎゃっあっあっっっ！っx', `bbbea~…gya~a~a~~~!~tsux`)
+
+		//
+		// Additional kana tests from wana-kana
+		//
+
+		check('おなじ', 'onaji')
+		check('ぶっつうじ', 'buttsuuji')
+		check('わにかに', 'wanikani')
+		check('わにかに あいうえお 鰐蟹 12345 @#$%', 'wanikani aiueo 鰐蟹 12345 @#$%')
+		check('座禅「ざぜん」すたいる', '座禅[zazen]sutairu')
+		check('ばつげーむ', 'batsuge-mu')
+
+		// Quick Brown Fox Hiragana to Romaji
+		check('いろはにほへと', 'irohanihoheto')
+		check('ちりぬるを', 'chirinuruwo')
+		check('わかよたれそ', 'wakayotareso')
+		check('つねならむ', 'tsunenaramu')
+		check('うゐのおくやま', 'uwinookuyama')
+		check('けふこえて', 'kefukoete')
+		check('あさきゆめみし', 'asakiyumemishi')
+		check('ゑひもせすん', 'wehimosesun')
+
+		// Convert katakana to romaji"
+		check('ワニカニ　ガ　スゴイ　ダ', 'WANIKANI GA SUGOI DA')
+		// Convert hiragana to romaji"
+		check('わにかに　が　すごい　だ', 'wanikani ga sugoi da')
+		// Convert mixed kana to romaji"
+		check('ワニカニ　が　すごい　だ', 'WANIKANI ga sugoi da')
+		// Doesn't mangle the long dash 'ー' or slashdot '・'"
+		check('罰ゲーム・ばつげーむ', '罰GE-MU/batsuge-mu')
+
+		// Double and single n"
+		check('きんにくまん', `kin'nikuman`)
+		// N extravaganza"
+		check('んんにんにんにゃんやん', `n'n'nin'nin'nyan'yan`)
+		// Double consonants"
+		check('かっぱ　たった　しゅっしゅ ちゃっちゃ　やっつ', 'kappa tatta shusshu chaccha yattsu')
+
+		// Apostrophes in vague consonant vowel combos:
+
+		check('おんよみ', `on'yomi`)
+		check('んよ んあ んゆ', `n'yo n'a n'yu`)
+
+		// Roman characters
+		check('ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+		check('ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ', 'abcdefghijklmnopqrstuvwxyz')
+		check('０１２３４５６７８９', '0123456789')
+
+		// Small kana:
+
+		// Small tsu
+		check('っ', `~tsu`)
+		// Small ya
+		check('ゃ', 'ya')
+		// Small yu
+		check('ゅ', 'yu')
+		// Small yo
+		check('ょ', 'yo')
+		// Small a
+		check('ぁ', 'a')
+		// Small i
+		check('ぃ', 'i')
+		// Small u
+		check('ぅ', 'u')
+		// Small e
+		check('ぇ', 'e')
+		// Small o
+		check('ぉ', 'o')
+		// Small ka`
+		check('ヵ', 'KA')
+		// Small wa`
+		check('ゎ', 'wa')
+
+		// Small ke (ka) - https://en.wikipedia.org/wiki/Small_ke
+		check('ゖ', 'ka')
+		check('ヶ', 'KA')
+
+		// spell-checker: enable
+	})
+
 	test('should convert from isolated small kana', () => {
 		// spell-checker: disable
 		const IN = 'ァィゥェォ ッ ャュョ ヮヵヶ ぁぃぅぇぉ っ ゃゅょ ゎゕゖ'
-		const TO = 'AIUEO ~TSU YAYUYO WAKAKE aiueo ~tsu yayuyo wakake'
+		const TO = 'AIUEO ~TSU YAYUYO WAKAKA aiueo ~tsu yayuyo wakaka'
 		// spell-checker: enable
 		expect(to_romaji(IN)).toEqual(TO)
 	})

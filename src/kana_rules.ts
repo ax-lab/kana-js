@@ -60,7 +60,9 @@ export function rules_to_romaji() {
 	//     `なんな` -> `na` + `n` + `na` -> `na` + `n` + `'na`
 	//
 	const output = filter_output(baseOutput, (ctx, rule, output) =>
-		/^([ny]|[aeiou])/i.test(output) && /n$/i.test(ctx.lastOutput) ? `'${output}` : output,
+		/^([ny]|[aeiou])/i.test(output) && /n$/i.test(ctx.lastOutput) && !/[Ａ-Ｚ]/i.test(ctx.input)
+			? `'${output}`
+			: output,
 	)
 
 	return output
@@ -362,7 +364,7 @@ function map_kana<T>(m: MapFn<T>): T[] {
 		// first to be overridden by later rules (e.g. for romaji)
 		m('ゎ', 'ヮ', 'wa'),
 		m('ゕ', 'ヵ', 'ka'),
-		m('ゖ', 'ヶ', 'ke'),
+		m('ゖ', 'ヶ', 'ka'), // transliterate to romaji as "ka" (https://en.wikipedia.org/wiki/Small_ke)
 
 		// "N" mappings
 		m('ん', 'ン', `n'`), // This first so it has lesser precedence
@@ -505,6 +507,8 @@ function map_digraphs<T>(m: MapFn<T>): T[] {
 		m('くぉ', 'クォ', 'qwo'),
 
 		// Default combinations
+
+		m('いぇ', 'イェ', 'ye'),
 
 		m('きゃ', 'キャ', 'kya'),
 		m('きゅ', 'キュ', 'kyu'),
