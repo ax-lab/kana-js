@@ -123,8 +123,28 @@ describe('to_hiragana', () => {
 	// Reverse from the romaji tests.
 	test('should convert from ambiguous romaji', () => {
 		// spell-checker: disable
-		expect(to_hiragana(`nan'na`)).toEqual('なんな')
-		expect(to_hiragana(`NAN'NA`)).toEqual('なんな')
+
+		// nn sequences
+		expect(to_hiragana(`n'na`)).toEqual('んな')
+		expect(to_hiragana(`N'NA`)).toEqual('んな')
+
+		// ny sequences
+		expect(to_hiragana(`n'ya`)).toEqual('んや')
+		expect(to_hiragana(`N'YA`)).toEqual('んや')
+
+		// n + vowel sequences
+		expect(to_hiragana(`n'a`)).toEqual('んあ')
+		expect(to_hiragana(`n'e`)).toEqual('んえ')
+		expect(to_hiragana(`n'i`)).toEqual('んい')
+		expect(to_hiragana(`n'o`)).toEqual('んお')
+		expect(to_hiragana(`n'u`)).toEqual('んう')
+
+		expect(to_hiragana(`N'A`)).toEqual('んあ')
+		expect(to_hiragana(`N'E`)).toEqual('んえ')
+		expect(to_hiragana(`N'I`)).toEqual('んい')
+		expect(to_hiragana(`N'O`)).toEqual('んお')
+		expect(to_hiragana(`N'U`)).toEqual('んう')
+
 		// spell-checker: enable
 	})
 })

@@ -7,29 +7,31 @@ describe('to_romaji', () => {
 		expect(to_romaji('')).toEqual('')
 	})
 
-	// spell-checker: ignore kakikukeko gagigugego sashisuseso zajizuzezo tachitsuteto dadidudedo naninuneno
-	// spell-checker: ignore hahifuheho babibubebo papipupepo mamimumemo yayuyo rarirurero wawiwewon wakake
-	// spell-checker: ignore hahabahaba yoririri kototodotodo masusuzusuzu
-
 	test('should convert from common hiragana', () => {
+		// spell-checker: disable
 		const IN =
 			'あいうえお　かきくけこ　がぎぐげご　さしすせそ　ざじずぜぞ　たちつてと　だぢづでど　なにぬねの　はひふへほ　ばびぶべぼ　ぱぴぷぺぽ　まみむめも　やゆよ　らりるれろ　わゐゑをん'
 		const TO =
 			'aiueo kakikukeko gagigugego sashisuseso zajizuzezo tachitsuteto dadidudedo naninuneno hahifuheho babibubebo papipupepo mamimumemo yayuyo rarirurero wawiwewon'
+		// spell-checker: enable
 		expect(to_romaji(IN)).toEqual(TO)
 	})
 
 	test('should convert from common katakana', () => {
+		// spell-checker: disable
 		const IN =
 			'アイウエオ　カキクケコ　ガギグゲゴ　サシスセソ　ザジズゼゾ　タチツテト　ダヂヅデド　ナニヌネノ　ハヒフヘホ　バビブベボ　パピプペポ　マミムメモ　ヤユヨ　ラリルレロ　ワヰヱヲン'
 		const TO =
 			'AIUEO KAKIKUKEKO GAGIGUGEGO SASHISUSESO ZAJIZUZEZO TACHITSUTETO DADIDUDEDO NANINUNENO HAHIFUHEHO BABIBUBEBO PAPIPUPEPO MAMIMUMEMO YAYUYO RARIRURERO WAWIWEWON'
+		// spell-checker: enable
 		expect(to_romaji(IN)).toEqual(TO)
 	})
 
 	test('should convert from isolated small kana', () => {
+		// spell-checker: disable
 		const IN = 'ァィゥェォ ッ ャュョ ヮヵヶ ぁぃぅぇぉ っ ゃゅょ ゎゕゖ'
 		const TO = 'AIUEO ~TSU YAYUYO WAKAKE aiueo ~tsu yayuyo wakake'
+		// spell-checker: enable
 		expect(to_romaji(IN)).toEqual(TO)
 	})
 
@@ -40,9 +42,11 @@ describe('to_romaji', () => {
 	})
 
 	test('should support iteration marks', () => {
+		// spell-checker: disable
 		const IN_A = 'はゝゞゝゞ ゟゝゞ あゝゞ　アゝゞ ハゝゞゝゞ ヿゝゞゝゞ 〼ゝゞゝゞ Xゝゞヽヾ'
 		const IN_B = 'はヽヾヽヾ ゟヽヾ あヽヾ　アヽヾ ハヽヾヽヾ ヿヽヾヽヾ 〼ヽヾヽヾ Xゝゞヽヾ'
 		const TO = 'hahabahaba yoririri aaa AAA HAHABAHABA KOTOTODOTODO masusuzusuzu Xゝゞヽヾ'
+		// spell-checker: enable
 		expect(to_romaji(IN_A)).toEqual(TO)
 		expect(to_romaji(IN_B)).toEqual(TO)
 	})
@@ -187,12 +191,26 @@ describe('to_romaji', () => {
 	test('should generate apostrophe for ambiguous romaji', () => {
 		// spell-checker: disable
 
-		expect(to_romaji('なんな')).toEqual(`nan'na`)
-		expect(to_romaji('ナンナ')).toEqual(`NAN'NA`)
+		// nn sequences
+		expect(to_romaji('んな')).toEqual(`n'na`)
+		expect(to_romaji('ンナ')).toEqual(`N'NA`)
 
-		// But make sure actual double consonants are not affected
-		expect(to_romaji('なっな')).toEqual(`nanna`)
-		expect(to_romaji('ナッナ')).toEqual(`NANNA`)
+		// ny sequences
+		expect(to_romaji('んや')).toEqual(`n'ya`)
+		expect(to_romaji('ンヤ')).toEqual(`N'YA`)
+
+		// n + vowel sequences
+		expect(to_romaji('んあ')).toEqual(`n'a`)
+		expect(to_romaji('んえ')).toEqual(`n'e`)
+		expect(to_romaji('んい')).toEqual(`n'i`)
+		expect(to_romaji('んお')).toEqual(`n'o`)
+		expect(to_romaji('んう')).toEqual(`n'u`)
+
+		expect(to_romaji('ンア')).toEqual(`N'A`)
+		expect(to_romaji('ンエ')).toEqual(`N'E`)
+		expect(to_romaji('ンイ')).toEqual(`N'I`)
+		expect(to_romaji('ンオ')).toEqual(`N'O`)
+		expect(to_romaji('ンウ')).toEqual(`N'U`)
 
 		// spell-checker: enable
 	})

@@ -1,5 +1,5 @@
 import { is_kana } from './chars'
-import { convert_next, filter_output, m, MappingRuleContext, mFn, rules, RuleSet, transform_rules } from './conversion'
+import { convert_next, filter_output, m, mFn, RuleContext, rules, RuleSet, transform_rules } from './conversion'
 import { tuple } from './util'
 import { to_voiced } from './voiced'
 
@@ -35,7 +35,7 @@ export function rules_to_romaji() {
 		mFn('ッ', (ctx) => small_tsu(ctx, false)),
 	)
 
-	function small_tsu(ctx: MappingRuleContext, hiragana: boolean) {
+	function small_tsu(ctx: RuleContext, hiragana: boolean) {
 		// Count the number of small tsu following the current one
 		const match = ctx.nextInput.match(/^[っッ]+/)
 		const count = 1 + (match ? match[0].length : 0)
@@ -60,7 +60,7 @@ export function rules_to_romaji() {
 	//     `なんな` -> `na` + `n` + `na` -> `na` + `n` + `'na`
 	//
 	const output = filter_output(baseOutput, (ctx, rule, output) =>
-		/^n/i.test(output) && /n$/i.test(ctx.lastOutput) ? `'${output}` : output,
+		/^([ny]|[aeiou])/i.test(output) && /n$/i.test(ctx.lastOutput) ? `'${output}` : output,
 	)
 
 	return output
