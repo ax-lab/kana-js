@@ -19,23 +19,23 @@ import { TextBuilder, tuple } from './util'
 /**
  * A simple rule that maps the input to the output, verbatim.
  */
-type MappingRule = { isRuleSet: false; key: string; out: string; len?: number; outFn?: MappingRuleFn }
+type Rule = { isRuleSet: false; key: string; out: string; len?: number; outFn?: RuleFn }
 
 /**
- * Shorthand to create a MappingRule.
+ * Shorthand to create a Rule.
  */
-export function m(key: string, out: string, len = 0): MappingRule {
+export function m(key: string, out: string, len = 0): Rule {
 	return { isRuleSet: false, key, out, len }
 }
 
-type SimpleRuleContext = {
+type RuleLastContext = {
 	/** Input to the last rule matched */
 	lastInput: string
 	/** Output of the last rule matched */
 	lastOutput: string
 }
 
-export type MappingRuleContext = SimpleRuleContext & {
+export type RuleContext = RuleLastContext & {
 	/** Current rules being used. */
 	rules: CompiledRuleSet
 	/** Input for the current rule */
@@ -45,19 +45,14 @@ export type MappingRuleContext = SimpleRuleContext & {
 }
 
 /** Function type for function-style mapping rules. */
-type MappingRuleFn = (ctx: MappingRuleContext) => [string, number] | [string, number, string]
+type RuleFn = (ctx: RuleContext) => [string, number] | [string, number, string]
 
 /** Function type for output filters. */
-type OutputFilterFn = (ctx: MappingRuleContext, rule: Rule, output: string) => string
+type OutputFilterFn = (ctx: RuleContext, rule: Rule, output: string) => string
 
-export function mFn(key: string, outFn: MappingRuleFn): MappingRule {
+export function mFn(key: string, outFn: RuleFn): Rule {
 	return { isRuleSet: false, key, outFn, out: '' }
 }
-
-/**
- * Union type of all possible rule types.
- */
-export type Rule = MappingRule
 
 /**
  * Collection of text transformation rules.
@@ -199,8 +194,8 @@ export function compile(set: RuleSet) {
 export function convert_next(
 	input: string,
 	rules: CompiledRuleSet,
-	context: SimpleRuleContext = { lastInput: '', lastOutput: '' },
-): [string, number, SimpleRuleContext] {
+	context: RuleLastContext = { lastInput: '', lastOutput: '' },
+): [string, number, RuleLastContext] {
 	// Lookup what is the maximum possible key length given the next char
 	// code. Note that we don't care about Unicode codepoints at this point,
 	// as the mapping algorithm will work regardless of them.
@@ -219,8 +214,8 @@ export function convert_next(
 		output: string,
 		length: number,
 		rule: Rule,
-		ruleContext: MappingRuleContext,
-		nextContext: SimpleRuleContext,
+		ruleContext: RuleContext,
+		nextContext: RuleLastContext,
 	) => {
 		const actualOutput =
 			rules.filters.length && (length > 0 || output)
