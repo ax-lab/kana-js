@@ -183,4 +183,17 @@ describe('to_romaji', () => {
 		expect(to_romaji('!ッッッッッッッッッッッ')).toEqual('!~TSU~~~~~~~~~~')
 		// spell-checker: enable
 	})
+
+	test('should generate apostrophe for ambiguous romaji', () => {
+		// spell-checker: disable
+
+		expect(to_romaji('なんな')).toEqual(`nan'na`)
+		expect(to_romaji('ナンナ')).toEqual(`NAN'NA`)
+
+		// But make sure actual double consonants are not affected
+		expect(to_romaji('なっな')).toEqual(`nanna`)
+		expect(to_romaji('ナッナ')).toEqual(`NANNA`)
+
+		// spell-checker: enable
+	})
 })

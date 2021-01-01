@@ -144,4 +144,12 @@ describe('to_katakana', () => {
 		expect(to_katakana('akka')).toEqual('アッカ')
 		// spell-checker: enable
 	})
+
+	// Reverse from the romaji tests.
+	test('should convert from ambiguous romaji', () => {
+		// spell-checker: disable
+		expect(to_katakana(`nan'na`)).toEqual('ナンナ')
+		expect(to_katakana(`NAN'NA`)).toEqual('ナンナ')
+		// spell-checker: enable
+	})
 })

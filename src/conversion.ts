@@ -19,13 +19,13 @@ import { TextBuilder, tuple } from './util'
 /**
  * A simple rule that maps the input to the output, verbatim.
  */
-type MappingRule = { key: string; out: string; len?: number; outFn?: MappingRuleFn }
+type MappingRule = { isRuleSet: false; key: string; out: string; len?: number; outFn?: MappingRuleFn }
 
 /**
  * Shorthand to create a MappingRule.
  */
 export function m(key: string, out: string, len = 0): MappingRule {
-	return { key, out, len }
+	return { isRuleSet: false, key, out, len }
 }
 
 type SimpleRuleContext = {
@@ -44,10 +44,14 @@ export type MappingRuleContext = SimpleRuleContext & {
 	nextInput: string
 }
 
+/** Function type for function-style mapping rules. */
 type MappingRuleFn = (ctx: MappingRuleContext) => [string, number] | [string, number, string]
 
+/** Function type for output filters. */
+type OutputFilterFn = (ctx: MappingRuleContext, rule: Rule, output: string) => string
+
 export function mFn(key: string, outFn: MappingRuleFn): MappingRule {
-	return { key, outFn, out: '' }
+	return { isRuleSet: false, key, outFn, out: '' }
 }
 
 /**
@@ -58,7 +62,11 @@ export type Rule = MappingRule
 /**
  * Collection of text transformation rules.
  */
-export type RuleSet = List<Rule>
+export type RuleSet = {
+	isRuleSet: true
+	rules: List<Rule>
+	filters: List<OutputFilterFn>
+}
 
 /**
  * Shorthand for building a RuleSet from a sequence of Rules or RuleSet.
@@ -67,22 +75,50 @@ export type RuleSet = List<Rule>
  * increasing order of precedence.
  */
 export function rules(...set: (Rule | RuleSet)[]): RuleSet {
-	return List<Rule>().concat(...set)
+	const filters = List<OutputFilterFn>().concat(...set.flatMap((x) => (x.isRuleSet ? x.filters : [])))
+	return {
+		isRuleSet: true,
+		rules: List<Rule>().concat(...set.map((x) => (x.isRuleSet ? x.rules : x))),
+		filters: filters,
+	}
 }
 
 /**
  * Map every individual rule in the RuleSet using the given mapper and returns
  * a new RuleSet.
  */
-export function transform_rules(rules: RuleSet, mapper: (input: Rule) => Rule | Rule[]): RuleSet {
-	return rules.flatMap((input) => {
-		const output = mapper(input)
-		const mapping = Array.isArray(output) ? output : [output]
-		return mapping.map((x) => ({
-			...input,
-			...x,
-		}))
-	})
+export function transform_rules(set: RuleSet, mapper: (input: Rule) => Rule | Rule[]): RuleSet {
+	const newSet = {
+		...set,
+		rules: set.rules.flatMap((input) => {
+			const output = mapper(input)
+			const mapping = Array.isArray(output) ? output : [output]
+			return mapping.map((x) => ({
+				...input,
+				...x,
+			}))
+		}),
+	}
+	return newSet
+}
+
+/**
+ * Adds an output filter to the RuleSet, returning a new rule set. Does not
+ * change the original RuleSet.
+ *
+ * Output filters are called before a rule output is generated and can change
+ * the generated output. They have access to the context of the rule, the rule
+ * and the currently generated output (which may include changes by other
+ * filters).
+ *
+ * If multiple filters are set, they are called in the sequence they were added.
+ */
+export function filter_output(set: RuleSet, filter: OutputFilterFn): RuleSet {
+	const newSet = {
+		...set,
+		filters: set.filters.push(filter),
+	}
+	return newSet
 }
 
 //============================================================================//
@@ -94,10 +130,10 @@ export type CompiledRuleSet = ReturnType<typeof compile>
 /**
  * Compiles a RuleSet to be used for text conversion with `convert`.
  */
-export function compile(rules: RuleSet) {
+export function compile(set: RuleSet) {
 	// Convert the RuleSet to a map, de-duplicating rules by key. Each key is
 	// the expected input text that will be processed by the rule.
-	const allByKey = Seq.Keyed(rules.map((x) => [x.key, x])).toMap()
+	const allByKey = Seq.Keyed(set.rules.map((x) => [x.key, x])).toMap()
 
 	// Expand all keys to include normalized versions of themselves.
 	const mappings = allByKey.flatMap((rule, key) => {
@@ -144,8 +180,9 @@ export function compile(rules: RuleSet) {
 		.toMap()
 
 	return {
-		mappings: mappings.toJS() as { [key: string]: MappingRule },
-		maxLengthByPrefix: maxLengthByPrefix.toJS() as { [key: number]: number },
+		mappings: mappings.toObject(),
+		maxLengthByPrefix: maxLengthByPrefix.toObject(),
+		filters: set.filters.toArray(),
 	}
 }
 
@@ -157,6 +194,7 @@ export function compile(rules: RuleSet) {
  * - The generated output for the rule. Empty for no match.
  * - The length of the consumed input. Zero for no match.
  * - Context for the next rule.
+ * - The applied rule.
  */
 export function convert_next(
 	input: string,
@@ -177,6 +215,20 @@ export function convert_next(
 				rules.maxLengthByPrefix[prefix.toLowerCase().charCodeAt(0)])) ||
 		0
 
+	const doOutput = (
+		output: string,
+		length: number,
+		rule: Rule,
+		ruleContext: MappingRuleContext,
+		nextContext: SimpleRuleContext,
+	) => {
+		const actualOutput =
+			rules.filters.length && (length > 0 || output)
+				? rules.filters.reduce((previousOutput, fn) => fn(ruleContext, rule, previousOutput), output)
+				: output
+		return tuple(actualOutput, length, nextContext)
+	}
+
 	// This will return the string length to skip and if a mapping has been
 	// found.
 	if (length > 0) {
@@ -188,23 +240,27 @@ export function convert_next(
 			const key = chunk
 			const rule = rules.mappings[key] || rules.mappings[key.toLowerCase()]
 			if (rule) {
+				const ctx = {
+					...context,
+					rules: rules,
+					input: chunk,
+					nextInput: input.slice(keyLength),
+				}
 				if (rule.outFn) {
 					// Rule is a function called with the context.
-					const [txt, len, nextOutput] = rule.outFn({
-						...context,
-						rules: rules,
-						input: chunk,
-						nextInput: input.slice(keyLength),
-					})
+					const [txt, len, nextOutput] = rule.outFn(ctx)
 					if (len >= 0) {
 						const output = txt || rule.out
 						const length = len || rule.len || keyLength
-						return tuple(output, length, { lastOutput: nextOutput || output, lastInput: chunk })
+						return doOutput(output, length, rule, ctx, {
+							lastOutput: nextOutput || output,
+							lastInput: chunk,
+						})
 					}
 				} else {
 					const output = rule.out
 					const length = rule.len || keyLength
-					return tuple(output, length, { lastOutput: output, lastInput: chunk })
+					return doOutput(output, length, rule, ctx, { lastOutput: output, lastInput: chunk })
 				}
 			}
 		}

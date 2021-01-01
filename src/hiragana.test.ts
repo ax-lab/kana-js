@@ -119,4 +119,12 @@ describe('to_hiragana', () => {
 		expect(to_hiragana('akka')).toEqual('あっか')
 		// spell-checker: enable
 	})
+
+	// Reverse from the romaji tests.
+	test('should convert from ambiguous romaji', () => {
+		// spell-checker: disable
+		expect(to_hiragana(`nan'na`)).toEqual('なんな')
+		expect(to_hiragana(`NAN'NA`)).toEqual('なんな')
+		// spell-checker: enable
+	})
 })
