@@ -1,4 +1,4 @@
-import { to_romaji } from './romaji'
+import { to_romaji, to_romaji_key } from './romaji'
 import * as testkana from './testkana'
 import { describe, expect, test } from './testutil'
 
@@ -345,6 +345,142 @@ describe('to_romaji', () => {
 		expect(to_romaji('ンオ')).toEqual(`N'O`)
 		expect(to_romaji('ンウ')).toEqual(`N'U`)
 
+		// spell-checker: enable
+	})
+})
+
+describe('to_romaji_key', () => {
+	const check = (input: string, expected: string) => {
+		const pre = `'${input}' = `
+		expect(pre + to_romaji_key(input)).toEqual(pre + expected)
+	}
+
+	test('should handle empty string', () => {
+		check('', '')
+	})
+
+	test('should handle hiragana', () => {
+		check('ひらがな', 'hiragana')
+	})
+
+	test('should handle katakana', () => {
+		check('カタカナ', 'katakana')
+	})
+
+	test('should pass through romaji', () => {
+		check('romaji', 'romaji')
+	})
+
+	test('should strip accents', () => {
+		check('á é í ó ú ā ē ī ō ū', 'aeiouaeiou')
+	})
+
+	test('should handle combining marks', () => {
+		const B = '\u{3099}'
+		const P = '\u{309A}'
+		check(`は${B}は${B}は${P}は${P}`, 'babapapa')
+	})
+
+	test('should remove non-ascii characters', () => {
+		// spell-checker: disable
+		check(`'Tis is some random sentence ha-ha-ha baba, papa x_x!`, 'tisissomerandomsentencehahahababapapaxx')
+		// spell-checker: enable
+	})
+
+	test('should collapse repeated characters', () => {
+		// spell-checker: disable
+		check('a', 'a')
+		check('aa', 'a')
+		check('aaa', 'a')
+		check('aaaa', 'a')
+		check('aaaaa', 'a')
+		check('aaaaaa', 'a')
+		check('aaaaaaa', 'a')
+
+		check('aba', 'aba')
+		check('abba', 'aba')
+		check('abbba', 'aba')
+		check('abbbba', 'aba')
+		check('abbbbba', 'aba')
+		// spell-checker: enable
+	})
+
+	test('should collapse long vowels', () => {
+		// spell-checker: disable
+
+		check('aa', 'a')
+		check('ii', 'i')
+		check('uu', 'u')
+		check('ee', 'e')
+		check('ei', 'e')
+		check('oo', 'o')
+		check('ou', 'o')
+
+		check('aaa', 'a')
+		check('iii', 'i')
+		check('uuu', 'u')
+		check('eee', 'e')
+		check('eei', 'e')
+		check('ooo', 'o')
+		check('oou', 'o')
+
+		check('aaaa', 'a')
+		check('iiii', 'i')
+		check('uuuu', 'u')
+		check('eeee', 'e')
+		check('eeei', 'e')
+		check('oooo', 'o')
+		check('ooou', 'o')
+
+		check('ââ', 'a')
+		check('îî', 'i')
+		check('ûû', 'u')
+		check('êê', 'e')
+		check('ôô', 'o')
+		check('ââ', 'a')
+		check('îî', 'i')
+		check('ûû', 'u')
+		check('êê', 'e')
+		check('ôô', 'o')
+		check('êêi', 'e')
+		check('ôôu', 'o')
+
+		check('āā', 'a')
+		check('īī', 'i')
+		check('ūū', 'u')
+		check('ēē', 'e')
+		check('ōō', 'o')
+		check('āā', 'a')
+		check('īī', 'i')
+		check('ūū', 'u')
+		check('ēē', 'e')
+		check('ōō', 'o')
+		check('ēēi', 'e')
+		check('ōōu', 'o')
+
+		check('ââāāaa', 'a')
+		check('îîīīii', 'i')
+		check('ûûūūuu', 'u')
+		check('êêēēee', 'e')
+		check('ôôōōoo', 'o')
+		check('ââāāaaa', 'a')
+		check('îîīīiii', 'i')
+		check('ûûūūuuu', 'u')
+		check('êêēēeee', 'e')
+		check('ôôōōooo', 'o')
+
+		check('おはよう', 'ohayo')
+		check('おはよお', 'ohayo')
+		check('おはよー', 'ohayo')
+		check('オハヨウ', 'ohayo')
+		check('オハヨオ', 'ohayo')
+		check('オハヨー', 'ohayo')
+		check('おはよおー', 'ohayo')
+		check('オハヨオー', 'ohayo')
+		check('ohayou', 'ohayo')
+		check('ohayō', 'ohayo')
+		check('ohayô', 'ohayo')
+		check('ohayo-', 'ohayo')
 		// spell-checker: enable
 	})
 })
